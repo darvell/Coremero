@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Coremero.Commands;
 using Xunit;
 
@@ -20,14 +21,16 @@ namespace Coremero.Test
     public class CommandMapTest
     {
         [Fact]
-        public void TaskForExampleWillExist()
+        public async Task TaskForExampleWillExist()
         {
             CommandMap commandMap = new CommandMap();
             IPlugin testPlugin = new CommandMapTestPlugin();
             commandMap.RegisterPluginCommands(testPlugin);
-            if (commandMap.GetTaskForCommand("example") == null)
+            object result = await commandMap.ExecuteCommand("example", null);
+            var s = result as string;
+            if (s == null)
             {
-                throw new Exception("Task for command was not found.");
+                throw new Exception("Wrong.");
             }
         }
     }
