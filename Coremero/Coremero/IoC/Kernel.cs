@@ -13,7 +13,7 @@ namespace Coremero
 
     public static class Kernel
     {
-        private static Container _internalContainer;
+        private static Container _internalContainer = new Container();
 
 
         public static Func<Type, object> GetInstance = (service) => { return _internalContainer.GetInstance(service); };
