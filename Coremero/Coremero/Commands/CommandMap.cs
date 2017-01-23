@@ -11,13 +11,14 @@ namespace Coremero.Commands
 {
     public class CommandMap
     {
-        private Dictionary<CommandAttribute, Func<IMessageContext, object>> _commandMap =
+        private readonly Dictionary<CommandAttribute, Func<IMessageContext, object>> _commandMap =
             new Dictionary<CommandAttribute, Func<IMessageContext, object>>();
 
         private List<Type> _validCommandReturnTypes = new List<Type>()
         {
             typeof(int),
             typeof(string),
+            typeof(void)
         };
 
         public void RegisterPluginCommands(IPlugin plugin)
@@ -34,6 +35,12 @@ namespace Coremero.Commands
                         Debug.Fail(
                             $"Command {attribute.Name} has an invalid return type of {methodInfo.ReturnType.FullName}");
                         continue;
+                    }
+
+                    // Don't trust the developer to remember to set HasSideEffects. Sorry.
+                    if (methodInfo.ReturnType == typeof(void))
+                    {
+                        attribute.HasSideEffects = true;
                     }
 
                     // Check if the parameters are right.
@@ -68,7 +75,7 @@ namespace Coremero.Commands
             }
         }
 
-        public async Task<object> ExecuteCommand(string commandName, IMessageContext context)
+        public async Task<object> ExecuteCommandAsync(string commandName, IMessageContext context)
         {
             List<CommandAttribute> potentialCommands =
                 _commandMap.Keys.Where(x => x.Name.StartsWith(commandName)).ToList();
@@ -79,6 +86,16 @@ namespace Coremero.Commands
             }
 
             return await Task.Run(() => _commandMap[potentialCommands[0]](context));
+        }
+
+        public object ExecuteCommand(string commandName, IMessageContext context)
+        {
+            return ExecuteCommandAsync(commandName, context).Result;
+        }
+
+        public bool IsCommandNullOrVoid()
+        {
+            return false;
         }
     }
 }

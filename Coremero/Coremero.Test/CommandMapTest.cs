@@ -21,17 +21,69 @@ namespace Coremero.Test
     public class CommandMapTest
     {
         [Fact]
-        public async Task TaskForExampleWillExist()
+        public void CanRunCommandAndGetResult()
         {
             CommandMap commandMap = new CommandMap();
             IPlugin testPlugin = new CommandMapTestPlugin();
             commandMap.RegisterPluginCommands(testPlugin);
-            object result = await commandMap.ExecuteCommand("example", null);
+            object result = commandMap.ExecuteCommand("example", null);
             var s = result as string;
             if (s == null)
             {
                 throw new Exception("Wrong.");
             }
         }
+
+        [Fact]
+        public async Task CanRunCommandAsyncAndGetResult()
+        {
+            CommandMap commandMap = new CommandMap();
+            IPlugin testPlugin = new CommandMapTestPlugin();
+            commandMap.RegisterPluginCommands(testPlugin);
+            object result = await commandMap.ExecuteCommandAsync("example", null);
+            var s = result as string;
+            if (s == null)
+            {
+                throw new Exception("Wrong.");
+            }
+        }
+
+        [Fact]
+        public void CanRunCommandAThousandTimesAndGetResult()
+        {
+            CommandMap commandMap = new CommandMap();
+            IPlugin testPlugin = new CommandMapTestPlugin();
+            commandMap.RegisterPluginCommands(testPlugin);
+            object result = null;
+            for (int i = 0; i < 1000; i++)
+            {
+                result = commandMap.ExecuteCommand("example", null);
+            }
+            var s = result as string;
+            if (s == null)
+            {
+                throw new Exception("Wrong.");
+            }
+        }
+
+        [Fact]
+        public async Task CanRunCommandAsyncAThousandTimesAndGetResult()
+        {
+            CommandMap commandMap = new CommandMap();
+            IPlugin testPlugin = new CommandMapTestPlugin();
+            commandMap.RegisterPluginCommands(testPlugin);
+            object result = null;
+            for (int i = 0; i < 1000; i++)
+            {
+                 result = await commandMap.ExecuteCommandAsync("example", null);
+            }
+            var s = result as string;
+            if (s == null)
+            {
+                throw new Exception("Wrong.");
+            }
+        }
+
+
     }
 }
