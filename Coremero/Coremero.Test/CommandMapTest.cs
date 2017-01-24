@@ -106,6 +106,29 @@ namespace Coremero.Test
             }
         }
 
+        [Fact]
+        public void CommandDoesntExistAndReturnsNull()
+        {
+            CommandMap commandMap = new CommandMap();
+            if (commandMap.ExecuteCommand("notreal", null) != null)
+            {
+                throw new Exception("Somehow ran a non-existant command.");
+            }
+        }
+
+        [Fact]
+        public void CommandDoesntExistAndOthersAreRegistered()
+        {
+            CommandMap commandMap = new CommandMap();
+            IPlugin testPlugin = new CommandMapTestPlugin();
+            commandMap.RegisterPluginCommands(testPlugin);
+            object result = commandMap.ExecuteCommand("notreal", null);
+            if (result != null)
+            {
+                throw new Exception("Somehow ran a non-existant command.");
+            }
+        }
+
 
     }
 }
