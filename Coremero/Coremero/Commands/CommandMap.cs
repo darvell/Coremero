@@ -78,7 +78,9 @@ namespace Coremero.Commands
         public async Task<object> ExecuteCommandAsync(string commandName, IMessageContext context)
         {
             CommandAttribute selectedCommand = _commandMap.Keys.OrderBy(x => x.Name.DamerauLevenshteinDistance(commandName, 3)).FirstOrDefault();
-            if (!selectedCommand.Name.StartsWith(commandName))
+
+            // TODO: Can we avoid double calculation by stuffing the result of the calculation temporarily during the LINQ query?
+            if (selectedCommand.Name.DamerauLevenshteinDistance(commandName, 3) == int.MaxValue)
             {
                 // Not even close. Go away.
                 return null;
