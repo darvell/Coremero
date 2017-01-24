@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Coremero.Utilities;
 
 namespace Coremero.Commands
 {
@@ -76,17 +77,16 @@ namespace Coremero.Commands
 
         public async Task<object> ExecuteCommandAsync(string commandName, IMessageContext context)
         {
-            List<CommandAttribute> potentialCommands =
-                _commandMap.Keys.Where(x => x.Name.StartsWith(commandName)).ToList();
-            if (potentialCommands.Count != 1)
+            CommandAttribute selectedCommand = _commandMap.Keys.OrderBy(x => x.Name.DamerauLevenshteinDistance(commandName, 3)).FirstOrDefault();
+            if (!selectedCommand.Name.StartsWith(commandName))
             {
-                // TODO: Custom exception
+                // Not even close. Go away.
                 return null;
             }
 
             return await Task.Run(async () =>
             {
-                var result = _commandMap[potentialCommands[0]](context);
+                var result = _commandMap[selectedCommand](context);
 
                 // Check if the command is actually a task, if so, start that bad boy up and return result.
                 if (result is Task)
