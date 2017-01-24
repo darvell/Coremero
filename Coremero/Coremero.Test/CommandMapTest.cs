@@ -16,10 +16,32 @@ namespace Coremero.Test
             return "hi";
         }
 
+        [Command("exampleasync")]
+        public async Task<string> ExampleAsync(IMessageContext context)
+        {
+            await Task.Delay(1000);
+            return "hi im async";
+        }
+
     }
 
     public class CommandMapTest
     {
+        [Fact]
+        public void CanExecuteAsyncCommandAsyncAndGetResult()
+        {
+            CommandMap commandMap = new CommandMap();
+            IPlugin testPlugin = new CommandMapTestPlugin();
+            commandMap.RegisterPluginCommands(testPlugin);
+            object result = commandMap.ExecuteCommand("exampleasync", null);
+            var s = result as string;
+            if (s == null)
+            {
+                throw new Exception("Wrong.");
+            }
+
+        }
+
         [Fact]
         public void CanRunCommandAndGetResult()
         {

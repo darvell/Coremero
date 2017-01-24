@@ -18,7 +18,10 @@ namespace Coremero.Commands
         {
             typeof(int),
             typeof(string),
-            typeof(void)
+            typeof(void),
+            typeof(Task<string>),
+            typeof(Task),
+            typeof(Task<int>)
         };
 
         public void RegisterPluginCommands(IPlugin plugin)
@@ -38,7 +41,7 @@ namespace Coremero.Commands
                     }
 
                     // Don't trust the developer to remember to set HasSideEffects. Sorry.
-                    if (methodInfo.ReturnType == typeof(void))
+                    if (methodInfo.ReturnType == typeof(void) || methodInfo.ReturnType == typeof(Task))
                     {
                         attribute.HasSideEffects = true;
                     }
@@ -58,17 +61,13 @@ namespace Coremero.Commands
                         continue;
                     }
 
-                    // Check if it's async.
-                    // TODO: Handle properly
-                    bool isAsync = methodInfo.GetCustomAttribute<AsyncStateMachineAttribute>() != null;
-
                     // Register command
                     _commandMap[attribute] = delegate(IMessageContext context)
                     {
                         // Force a local copy on the stack of the delegate.
                         // TODO: Does this go out of scope?
                         IPlugin localPlugin = plugin;
-                        return methodInfo.Invoke(localPlugin, new object[] {context});
+                        return methodInfo.Invoke(localPlugin, new object[] { context });
                     };
 
                 }
@@ -85,7 +84,19 @@ namespace Coremero.Commands
                 return null;
             }
 
-            return await Task.Run(() => _commandMap[potentialCommands[0]](context));
+            return await Task.Run(async () =>
+            {
+                var result = _commandMap[potentialCommands[0]](context);
+
+                // Check if the command is actually a task, if so, start that bad boy up and return result.
+                if (result is Task)
+                {
+                    await (Task) result;
+                    return result.GetType().GetRuntimeProperty("Result")?.GetValue(result);
+                }
+
+                return result;
+            });
         }
 
         public object ExecuteCommand(string commandName, IMessageContext context)
