@@ -1,136 +1,49 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Coremero.Commands;
+using Coremero.Messages;
 using Xunit;
 
 namespace Coremero.Test
 {
-    public class CommandMapTestPlugin : IPlugin
-    {
-
-        [Command("example")]
-        public string Example(IInvocationContext context, IMessage message)
-        {
-            return "hi";
-        }
-
-        [Command("exampleasync")]
-        public async Task<string> ExampleAsync(IInvocationContext context, IMessage message)
-        {
-            await Task.Delay(1000);
-            return "hi im async";
-        }
-
-        public void Dispose()
-        {
-            // ignore
-        }
-    }
 
     public class CommandMapTest
     {
-        [Fact]
-        public void CanExecuteAsyncCommandAsyncAndGetResult()
-        {
-            CommandMap commandMap = new CommandMap();
-            IPlugin testPlugin = new CommandMapTestPlugin();
-            commandMap.RegisterPluginCommands(testPlugin);
-            object result = commandMap.ExecuteCommand("exampleasync", null, null);
-            var s = result as string;
-            if (s == null)
-            {
-                throw new Exception("Wrong.");
-            }
+        public CommandMap Map { get; set; }
 
+        public CommandMapTest()
+        {
+            Map = new CommandMap();
+            Map.RegisterPluginCommands(new MockPlugin());
         }
 
         [Fact]
-        public void CanRunCommandAndGetResult()
+        public async void CanExecuteAsync()
         {
-            CommandMap commandMap = new CommandMap();
-            IPlugin testPlugin = new CommandMapTestPlugin();
-            commandMap.RegisterPluginCommands(testPlugin);
-            object result = commandMap.ExecuteCommand("example", null, null);
-            var s = result as string;
-            if (s == null)
+            await Map.ExecuteCommandAsync("example", null, null);
+        }
+
+        [Fact]
+        public async void CanEcho()
+        {
+            IMessage message = Message.Create("Hello!");
+            IMessage result = await Map.ExecuteCommandAsync("echo", null, message);
+            if (result != message)
             {
-                throw new Exception("Wrong.");
+                Debug.Fail("Result != Message");
             }
         }
 
         [Fact]
-        public async Task CanRunCommandAsyncAndGetResult()
+        public async void CanAwaitInvalidCommand()
         {
-            CommandMap commandMap = new CommandMap();
-            IPlugin testPlugin = new CommandMapTestPlugin();
-            commandMap.RegisterPluginCommands(testPlugin);
-            object result = await commandMap.ExecuteCommandAsync("example", null, null);
-            var s = result as string;
-            if (s == null)
-            {
-                throw new Exception("Wrong.");
-            }
-        }
-
-        [Fact]
-        public void CanRunCommandAThousandTimesAndGetResult()
-        {
-            CommandMap commandMap = new CommandMap();
-            IPlugin testPlugin = new CommandMapTestPlugin();
-            commandMap.RegisterPluginCommands(testPlugin);
-            object result = null;
-            for (int i = 0; i < 1000; i++)
-            {
-                result = commandMap.ExecuteCommand("example", null, null);
-            }
-            var s = result as string;
-            if (s == null)
-            {
-                throw new Exception("Wrong.");
-            }
-        }
-
-        [Fact]
-        public async Task CanRunCommandAsyncAThousandTimesAndGetResult()
-        {
-            CommandMap commandMap = new CommandMap();
-            IPlugin testPlugin = new CommandMapTestPlugin();
-            commandMap.RegisterPluginCommands(testPlugin);
-            object result = null;
-            for (int i = 0; i < 1000; i++)
-            {
-                 result = await commandMap.ExecuteCommandAsync("example", null, null);
-            }
-            var s = result as string;
-            if (s == null)
-            {
-                throw new Exception("Wrong.");
-            }
-        }
-
-        [Fact]
-        public void CommandDoesntExistAndReturnsNull()
-        {
-            CommandMap commandMap = new CommandMap();
-            if (commandMap.ExecuteCommand("notreal", null, null) != null)
-            {
-                throw new Exception("Somehow ran a non-existant command.");
-            }
-        }
-
-        [Fact]
-        public void CommandDoesntExistAndOthersAreRegistered()
-        {
-            CommandMap commandMap = new CommandMap();
-            IPlugin testPlugin = new CommandMapTestPlugin();
-            commandMap.RegisterPluginCommands(testPlugin);
-            object result = commandMap.ExecuteCommand("notreal", null, null);
+            IMessage result = await Map.ExecuteCommandAsync("notreal", null, null);
             if (result != null)
             {
-                throw new Exception("Somehow ran a non-existant command.");
+                Debug.Fail("Result was not null.");
             }
         }
-
 
     }
 }
