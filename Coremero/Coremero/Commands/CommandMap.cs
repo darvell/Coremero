@@ -18,9 +18,12 @@ namespace Coremero.Commands
             typeof(int),
             typeof(string),
             typeof(void),
-            typeof(Task<string>),
+            typeof(IMessage),
+
             typeof(Task),
-            typeof(Task<int>)
+            typeof(Task<int>),
+            typeof(Task<string>),
+            typeof(Task<IMessage>)
         };
 
         public void RegisterPluginCommands(IPlugin plugin)
