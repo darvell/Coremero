@@ -62,13 +62,17 @@ namespace Coremero.Commands
                         continue;
                     }
 
+                    // If attribute exists, clear.
+                    // TODO: Check if no leaks after due to delegates being delegates.
+                    if (_commandMap.ContainsKey(attribute))
+                    {
+                        _commandMap.Remove(attribute);
+                    }
+
                     // Register command
                     _commandMap[attribute] = delegate(IMessageContext context)
                     {
-                        // Force a local copy on the stack of the delegate.
-                        // TODO: Does this go out of scope?
-                        IPlugin localPlugin = plugin;
-                        return methodInfo.Invoke(localPlugin, new object[] { context });
+                        return methodInfo.Invoke(plugin, new object[] { context });
                     };
 
                 }
