@@ -14,6 +14,10 @@ namespace Coremero.Commands
         private readonly Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>> _commandMap =
             new Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>>();
 
+        /// <summary>
+        /// Registers all methods with the [Command] attribute in to the command map.
+        /// </summary>
+        /// <param name="plugin">The instance of the plugin to register in the command map.</param>
         public void RegisterPluginCommands(IPlugin plugin)
         {
             Type pluginType = plugin.GetType();
@@ -68,6 +72,11 @@ namespace Coremero.Commands
             }
         }
 
+        /// <summary>
+        /// Retrieves the command attribute for a command string.
+        /// </summary>
+        /// <param name="commandName">The string to search.</param>
+        /// <returns>CommandAttribute if found else null.</returns>
         private CommandAttribute GetCommand(string commandName)
         {
             CommandAttribute selectedCommand =
