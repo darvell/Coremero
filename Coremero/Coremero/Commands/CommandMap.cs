@@ -10,8 +10,8 @@ namespace Coremero.Commands
 {
     public class CommandMap
     {
-        private readonly Dictionary<CommandAttribute, Func<IMessageContext, object>> _commandMap =
-            new Dictionary<CommandAttribute, Func<IMessageContext, object>>();
+        private readonly Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>> _commandMap =
+            new Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>>();
 
         private List<Type> _validCommandReturnTypes = new List<Type>()
         {
@@ -47,18 +47,26 @@ namespace Coremero.Commands
 
                     // Check if the parameters are right.
                     ParameterInfo[] methodParams = methodInfo.GetParameters();
-                    if (methodParams.Length != 1)
+                    if (methodParams.Length != 2)
                     {
                         Debug.Fail($"Command {attribute.Name} has an invalid parameter count of {methodParams.Length}.");
                         continue;
                     }
 
-                    if (methodParams[0].ParameterType != typeof(IMessageContext))
+                    if (methodParams[0].ParameterType != typeof(IInvocationContext))
                     {
                         Debug.Fail(
-                            $"Command {attribute.Name} has an invalid parameter argument. You should only use MethodName(IMessageContext context).");
+                            $"Command {attribute.Name} has an invalid first argument. You should only use MethodName(IInvocationContext context, IMessage message).");
                         continue;
                     }
+
+                    if (methodParams[1].ParameterType != typeof(IMessage))
+                    {
+                        Debug.Fail(
+                            $"Command {attribute.Name} has an invalid second argument. You should only use MethodName(IInvocationContext context, IMessage message).");
+                        continue;
+                    }
+
 
                     // If attribute exists, clear.
                     // TODO: Check if no leaks after due to delegates being delegates.
@@ -68,18 +76,19 @@ namespace Coremero.Commands
                     }
 
                     // Register command
-                    _commandMap[attribute] = delegate(IMessageContext context)
+                    _commandMap[attribute] = delegate(IInvocationContext context, IMessage message)
                     {
-                        return methodInfo.Invoke(plugin, new object[] { context });
+                        return methodInfo.Invoke(plugin, new object[] { context, message });
                     };
 
                 }
             }
         }
 
-        public async Task<object> ExecuteCommandAsync(string commandName, IMessageContext context)
+        private CommandAttribute GetCommand(string commandName)
         {
-            CommandAttribute selectedCommand = _commandMap.Keys.OrderBy(x => x.Name.DamerauLevenshteinDistance(commandName, 3)).FirstOrDefault();
+            CommandAttribute selectedCommand =
+                _commandMap.Keys.OrderBy(x => x.Name.DamerauLevenshteinDistance(commandName, 3)).FirstOrDefault();
 
             // TODO: Can we avoid double calculation by stuffing the result of the calculation temporarily during the LINQ query?
             if (selectedCommand == null || selectedCommand.Name.DamerauLevenshteinDistance(commandName, 3) == int.MaxValue)
@@ -87,10 +96,16 @@ namespace Coremero.Commands
                 // Not even close. Go away.
                 return null;
             }
+            return selectedCommand;
+        }
+
+        public async Task<object> ExecuteCommandAsync(string commandName, IInvocationContext context, IMessage message)
+        {
+            var selectedCommand = GetCommand(commandName);
 
             return await Task.Run(async () =>
             {
-                var result = _commandMap[selectedCommand](context);
+                var result = _commandMap[selectedCommand](context, message);
 
                 // Check if the command is actually a task, if so, start that bad boy up and return result.
                 if (result is Task)
@@ -103,14 +118,15 @@ namespace Coremero.Commands
             });
         }
 
-        public object ExecuteCommand(string commandName, IMessageContext context)
+        public object ExecuteCommand(string commandName, IInvocationContext context, IMessage message)
         {
-            return ExecuteCommandAsync(commandName, context).Result;
+            return ExecuteCommandAsync(commandName, context, message).Result;
         }
 
-        public bool IsCommandNullOrVoid()
+        public bool IsCommandComplexOrNull(string commandName)
         {
-            return false;
+            var cmd = GetCommand(commandName);
+            return !(cmd?.HasSideEffects ?? true);
         }
     }
 }

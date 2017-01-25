@@ -1,7 +1,14 @@
-﻿namespace Coremero
+﻿using Coremero.Client;
+
+namespace Coremero
 {
     public interface IInvocationContext
     {
+        /// <summary>
+        /// The client (message source) that raised the invocation.
+        /// </summary>
+        IClient OriginClient { get; }
+
         /// <summary>
         /// The ISendable object that raised the invocation.
         /// </summary>
