@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Coremero.Messages;
 using Coremero.Utilities;
 
 namespace Coremero.Commands
@@ -13,19 +14,6 @@ namespace Coremero.Commands
         private readonly Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>> _commandMap =
             new Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>>();
 
-        private List<Type> _validCommandReturnTypes = new List<Type>()
-        {
-            typeof(int),
-            typeof(string),
-            typeof(void),
-            typeof(IMessage),
-
-            typeof(Task),
-            typeof(Task<int>),
-            typeof(Task<string>),
-            typeof(Task<IMessage>)
-        };
-
         public void RegisterPluginCommands(IPlugin plugin)
         {
             Type pluginType = plugin.GetType();
@@ -34,14 +22,6 @@ namespace Coremero.Commands
                 CommandAttribute attribute = methodInfo.GetCustomAttribute<CommandAttribute>();
                 if (attribute != null)
                 {
-                    // Check what it returns.
-                    if (!_validCommandReturnTypes.Contains(methodInfo.ReturnType))
-                    {
-                        Debug.Fail(
-                            $"Command {attribute.Name} has an invalid return type of {methodInfo.ReturnType.FullName}");
-                        continue;
-                    }
-
                     // Don't trust the developer to remember to set HasSideEffects. Sorry.
                     if (methodInfo.ReturnType == typeof(void) || methodInfo.ReturnType == typeof(Task))
                     {
@@ -102,7 +82,7 @@ namespace Coremero.Commands
             return selectedCommand;
         }
 
-        public async Task<object> ExecuteCommandAsync(string commandName, IInvocationContext context, IMessage message)
+        public async Task<IMessage> ExecuteCommandAsync(string commandName, IInvocationContext context, IMessage message)
         {
             var selectedCommand = GetCommand(commandName);
 
@@ -119,14 +99,24 @@ namespace Coremero.Commands
                 if (result is Task)
                 {
                     await (Task) result;
-                    return result.GetType().GetRuntimeProperty("Result")?.GetValue(result);
+                    result = result.GetType().GetRuntimeProperty("Result")?.GetValue(result);
                 }
 
-                return result;
+                if (result == null)
+                {
+                    return Message.Create(String.Empty);
+                }
+
+                if (result is IMessage)
+                {
+                    return (IMessage) result;
+                }
+
+                return Message.Create(result.ToString());
             });
         }
 
-        public object ExecuteCommand(string commandName, IInvocationContext context, IMessage message)
+        public IMessage ExecuteCommand(string commandName, IInvocationContext context, IMessage message)
         {
             return ExecuteCommandAsync(commandName, context, message).Result;
         }
