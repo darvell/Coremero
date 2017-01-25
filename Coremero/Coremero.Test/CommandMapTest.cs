@@ -9,18 +9,22 @@ namespace Coremero.Test
     {
 
         [Command("example")]
-        public string Example(IMessageContext context)
+        public string Example(IInvocationContext context, IMessage message)
         {
             return "hi";
         }
 
         [Command("exampleasync")]
-        public async Task<string> ExampleAsync(IMessageContext context)
+        public async Task<string> ExampleAsync(IInvocationContext context, IMessage message)
         {
             await Task.Delay(1000);
             return "hi im async";
         }
 
+        public void Dispose()
+        {
+            // ignore
+        }
     }
 
     public class CommandMapTest
@@ -31,7 +35,7 @@ namespace Coremero.Test
             CommandMap commandMap = new CommandMap();
             IPlugin testPlugin = new CommandMapTestPlugin();
             commandMap.RegisterPluginCommands(testPlugin);
-            object result = commandMap.ExecuteCommand("exampleasync", null);
+            object result = commandMap.ExecuteCommand("exampleasync", null, null);
             var s = result as string;
             if (s == null)
             {
@@ -46,7 +50,7 @@ namespace Coremero.Test
             CommandMap commandMap = new CommandMap();
             IPlugin testPlugin = new CommandMapTestPlugin();
             commandMap.RegisterPluginCommands(testPlugin);
-            object result = commandMap.ExecuteCommand("example", null);
+            object result = commandMap.ExecuteCommand("example", null, null);
             var s = result as string;
             if (s == null)
             {
@@ -60,7 +64,7 @@ namespace Coremero.Test
             CommandMap commandMap = new CommandMap();
             IPlugin testPlugin = new CommandMapTestPlugin();
             commandMap.RegisterPluginCommands(testPlugin);
-            object result = await commandMap.ExecuteCommandAsync("example", null);
+            object result = await commandMap.ExecuteCommandAsync("example", null, null);
             var s = result as string;
             if (s == null)
             {
@@ -77,7 +81,7 @@ namespace Coremero.Test
             object result = null;
             for (int i = 0; i < 1000; i++)
             {
-                result = commandMap.ExecuteCommand("example", null);
+                result = commandMap.ExecuteCommand("example", null, null);
             }
             var s = result as string;
             if (s == null)
@@ -95,7 +99,7 @@ namespace Coremero.Test
             object result = null;
             for (int i = 0; i < 1000; i++)
             {
-                 result = await commandMap.ExecuteCommandAsync("example", null);
+                 result = await commandMap.ExecuteCommandAsync("example", null, null);
             }
             var s = result as string;
             if (s == null)
@@ -108,7 +112,7 @@ namespace Coremero.Test
         public void CommandDoesntExistAndReturnsNull()
         {
             CommandMap commandMap = new CommandMap();
-            if (commandMap.ExecuteCommand("notreal", null) != null)
+            if (commandMap.ExecuteCommand("notreal", null, null) != null)
             {
                 throw new Exception("Somehow ran a non-existant command.");
             }
@@ -120,7 +124,7 @@ namespace Coremero.Test
             CommandMap commandMap = new CommandMap();
             IPlugin testPlugin = new CommandMapTestPlugin();
             commandMap.RegisterPluginCommands(testPlugin);
-            object result = commandMap.ExecuteCommand("notreal", null);
+            object result = commandMap.ExecuteCommand("notreal", null, null);
             if (result != null)
             {
                 throw new Exception("Somehow ran a non-existant command.");

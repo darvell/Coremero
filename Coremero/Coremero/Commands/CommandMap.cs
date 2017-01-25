@@ -103,6 +103,11 @@ namespace Coremero.Commands
         {
             var selectedCommand = GetCommand(commandName);
 
+            if (selectedCommand == null)
+            {
+                return null;
+            }
+
             return await Task.Run(async () =>
             {
                 var result = _commandMap[selectedCommand](context, message);
