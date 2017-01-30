@@ -10,25 +10,25 @@ namespace Coremero.Test
 
     public class CommandMapTest
     {
-        public CommandMap Map { get; set; }
+        public CommandRegistry Registry { get; set; }
 
         public CommandMapTest()
         {
-            Map = new CommandMap();
-            Map.RegisterPluginCommands(new MockPlugin());
+            Registry = new CommandRegistry();
+            Registry.RegisterPluginCommands(new MockPlugin());
         }
 
         [Fact]
         public async void CanExecuteAsync()
         {
-            await Map.ExecuteCommandAsync("example", null, null);
+            await Registry.ExecuteCommandAsync("example", null, null);
         }
 
         [Fact]
         public async void CanEcho()
         {
             IMessage message = Message.Create("Hello!");
-            IMessage result = await Map.ExecuteCommandAsync("echo", null, message);
+            IMessage result = await Registry.ExecuteCommandAsync("echo", null, message);
             if (result != message)
             {
                 Debug.Fail("Result != Message");
@@ -38,7 +38,7 @@ namespace Coremero.Test
         [Fact]
         public async void CanAwaitInvalidCommand()
         {
-            IMessage result = await Map.ExecuteCommandAsync("notreal", null, null);
+            IMessage result = await Registry.ExecuteCommandAsync("notreal", null, null);
             if (result != null)
             {
                 Debug.Fail("Result was not null.");

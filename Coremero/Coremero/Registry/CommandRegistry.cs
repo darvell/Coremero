@@ -4,12 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Coremero.Commands;
 using Coremero.Messages;
 using Coremero.Utilities;
 
-namespace Coremero.Commands
+namespace Coremero.Registry
 {
-    public class CommandMap
+    public class CommandRegistry
     {
         private readonly Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>> _commandMap =
             new Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>>();
