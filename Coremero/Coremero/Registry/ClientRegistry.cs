@@ -11,10 +11,6 @@ namespace Coremero.Registry
     {
         private List<IClient> Clients = new List<IClient>();
 
-        public ClientRegistry()
-        {
-        }
-
         public void Register(IClient client)
         {
             if (Clients.Contains(client))

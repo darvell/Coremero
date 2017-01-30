@@ -19,7 +19,7 @@ namespace Coremero.Registry
         /// Registers all methods with the [Command] attribute in to the command map.
         /// </summary>
         /// <param name="plugin">The instance of the plugin to register in the command map.</param>
-        public void RegisterPluginCommands(IPlugin plugin)
+        public void Register(IPlugin plugin)
         {
             Type pluginType = plugin.GetType();
             foreach (var methodInfo in pluginType.GetRuntimeMethods())
