@@ -9,7 +9,7 @@ namespace Coremero.Registry
 {
     public class ClientRegistry
     {
-        private List<IClient> Clients = new List<IClient>();
+        private readonly List<IClient> Clients = new List<IClient>();
 
         public void Register(IClient client)
         {
