@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Coremero.Services;
 
 namespace Coremero.Client.Mock
 {
@@ -10,7 +11,7 @@ namespace Coremero.Client.Mock
         #region Private Fields
 
         private bool _isConnected = false;
-
+        private IMessageBus _messageBus;
         #endregion
 
         #region Public Interface Properties
@@ -42,6 +43,11 @@ namespace Coremero.Client.Mock
         public bool IsConnected => _isConnected;
 
         #endregion
+
+        public MockClient(IMessageBus messageBus)
+        {
+            _messageBus = messageBus;
+        }
 
         public Task Connect()
         {
