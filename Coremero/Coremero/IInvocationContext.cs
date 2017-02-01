@@ -22,6 +22,6 @@ namespace Coremero
         /// <summary>
         /// The channel in which the invocation was raised.
         /// </summary>
-        ISendable Channel { get; }
+        IChannel Channel { get; }
     }
 }

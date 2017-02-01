@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coremero.Client.Mock", "Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coremero.Test", "Coremero.Test\Coremero.Test.csproj", "{4E78DA06-FB4B-482E-9343-A19C6B13B5D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coremero.Client.Discord", "Coremero.Client.Discord\Coremero.Client.Discord.csproj", "{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{4E78DA06-FB4B-482E-9343-A19C6B13B5D8}.Release|x64.Build.0 = Release|x64
 		{4E78DA06-FB4B-482E-9343-A19C6B13B5D8}.Release|x86.ActiveCfg = Release|x86
 		{4E78DA06-FB4B-482E-9343-A19C6B13B5D8}.Release|x86.Build.0 = Release|x86
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Debug|x64.ActiveCfg = Debug|x64
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Debug|x64.Build.0 = Debug|x64
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Debug|x86.ActiveCfg = Debug|x86
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Debug|x86.Build.0 = Debug|x86
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Release|x64.ActiveCfg = Release|x64
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Release|x64.Build.0 = Release|x64
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Release|x86.ActiveCfg = Release|x86
+		{F7542C58-30DD-4AC8-9C5F-BA762C154F8B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
