@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Coremero.Utilities
 {
@@ -90,5 +92,12 @@ namespace Coremero.Utilities
             int result = dCurrent[maxi];
             return (result > threshold) ? int.MaxValue : result;
         }
+
+        public static List<string> GetCommandArguments(this string input)
+        {
+            return input?.Split(' ').Skip(1).ToList();
+        }
     }
+
+
 }

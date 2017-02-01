@@ -6,10 +6,10 @@ namespace Coremero.Services
 {
     public interface IMessageBus
     {
-        event EventHandler Sent;
-        event EventHandler Received;
+        event EventHandler<MessageSentEventArgs> Sent;
+        event EventHandler<MessageReceivedEventArgs> Received;
 
-        void RaiseIncoming();
-        void RaiseOutgoing();
+        void RaiseIncoming(IInvocationContext context, IMessage message);
+        void RaiseOutgoing(ISendable target, IMessage message);
     }
 }

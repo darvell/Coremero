@@ -136,5 +136,10 @@ namespace Coremero.Registry
             var cmd = GetCommand(commandName);
             return !(cmd?.HasSideEffects ?? true);
         }
+
+        public bool Exists(string commandName)
+        {
+            return GetCommand(commandName) != null;
+        }
     }
 }
