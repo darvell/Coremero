@@ -22,6 +22,7 @@ namespace Coremero.Services
             _commandRegistry = commandRegistry;
 
             messageBus.Received += MessageBusOnReceived;
+            messageBus.Sent += MessageBusOnSent;
         }
 
         private void MessageBusOnReceived(object sender, MessageReceivedEventArgs eventArgs)
@@ -57,5 +58,15 @@ namespace Coremero.Services
                 }
             });
         }
+
+        private void MessageBusOnSent(object sender, MessageSentEventArgs messageSentEventArgs)
+        {
+            // TODO: Move this to be per-client so they can format for their audience?
+            if (messageSentEventArgs.Message != null)
+            {
+                messageSentEventArgs.Target.Send(messageSentEventArgs.Message);
+            }
+        }
+
     }
 }

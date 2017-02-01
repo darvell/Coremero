@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Coremero;
+using Coremero.Services;
 
 namespace Coremero.Client.Discord
 {
     public class DiscordClient : IClient
     {
+        #region IClient Properties
         public string Name
         {
             get { return "Discord"; }
@@ -25,6 +27,16 @@ namespace Coremero.Client.Discord
         }
 
         public bool IsConnected { get; }
+
+        #endregion
+
+        
+
+        public DiscordClient(IMessageBus messageBus)
+        {
+            
+        }
+
         public Task Connect()
         {
 

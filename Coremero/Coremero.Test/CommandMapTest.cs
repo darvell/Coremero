@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Messages;
+using Coremero.Registry;
 using Xunit;
 
 namespace Coremero.Test
@@ -15,7 +16,7 @@ namespace Coremero.Test
         public CommandMapTest()
         {
             Registry = new CommandRegistry();
-            Registry.RegisterPluginCommands(new MockPlugin());
+            Registry.Register(new MockPlugin());
         }
 
         [Fact]
