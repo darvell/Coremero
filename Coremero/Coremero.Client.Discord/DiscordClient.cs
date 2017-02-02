@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Coremero;
 using Coremero.Services;
+using Discord;
+using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
@@ -26,24 +28,45 @@ namespace Coremero.Client.Discord
             }
         }
 
-        public bool IsConnected { get; }
+        public bool IsConnected { get; private set; }
 
         #endregion
 
-        
+
+        private IMessageBus _messageBus;
+        private DiscordSocketClient _discordClient;
 
         public DiscordClient(IMessageBus messageBus)
+        {
+            _discordClient = new DiscordSocketClient();
+        }
+
+        public async Task Connect()
+        {
+            if (IsConnected)
+            {
+                throw new InvalidOperationException();
+            }
+
+            await _discordClient.LoginAsync(TokenType.Bot, "NO");
+            await _discordClient.ConnectAsync();
+            IsConnected = true;
+
+            _discordClient.MessageReceived += DiscordClientOnMessageReceived;
+
+        }
+
+        private async Task DiscordClientOnMessageReceived(SocketMessage socketMessage)
         {
             
         }
 
-        public Task Connect()
+        public async Task Disconnect()
         {
-
-        }
-
-        public Task Disconnect()
-        {
+            if (IsConnected)
+            {
+                await _discordClient.DisconnectAsync();
+            }
         }
 
         public event EventHandler<Exception> Error;
