@@ -25,8 +25,9 @@ namespace Coremero
             _container.RegisterSingleton<CommandRegistry>();
 
             // Register services
+            _container.RegisterSingleton<IMessageBus, MessageBus>();
             _container.RegisterSingleton<ICommandHandler, CommandHandler>();
-
+            
 
 
 

@@ -10,8 +10,8 @@ namespace Coremero.Services
         public event EventHandler<MessageSentEventArgs> Sent;
         public event EventHandler<MessageReceivedEventArgs> Received;
 
-        private Stopwatch _incomingStopwatch = new Stopwatch();
-        private Stopwatch _outgoingStopwatch = new Stopwatch();
+        private readonly Stopwatch _incomingStopwatch = new Stopwatch();
+        private readonly Stopwatch _outgoingStopwatch = new Stopwatch();
 
         public void RaiseIncoming(IInvocationContext context, IMessage message)
         {
