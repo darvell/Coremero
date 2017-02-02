@@ -58,7 +58,8 @@ namespace Coremero.Client.Discord
 
         private async Task DiscordClientOnMessageReceived(SocketMessage socketMessage)
         {
-            
+            IMessage message = new DiscordMessage(socketMessage);
+            IInvocationContext context = new DiscordInvocationContext(this);
         }
 
         public async Task Disconnect()
