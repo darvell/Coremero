@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -46,14 +47,25 @@ namespace Coremero
 
             // Scan for plugins
             string pluginDirectory = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Plugins");
-            var pluginAssemblies = 
-                from file in new DirectoryInfo(pluginDirectory).GetFiles()
-                where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin.")
-                select AssemblyLoadContext.Default.LoadFromAssemblyPath(file.FullName);
+            if (Directory.Exists(pluginDirectory))
+            {
+                var pluginAssemblies =
+                    from file in new DirectoryInfo(pluginDirectory).GetFiles()
+                    where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin.")
+                    select AssemblyLoadContext.Default.LoadFromAssemblyPath(file.FullName);
 
-            _container.RegisterCollection<IPlugin>(pluginAssemblies);
+                _container.RegisterCollection<IPlugin>(pluginAssemblies);
+            }
 
-            _container.Verify();            
+            _container.Verify();
+            
+            // TODO: Allow host application to control this.
+            Debug.WriteLine("Connecting all clients.");
+            foreach (IClient client in _container.GetAllInstances<IClient>())
+            {
+                client.Connect();
+            }
+                        
 
             _hasInit = true;
         }

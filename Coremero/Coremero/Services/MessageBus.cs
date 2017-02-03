@@ -15,6 +15,9 @@ namespace Coremero.Services
 
         public void RaiseIncoming(IInvocationContext context, IMessage message)
         {
+#if DEBUG
+            Debug.WriteLine($"[{context.Channel.Name}] {context.User.Name}: {message.Text}");
+#endif
             _incomingStopwatch.Start();
             Received?.Invoke(this, new MessageReceivedEventArgs(context, message));
             _incomingStopwatch.Stop();
