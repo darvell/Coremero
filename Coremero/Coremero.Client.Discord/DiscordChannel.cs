@@ -3,26 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord;
 
 namespace Coremero.Client.Discord
 {
     public class DiscordChannel : IChannel
     {
-        private global::Discord.IChannel _channel;
+        private IMessageChannel _channel;
 
-        public DiscordChannel(global::Discord.IChannel channel)
+        public DiscordChannel(IMessageChannel channel)
         {
             _channel = channel;
         }
 
-        public Task SendAsync(IMessage message)
+        public async Task SendAsync(IMessage message)
         {
-            throw new NotImplementedException();
+            if (message.Attachments?.Count > 0)
+            {
+                foreach (IAttachment attachment in message.Attachments)
+                {
+                    await _channel.SendFileAsync(attachment.Contents, attachment.Name, message.Attachments?.Count == 1 ? message.Text : null);
+                }
+            }
+            else
+            {
+                await _channel.SendMessageAsync(message.Text);
+            }
         }
 
         public void Send(IMessage message)
         {
-            throw new NotImplementedException();
+            SendAsync(message);
         }
 
         public string Name
@@ -34,7 +45,7 @@ namespace Coremero.Client.Discord
         {
             get
             {
-                return String.Empty; // IChannel has no topic? Do we need to cast?
+                return String.Empty; // Channel interface has no topic? Do we need to cast?
             }
         }
 

@@ -61,6 +61,11 @@ namespace Coremero.Client.Discord
         {
             return Task.Run(() =>
             {
+                if (socketMessage.Author.Id == _discordClient.CurrentUser.Id)
+                {
+                    return;
+                }
+
                 IMessage message = new DiscordMessage(socketMessage);
                 IInvocationContext context = new DiscordInvocationContext(this, socketMessage);
                 _messageBus.RaiseIncoming(context, message);

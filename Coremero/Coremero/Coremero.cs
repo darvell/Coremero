@@ -65,7 +65,24 @@ namespace Coremero
             {
                 client.Connect();
             }
-                        
+
+            Debug.WriteLine("Loading all plugins.");
+            CommandRegistry cmdRegistry = _container.GetInstance<CommandRegistry>();
+
+            try
+            {
+                foreach (IPlugin plugin in _container.GetAllInstances<IPlugin>())
+                {
+                    cmdRegistry.Register(plugin);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+            cmdRegistry.Register(_container.GetInstance<CorePlugin>());
+                    
 
             _hasInit = true;
         }
