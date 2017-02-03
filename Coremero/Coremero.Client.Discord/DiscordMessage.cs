@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
 using Discord.Rpc;
+using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
@@ -33,8 +34,7 @@ namespace Coremero.Client.Discord
 
         public async Task React(string emoji)
         {
-            var restMessage = (RestUserMessage) await _message.Channel.GetMessageAsync(_message.Id);
-            await restMessage.AddReactionAsync(emoji);
+            await ((SocketUserMessage)_message).AddReactionAsync(Emoji.Parse(emoji));
         }
 
         public async Task<List<string>> GetReactions()

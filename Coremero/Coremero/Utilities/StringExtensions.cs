@@ -97,6 +97,11 @@ namespace Coremero.Utilities
         {
             return input?.Split(' ').Skip(1).ToList();
         }
+
+        public static bool CaseInsensitiveContains(this string input, string toCheck)
+        {
+            return input.IndexOf(toCheck, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
     }
 
 

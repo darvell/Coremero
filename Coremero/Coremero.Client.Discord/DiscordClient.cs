@@ -69,6 +69,14 @@ namespace Coremero.Client.Discord
                 IMessage message = new DiscordMessage(socketMessage);
                 IInvocationContext context = new DiscordInvocationContext(this, socketMessage);
                 _messageBus.RaiseIncoming(context, message);
+
+#if DEBUG
+                if (message.Text.CaseInsensitiveContains("my wife") || message.Text.CaseInsensitiveContains("very nice") || message.Text.CaseInsensitiveContains("kind of dog is this?"))
+                {
+                    ((DiscordMessage) message).React("<:borat:244253799030587402>");
+                    context.Raiser.Send(Message.Create("Dude is that Borat? \"Very nice.\""));
+                }
+#endif
             });
         }
 
