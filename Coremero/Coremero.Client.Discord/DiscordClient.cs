@@ -38,6 +38,7 @@ namespace Coremero.Client.Discord
 
         public DiscordClient(IMessageBus messageBus)
         {
+            _messageBus = messageBus;
             _discordClient = new DiscordSocketClient();
         }
 
