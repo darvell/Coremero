@@ -56,10 +56,14 @@ namespace Coremero.Client.Discord
 
         }
 
-        private async Task DiscordClientOnMessageReceived(SocketMessage socketMessage)
+        private Task DiscordClientOnMessageReceived(SocketMessage socketMessage)
         {
-            IMessage message = new DiscordMessage(socketMessage);
-            IInvocationContext context = new DiscordInvocationContext(this);
+            return Task.Run(() =>
+            {
+                IMessage message = new DiscordMessage(socketMessage);
+                IInvocationContext context = new DiscordInvocationContext(this, socketMessage);
+                _messageBus.RaiseIncoming(context, message);
+            });
         }
 
         public async Task Disconnect()

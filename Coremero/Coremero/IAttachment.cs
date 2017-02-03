@@ -1,4 +1,6 @@
-﻿namespace Coremero
+﻿using System.IO;
+
+namespace Coremero
 {
     public interface IAttachment
     {
@@ -10,6 +12,6 @@
         /// <summary>
         /// The attachment contents.
         /// </summary>
-        object Contents { get; }
+        Stream Contents { get; }
     }
 }
