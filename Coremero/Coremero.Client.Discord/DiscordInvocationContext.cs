@@ -20,14 +20,40 @@ namespace Coremero.Client.Discord
             }
         }
 
-        public IUser User { get; }
-        public IChannel Channel { get; }
+        private IUser _user;
+
+        public IUser User
+        {
+            get
+            {
+                if (_user == null)
+                {
+                    _user = new DiscordUser(_message.Author);
+                }
+                return _user;
+            }
+        }
+
+        private IChannel _channel;
+
+        public IChannel Channel
+        {
+            get
+            {
+                if (_channel == null)
+                {
+                    _channel = new DiscordChannel(_message.Channel);
+                }
+                return _channel;
+            }
+        }
 
         private global::Discord.IMessage _message; // Discord holds a lot of invocation context in here, great.
          
         public DiscordInvocationContext(IClient client, global::Discord.IMessage message)
         {
             OriginClient = client;
+            _message = message;
         }
 
     }

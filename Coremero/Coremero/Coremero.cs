@@ -70,6 +70,11 @@ namespace Coremero
             _hasInit = true;
         }
 
+        public static IMessageBus GetMessageBus()
+        {
+            return _container.GetInstance<IMessageBus>();
+        }
+
         public class SingletonLifestyleSelectionBehavior : ILifestyleSelectionBehavior
         {
             public Lifestyle SelectLifestyle(Type serviceType, Type implementationType)
