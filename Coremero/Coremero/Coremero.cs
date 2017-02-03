@@ -9,6 +9,7 @@ using System.Text;
 using Coremero.Client;
 using Coremero.Registry;
 using Coremero.Services;
+using Coremero.Utilities;
 using Microsoft.Extensions.PlatformAbstractions;
 using SimpleInjector;
 using SimpleInjector.Advanced;
@@ -46,11 +47,10 @@ namespace Coremero
             _container.RegisterCollection<IClient>(clientAssemblies);
 
             // Scan for plugins
-            string pluginDirectory = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Plugins");
-            if (Directory.Exists(pluginDirectory))
+            if (Directory.Exists(PathExtensions.PluginDir))
             {
                 var pluginAssemblies =
-                    from file in new DirectoryInfo(pluginDirectory).GetFiles()
+                    from file in new DirectoryInfo(PathExtensions.PluginDir).GetFiles()
                     where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin.")
                     select AssemblyLoadContext.Default.LoadFromAssemblyPath(file.FullName);
 
