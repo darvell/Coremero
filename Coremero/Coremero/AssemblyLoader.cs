@@ -16,14 +16,6 @@ namespace Coremero
                 var assembly = Assembly.Load(new AssemblyName(res.First().Name));
                 return assembly;
             }
-
-            var runtimeRes = deps.RuntimeLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
-            if (runtimeRes.Count > 0)
-            {
-                var assembly = Assembly.Load(new AssemblyName(res.First().Name));
-                return assembly;
-            }
-
             return null;
         }
     }
