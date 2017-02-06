@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Coremero;
 using Coremero.Services;
@@ -82,5 +83,6 @@ namespace Coremero.Client.Discord
         }
 
         public event EventHandler<Exception> Error;
+        public List<IServer> Servers { get; }
     }
 }

@@ -15,6 +15,12 @@ namespace Coremero
             return string.Join(" ", message.Text.GetCommandArguments());
         }
 
+        [Command("woke")]
+        public string Woke(IInvocationContext context, IMessage message)
+        {
+            return $"👏 {string.Join(" 👏 ", message.Text.ToUpper().GetCommandArguments())} 👏";
+        }
+
         public void Dispose()
         {
             // ignore

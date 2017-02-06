@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Coremero.Client
@@ -23,7 +24,7 @@ namespace Coremero.Client
         event EventHandler<Exception> Error;
 
 
-        //List<IServer> Servers { get; }
+        List<IServer> Servers { get; }
 
         //event EventHandler<MessageEventArgs> MessageReceived;
 
