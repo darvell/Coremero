@@ -77,6 +77,7 @@ namespace Coremero.Client.Discord
             if (IsConnected)
             {
                 await _discordClient.DisconnectAsync();
+                _discordClient.MessageReceived -= DiscordClientOnMessageReceived;
             }
         }
 
