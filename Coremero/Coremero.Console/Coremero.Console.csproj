@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="**\*.resx" />
@@ -9,7 +10,9 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Coremero.Client.Discord\Coremero.Client.Discord.csproj" />
+    <ProjectReference Include="..\Coremero.Client.Discord\Coremero.Client.Discord.csproj">
+      <Private>true</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
   </ItemGroup>
 </Project>

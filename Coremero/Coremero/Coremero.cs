@@ -39,11 +39,13 @@ namespace Coremero
             _container.RegisterSingleton<IMessageBus, MessageBus>();
             _container.RegisterSingleton<ICommandHandler, CommandHandler>();
 
+            AssemblyLoader loader = new AssemblyLoader();
+
             // Scan for clients
             var clientAssemblies =
                 from file in new DirectoryInfo(PlatformServices.Default.Application.ApplicationBasePath).GetFiles()
                 where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Client.")
-                select AssemblyLoadContext.Default.LoadFromAssemblyPath(file.FullName);
+                select loader.LoadFromAssemblyPath(file.FullName);
             _container.RegisterCollection<IClient>(clientAssemblies);
 
             // Scan for plugins
@@ -52,7 +54,7 @@ namespace Coremero
                 var pluginAssemblies =
                     from file in new DirectoryInfo(PathExtensions.PluginDir).GetFiles()
                     where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin.")
-                    select AssemblyLoadContext.Default.LoadFromAssemblyPath(file.FullName);
+                    select loader.LoadFromAssemblyPath(file.FullName);
 
                 _container.RegisterCollection<IPlugin>(pluginAssemblies);
             }
