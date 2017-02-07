@@ -21,6 +21,18 @@ namespace Coremero
             return $"👏 {string.Join(" 👏 ", message.Text.ToUpper().GetCommandArguments())} 👏";
         }
 
+        // TODO: PERM CHECK ASAP!
+        [Command("gc")]
+        public string RunGC(IInvocationContext context, IMessage message)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine($"Pre: {GC.GetTotalMemory(false) / 1024.0}KB");
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            builder.AppendLine($"Post: {GC.GetTotalMemory(false) / 1024.0}KB");
+            return builder.ToString();
+        }
+
         public void Dispose()
         {
             // ignore
