@@ -15,10 +15,5 @@ namespace Coremero.Plugin.Borat
         {
             return Message.Create("I like!", new FileAttachment(Path.Combine(PathExtensions.PluginDir, "IASIPLaughing.jpg")));
         }
-
-
-        public void Dispose()
-        {
-        }
     }
 }

@@ -81,7 +81,7 @@ namespace Coremero.Registry
         private CommandAttribute GetCommand(string commandName)
         {
             CommandAttribute selectedCommand =
-                _commandMap.Keys.OrderBy(x => x.Name.DamerauLevenshteinDistance(commandName, 1)).FirstOrDefault();
+                _commandMap.Keys.Where(x => x.Name.DamerauLevenshteinDistance(commandName, 1) != int.MaxValue).FirstOrDefault();
 
             // TODO: Can we avoid double calculation by stuffing the result of the calculation temporarily during the LINQ query?
             if (selectedCommand == null || selectedCommand.Name.DamerauLevenshteinDistance(commandName, 1) == int.MaxValue)

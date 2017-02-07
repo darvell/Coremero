@@ -38,9 +38,6 @@ namespace Coremero.Plugin.Borat
                 }
             }
         }
-
-        public void Dispose()
-        {
-        }
+       
     }
 }

@@ -14,7 +14,7 @@ using Coremero.Utilities;
 
 namespace Coremero.Plugin.Classic
 {
-    public class Tumblr : IPlugin
+    public class Tumblr : IPlugin, IDisposable
     {
         private const string TUMBLR_API_KEY = "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4"; // The example API key. We use it because we're jerks and this is a small 3-man chat bot project.
                                                                                                     // If I catch you using this in a big thing, ur ded m8.

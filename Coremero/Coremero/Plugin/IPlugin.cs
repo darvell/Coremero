@@ -2,7 +2,7 @@
 
 namespace Coremero
 {
-    public interface IPlugin : IDisposable
+    public interface IPlugin
     {
     }
 }

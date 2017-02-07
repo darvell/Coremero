@@ -41,9 +41,5 @@ namespace Coremero.Plugin.Classic
 
             return basicMessage;
         }
-
-        public void Dispose()
-        {
-        }
     }
 }
