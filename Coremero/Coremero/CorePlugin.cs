@@ -21,7 +21,6 @@ namespace Coremero
             return $"👏 {string.Join(" 👏 ", message.Text.ToUpper().GetCommandArguments())} 👏";
         }
 
-        // TODO: PERM CHECK ASAP!
         [Command("gc")]
         public string RunGC(IInvocationContext context, IMessage message)
         {
