@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Coremero.Messages;
 using Discord;
 using Discord.Rest;
 using Discord.Rpc;
@@ -9,7 +10,7 @@ using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
-    public class DiscordMessage : IMessage
+    public class DiscordMessage : IDeletableMessage
     {
         private global::Discord.IMessage _message;
 
@@ -49,6 +50,11 @@ namespace Coremero.Client.Discord
                 }
             }
             return result;
+        }
+
+        public async Task DeleteAsync()
+        {
+            await _message.DeleteAsync();
         }
     }
 }

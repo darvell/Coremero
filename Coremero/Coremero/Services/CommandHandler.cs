@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Coremero.Messages;
 using Coremero.Registry;
 
 namespace Coremero.Services
@@ -52,6 +53,14 @@ namespace Coremero.Services
             Task.Run(async () =>
             {
                 IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
+                
+                /* 
+                if (message is IDeletableMessage)
+                {
+                    await ((IDeletableMessage) message).DeleteAsync();
+                }
+                */
+
                 if (result != null)
                 {
                     _messageBus.RaiseOutgoing(context.Raiser, result);
