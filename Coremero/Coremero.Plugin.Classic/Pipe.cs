@@ -24,7 +24,7 @@ namespace Coremero.Plugin.Classic
         {
             List<string> cmds = string.Join(" ", message.Text.GetCommandArguments()).Split('|').ToList();
             Message basicMessage = Message.Create(message.Text, message.Attachments?.ToArray());
-            basicMessage.Text = cmds.First().Split(' ').First().Trim();
+            basicMessage.Text = string.Join(" ",cmds.First().Split(' ').Skip(1).ToList()).Trim();
             foreach (var cmd in cmds)
             {
                 string cmdCall = cmd.Trim().Split(' ').First().Trim();
