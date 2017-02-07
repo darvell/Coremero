@@ -95,7 +95,11 @@ namespace Coremero.Utilities
 
         public static List<string> GetCommandArguments(this string input)
         {
-            return input?.Split(' ').Skip(1).ToList();
+            if (input.StartsWith("."))
+            {
+                return input?.Split(' ').Skip(1).ToList();
+            }
+            return input.Split(' ').ToList();
         }
 
         public static bool CaseInsensitiveContains(this string input, string toCheck)

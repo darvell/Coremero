@@ -22,15 +22,18 @@ namespace Coremero.Plugin.Classic
         [Command("pipe")]
         public async Task<IMessage> PipeCommand(IInvocationContext context, IMessage message)
         {
-            string clean = string.Join(" ", message.Text.Split(' ').Skip(1));
-            List<string> cmds = clean.Split('|').ToList();
+            List<string> cmds = string.Join(" ", message.Text.GetCommandArguments()).Split('|').ToList();
             Message basicMessage = Message.Create(message.Text, message.Attachments?.ToArray());
             basicMessage.Text = cmds.First();
             foreach (var cmd in cmds)
             {
-                IMessage result = await _commandRegistry.ExecuteCommandAsync(cmd.Split(' ').First().Trim(), context, basicMessage);
-                basicMessage.Text = result.Text;
-                if (basicMessage.Attachments != null)
+                string cmdCall = cmd.Trim().Split(' ').First().Trim();
+                IMessage result = await _commandRegistry.ExecuteCommandAsync(cmdCall, context, basicMessage);
+                if (!string.IsNullOrEmpty(result.Text))
+                {
+                    basicMessage.Text = result.Text;
+                }
+                if (result.Attachments != null)
                 {
                     basicMessage.Attachments = result.Attachments;
                 }
