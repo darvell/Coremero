@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,10 +27,8 @@ namespace Coremero.Plugin.Classic
             var root = JsonConvert.DeserializeObject<Rootobject>(blogJson);
 
             var imageUrl = root.response.posts.Where(x => x.photos?.Length > 0)
-                .OrderBy(x => Guid.NewGuid())
-                .Take(1)
-                .Select(x => x.photos.First())
-                .FirstOrDefault()
+                .GetRandom()
+                .photos.First()
                 .original_size.url;
 
             // Store image in RAM and pass back.
