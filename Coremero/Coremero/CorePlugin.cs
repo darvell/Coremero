@@ -31,10 +31,10 @@ namespace Coremero
             }
 
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine($"Pre: {GC.GetTotalMemory(false) / 1024.0}KB");
+            builder.AppendLine($"Pre: {GC.GetTotalMemory(false) / 1024}KB");
             GC.Collect();
             GC.WaitForPendingFinalizers();
-            builder.AppendLine($"Post: {GC.GetTotalMemory(false) / 1024.0}KB");
+            builder.AppendLine($"Post: {GC.GetTotalMemory(false) / 1024}KB");
             return builder.ToString();
         }
 

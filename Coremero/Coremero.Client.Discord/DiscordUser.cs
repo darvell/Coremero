@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
@@ -68,7 +69,7 @@ namespace Coremero.Client.Discord
 
                     if (guildUser.Guild.Id == 109063664560009216)
                     {
-                        if (guildUser.GuildPermissions.Administrator)
+                        if (guildUser.GuildPermissions.Administrator || guildUser.RoleIds.Any(x => x.Equals(109078556360863744)))
                         {
                             return UserPermission.BotOwner;
                         }
