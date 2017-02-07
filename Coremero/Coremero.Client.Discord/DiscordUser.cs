@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Rpc;
 
 namespace Coremero.Client.Discord
@@ -23,6 +24,7 @@ namespace Coremero.Client.Discord
                 foreach (IAttachment attachment in message.Attachments)
                 {
                     await dmChannel.SendFileAsync(attachment.Contents, attachment.Name, message.Attachments?.Count == 1 ? message.Text : null);
+                    attachment.Contents?.Dispose();
                 }
             }
             else
@@ -39,7 +41,14 @@ namespace Coremero.Client.Discord
 
         public string Name
         {
-            get { return _user.Username; }
+            get
+            {
+                if (_user is IGuildUser)
+                {
+                    return ((IGuildUser)_user).Nickname ?? _user.Username;
+                }
+                return _user.Username;
+            }
         }
 
         public string Mention

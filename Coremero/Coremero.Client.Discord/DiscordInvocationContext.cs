@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
@@ -42,7 +43,7 @@ namespace Coremero.Client.Discord
             {
                 if (_channel == null)
                 {
-                    _channel = new DiscordChannel(_message.Channel);
+                    _channel = new DiscordChannel((ISocketMessageChannel) _message.Channel);
                 }
                 return _channel;
             }
