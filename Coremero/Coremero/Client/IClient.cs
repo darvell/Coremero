@@ -43,6 +43,9 @@ namespace Coremero.Client
         /// </summary>
         event EventHandler<Exception> Error;
 
+        /// <summary>
+        /// An enumerable list of what servers the client is currently connected to.
+        /// </summary>
         IEnumerable<IServer> Servers { get; }
     }
 }
