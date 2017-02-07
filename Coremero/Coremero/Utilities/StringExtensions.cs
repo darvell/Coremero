@@ -102,7 +102,11 @@ namespace Coremero.Utilities
         {
             if (input.StartsWith("."))
             {
-                return input.Substring(0, input.IndexOf(' '));
+                if (input.Contains(' '))
+                {
+                    return input.Substring(input.IndexOf(' ')).Trim();
+                }
+                return string.Empty;
             }
             return input;
         }
