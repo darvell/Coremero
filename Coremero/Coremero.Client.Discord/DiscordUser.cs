@@ -55,5 +55,31 @@ namespace Coremero.Client.Discord
         {
             get { return _user.Mention; }
         }
+
+        public UserPermission Permissions
+        {
+            get
+            {
+                if (_user is IGuildUser)
+                {
+                    // TODO: Move to configuration
+                    // HARDCODE SA-MINECRAFT FOR NOW
+                    var guildUser = (IGuildUser) _user;
+
+                    if (guildUser.Guild.Id == 109063664560009216)
+                    {
+                        if (guildUser.GuildPermissions.Administrator)
+                        {
+                            return UserPermission.BotOwner;
+                        }
+                    }
+
+                    return guildUser.GuildPermissions.Administrator
+                        ? UserPermission.Admin
+                        : UserPermission.Normal;
+                }
+                return UserPermission.Normal;
+            }
+        }
     }
 }

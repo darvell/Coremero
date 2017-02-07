@@ -25,6 +25,11 @@ namespace Coremero
         [Command("gc")]
         public string RunGC(IInvocationContext context, IMessage message)
         {
+            if (context.User?.Permissions != UserPermission.BotOwner)
+            {
+                return null;
+            }
+
             StringBuilder builder = new StringBuilder();
             builder.AppendLine($"Pre: {GC.GetTotalMemory(false) / 1024.0}KB");
             GC.Collect();

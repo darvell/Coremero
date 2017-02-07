@@ -4,5 +4,6 @@
     {
         string Name { get; }
         string Mention { get; }
+        UserPermission Permissions { get; }
     }
 }
