@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Coremero;
 using Coremero.Services;
@@ -83,6 +85,10 @@ namespace Coremero.Client.Discord
         }
 
         public event EventHandler<Exception> Error;
-        public List<IServer> Servers { get; }
+
+        public IEnumerable<IServer> Servers
+        {
+            get { return _discordClient.Guilds.Select(x => new DiscordServer(x)); }
+        }
     }
 }

@@ -53,14 +53,6 @@ namespace Coremero.Services
             Task.Run(async () =>
             {
                 IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
-                
-                /* 
-                if (message is IDeletableMessage)
-                {
-                    await ((IDeletableMessage) message).DeleteAsync();
-                }
-                */
-
                 if (result != null)
                 {
                     _messageBus.RaiseOutgoing(context.Raiser, result);

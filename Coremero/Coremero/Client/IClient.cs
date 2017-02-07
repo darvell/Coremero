@@ -24,7 +24,7 @@ namespace Coremero.Client
         event EventHandler<Exception> Error;
 
 
-        List<IServer> Servers { get; }
+        IEnumerable<IServer> Servers { get; }
 
         //event EventHandler<MessageEventArgs> MessageReceived;
 
