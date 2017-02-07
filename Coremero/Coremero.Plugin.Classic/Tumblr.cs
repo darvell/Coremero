@@ -44,13 +44,13 @@ namespace Coremero.Plugin.Classic
         [Command("homero")]
         public async Task<IMessage> Homero(IInvocationContext context, IMessage message)
         {
-            return Message.Create(null, new StreamAttachment(await GetRandomTumblrImage("simpsons-latino"), "homero.jpg"));
+            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(await GetRandomTumblrImage("simpsons-latino"), "homero.jpg"));
         }
 
         [Command("dog")]
         public async Task<IMessage> Dog(IInvocationContext context, IMessage message)
         {
-            return Message.Create(null, new StreamAttachment(await GetRandomTumblrImage("goodassdog"), "good_pupper.jpg"));
+            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(await GetRandomTumblrImage("goodassdog"), "good_pupper.jpg"));
         }
 
         #region Business Titles
@@ -74,8 +74,13 @@ namespace Coremero.Plugin.Classic
         [Command("ceo")]
         public async Task<IMessage> RealBusinessMan(IInvocationContext context, IMessage message)
         {
-            IUser randomUser = context.Channel?.Users.GetRandom();
-            return Message.Create($"{_businessTitles.GetRandom()} {randomUser?.Name} hard at work.", new StreamAttachment(await GetRandomTumblrImage("realbusinessmen"), "white_male_over_50.jpg"));
+            string outputText = message.Text?.TrimCommand();
+            if (string.IsNullOrEmpty(outputText))
+            {
+                IUser randomUser = context.Channel?.Users.GetRandom();
+                outputText = $"{_businessTitles.GetRandom()} {randomUser?.Name} hard at work.";
+            }
+            return Message.Create(outputText, new StreamAttachment(await GetRandomTumblrImage("realbusinessmen"), "white_male_over_50.jpg"));
         }
 
 
