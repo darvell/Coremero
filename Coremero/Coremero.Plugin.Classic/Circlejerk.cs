@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Coremero.Client.Discord;
 using Coremero.Commands;
 using Coremero.Messages;
 using Coremero.Utilities;
@@ -47,11 +49,21 @@ namespace Coremero.Plugin.Classic
             return message.Text.TrimCommand().Replace('o', 'ø');
         }
 
-        [Command("pepito")]
-        public string Pepito(IInvocationContext context, IMessage message)
+        [Command("ego")]
+        public string Ego(IInvocationContext context, IMessage message)
         {
             int pillAmount = _rnd.Next(20,421);
-            return $"<@!256179116200558594> hey guys i ate ${ (pillAmount == 100 ? "💯" : pillAmount.ToString()) } pills"
+            string egoName = "<ego>";
+            // Snatch pepitos name if it's in SA-MC.
+            if (context.OriginClient is DiscordClient)
+            {
+                IUser ego = context.Channel.Users.Where(x => x.Mention.Contains("ego#")).FirstOrDefault();
+                if (ego != null)
+                {
+                    egoName = $"{ego.Name}:";
+                }
+            }
+            return $"{egoName} hey guys i ate {(pillAmount == 100 ? "💯" : pillAmount.ToString())} pills";
         }
 
 
