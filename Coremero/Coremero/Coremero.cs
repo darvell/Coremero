@@ -9,6 +9,7 @@ using System.Text;
 using Coremero.Client;
 using Coremero.Registry;
 using Coremero.Services;
+using Coremero.Storage;
 using Coremero.Utilities;
 using Microsoft.Extensions.PlatformAbstractions;
 using SimpleInjector;
@@ -34,6 +35,7 @@ namespace Coremero
             // Register registries
             _container.RegisterSingleton<ClientRegistry>();
             _container.RegisterSingleton<CommandRegistry>();
+            _container.RegisterSingleton<ICredentialStorage, JsonCredentialStorage>();
 
             // Register services
             _container.RegisterSingleton<IMessageBus, MessageBus>();

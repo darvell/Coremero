@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Messages;
 using Coremero.Plugin.Classic.TumblrJson;
+using Coremero.Storage;
 using Newtonsoft.Json;
 using Coremero.Utilities;
 
@@ -16,20 +17,26 @@ namespace Coremero.Plugin.Classic
 {
     public class Tumblr : IPlugin, IDisposable
     {
-        private const string TUMBLR_API_KEY = "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4"; // The example API key. We use it because we're jerks and this is a small 3-man chat bot project.
-                                                                                                    // If I catch you using this in a big thing, ur ded m8.
+        private readonly string TUMBLR_API_KEY;
 
         private HttpClient _httpClient = new HttpClient();
 
+        public Tumblr(ICredentialStorage credentialStorage)
+        {
+            TUMBLR_API_KEY = credentialStorage.GetKey("tumblr", "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4"); // Public testing API key from Tumblr.
+        }
+
         private async Task<Stream> GetRandomTumblrImage(string tumblrUsername)
         {
-            string blogJson = await _httpClient.GetStringAsync($"http://api.tumblr.com/v2/blog/{tumblrUsername}.tumblr.com/posts?api_key={TUMBLR_API_KEY}");
-            var root = JsonConvert.DeserializeObject<Rootobject>(blogJson);
+            List<Photo> photos = new List<Photo>();
+            for (int i = 0; i < 40; i += 20)
+            {
+                string blogJson = await _httpClient.GetStringAsync($"http://api.tumblr.com/v2/blog/{tumblrUsername}.tumblr.com/posts?api_key={TUMBLR_API_KEY}&type=photo&offset={i}");
+                var root = JsonConvert.DeserializeObject<Rootobject>(blogJson);
+                photos.AddRange(root.response.posts.SelectMany(x => x.photos));
+            }
 
-            var imageUrl = root.response.posts.Where(x => x.photos?.Length > 0)
-                .GetRandom()
-                .photos.First()
-                .original_size.url;
+            var imageUrl = photos.GetRandom().original_size.url;
 
             // Store image in RAM and pass back.
             MemoryStream ms = new MemoryStream();

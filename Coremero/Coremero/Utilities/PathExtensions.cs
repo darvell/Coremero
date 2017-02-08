@@ -15,5 +15,10 @@ namespace Coremero.Utilities
                 return Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Plugins");
             }
         }
+
+        public static string AppDir
+        {
+            get { return PlatformServices.Default.Application.ApplicationBasePath; }
+        }
     }
 }

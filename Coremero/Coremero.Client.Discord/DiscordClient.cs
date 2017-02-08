@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Coremero;
 using Coremero.Services;
+using Coremero.Storage;
 using Discord;
 using Discord.WebSocket;
 
@@ -39,9 +40,12 @@ namespace Coremero.Client.Discord
         private IMessageBus _messageBus;
         private DiscordSocketClient _discordClient;
 
-        public DiscordClient(IMessageBus messageBus)
+        private readonly string DISCORD_BOT_KEY;
+
+        public DiscordClient(IMessageBus messageBus, ICredentialStorage credentialStorage)
         {
             _messageBus = messageBus;
+            DISCORD_BOT_KEY = credentialStorage.GetKey("discord", null);
             _discordClient = new DiscordSocketClient();
         }
 
@@ -52,12 +56,11 @@ namespace Coremero.Client.Discord
                 throw new InvalidOperationException();
             }
 
-            await _discordClient.LoginAsync(TokenType.Bot, "NO");
+            await _discordClient.LoginAsync(TokenType.Bot, DISCORD_BOT_KEY);
             await _discordClient.ConnectAsync();
             IsConnected = true;
 
             _discordClient.MessageReceived += DiscordClientOnMessageReceived;
-
         }
 
         private Task DiscordClientOnMessageReceived(SocketMessage socketMessage)
