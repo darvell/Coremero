@@ -27,7 +27,7 @@ namespace Coremero.Plugin.Classic
             TUMBLR_API_KEY = credentialStorage.GetKey("tumblr", "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4"); // Public testing API key from Tumblr.
         }
 
-        private async Task<Stream> GetRandomTumblrImage(string tumblrUsername)
+        private async Task<Tuple<Stream, string>> GetRandomTumblrImage(string tumblrUsername)
         {
             if (!_tumblrImageUrlCaches.ContainsKey(tumblrUsername))
             {
@@ -43,19 +43,22 @@ namespace Coremero.Plugin.Classic
                 httpImageStream.CopyTo(ms);
             }
             ms.Seek(0, SeekOrigin.Begin);
-            return ms;
+            // TODO: C# 7.0 when VS15 is RTM.
+            return new Tuple<Stream, string>(ms, imageUrl);
         }
 
         [Command("homero")]
         public async Task<IMessage> Homero(IInvocationContext context, IMessage message)
         {
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(await GetRandomTumblrImage("simpsons-latino"), "homero.jpg"));
+            Tuple<Stream, string> image = await GetRandomTumblrImage("simpsons-latino");
+            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"homero.{Path.GetExtension(image.Item2)}"));
         }
 
         [Command("dog")]
         public async Task<IMessage> Dog(IInvocationContext context, IMessage message)
         {
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(await GetRandomTumblrImage("goodassdog"), "good_pupper.jpg"));
+            Tuple<Stream, string> image = await GetRandomTumblrImage("goodassdog");
+            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"good_pupper.{Path.GetExtension(image.Item2)}"));
         }
 
         #region Business Titles
@@ -85,13 +88,14 @@ namespace Coremero.Plugin.Classic
                 IUser randomUser = context.Channel?.Users.GetRandom();
                 outputText = $"{_businessTitles.GetRandom()} {randomUser?.Name} hard at work.";
             }
-            return Message.Create(outputText, new StreamAttachment(await GetRandomTumblrImage("realbusinessmen"), "white_male_over_50.jpg"));
+            return Message.Create(outputText, new StreamAttachment((await GetRandomTumblrImage("realbusinessmen")).Item1, "white_male_over_50.jpg"));
         }
 
         [Command("y2k")]
         public async Task<IMessage> Y2K(IInvocationContext context, IMessage message)
         {
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(await GetRandomTumblrImage("y2kaestheticinstitute"), "aesthetic.jpg"));
+            Tuple<Stream, string> image = await GetRandomTumblrImage("y2kaestheticinstitute");
+            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"aesthetics.{Path.GetExtension(image.Item2)}"));
         }
 
         public void Dispose()
