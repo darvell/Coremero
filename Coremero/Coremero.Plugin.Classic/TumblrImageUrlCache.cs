@@ -64,6 +64,8 @@ namespace Coremero.Plugin.Classic
                 _lastCache.AddRange(newUrls);
             }
 
+            _lastUpdate = DateTime.Now;
+
         }
     }
 }
