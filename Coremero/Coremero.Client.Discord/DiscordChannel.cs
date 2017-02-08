@@ -33,6 +33,7 @@ namespace Coremero.Client.Discord
                     }
                     catch (Exception e)
                     {
+                        attachment.Contents?.Dispose();
                         Debug.WriteLine(e);
                         return;
                     }

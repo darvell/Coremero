@@ -24,8 +24,16 @@ namespace Coremero.Client.Discord
             {
                 foreach (IAttachment attachment in message.Attachments)
                 {
-                    await dmChannel.SendFileAsync(attachment.Contents, attachment.Name, message.Attachments?.Count == 1 ? message.Text : null);
-                    attachment.Contents?.Dispose();
+                    try
+                    {
+                        await dmChannel.SendFileAsync(attachment.Contents, attachment.Name,
+                            message.Attachments?.Count == 1 ? message.Text : null);
+                        attachment.Contents?.Dispose();
+                    }
+                    finally
+                    {
+                        attachment.Contents?.Dispose();
+                    }
                 }
             }
             else

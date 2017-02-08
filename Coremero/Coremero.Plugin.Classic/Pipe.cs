@@ -35,6 +35,11 @@ namespace Coremero.Plugin.Classic
                 }
                 if (result.Attachments != null)
                 {
+                    if (basicMessage.Attachments?.Count > 0)
+                    {
+                        // Prevent leak since we're going out of scope
+                        basicMessage.Attachments.ForEach(x => x.Contents?.Dispose());
+                    }
                     basicMessage.Attachments = result.Attachments;
                 }
             }
