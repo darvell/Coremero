@@ -34,7 +34,7 @@ namespace Coremero.Plugin.Classic
                 _tumblrImageUrlCaches[tumblrUsername] = new TumblrImageUrlCache(tumblrUsername, TUMBLR_API_KEY, TimeSpan.FromHours(12));
             }
 
-            string imageUrl = (await _tumblrImageUrlCaches[tumblrUsername].GetImagesAsync()).GetRandom();
+            string imageUrl = await _tumblrImageUrlCaches[tumblrUsername].Pop();
 
             // Store image in RAM and pass back.
             MemoryStream ms = new MemoryStream();

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Coremero.Plugin.Classic.TumblrJson;
+using Coremero.Utilities;
 using Newtonsoft.Json;
 
 namespace Coremero.Plugin.Classic
@@ -38,6 +39,22 @@ namespace Coremero.Plugin.Classic
             }
         }
 
+        public async Task<string> Pop()
+        {
+            if (_lastCache.Count == 0 || (DateTime.Now - _lastUpdate) > _cacheInvalidationTime)
+            {
+                await FillCache();
+            }
+
+
+            lock (_lastCache)
+            {
+                string result = _lastCache[0];
+                _lastCache.RemoveAt(0);
+                return result;
+            }
+        }
+
         public async Task FillCache()
         {
             List<string> newUrls = new List<string>();
@@ -61,7 +78,7 @@ namespace Coremero.Plugin.Classic
             lock (_lastCache)
             {
                 _lastCache.Clear();
-                _lastCache.AddRange(newUrls);
+                _lastCache.AddRange(newUrls.Shuffle());
             }
 
             _lastUpdate = DateTime.Now;
