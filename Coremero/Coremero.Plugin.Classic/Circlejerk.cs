@@ -57,7 +57,7 @@ namespace Coremero.Plugin.Classic
             // Snatch pepitos name if it's in SA-MC.
             if (context.OriginClient is DiscordClient)
             {
-                IUser ego = context.Channel.Users.Where(x => x.Mention.Contains("ego#")).FirstOrDefault();
+                IUser ego = context.Channel.Users.FirstOrDefault(x => x.Mention.Contains("ego#"));
                 if (ego != null)
                 {
                     egoName = $"{ego.Name}:";
