@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Coremero.Commands;
@@ -96,6 +97,22 @@ namespace Coremero.Plugin.Classic
         {
             Tuple<Stream, string> image = await GetRandomTumblrImage("y2kaestheticinstitute");
             return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"aesthetics.{Path.GetExtension(image.Item2)}"));
+        }
+
+        [Command("tumblrcache")]
+        public async Task<string> CacheSize(IInvocationContext context, IMessage message)
+        {
+            if (context.User.Permissions != UserPermission.BotOwner)
+            {
+                return null;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            foreach (KeyValuePair<string, TumblrImageUrlCache> cache in _tumblrImageUrlCaches)
+            {
+                sb.AppendLine($"{cache.Key}: {(await cache.Value.GetImagesAsync()).Count()} images.");
+            }
+            return sb.ToString();
         }
 
         public void Dispose()

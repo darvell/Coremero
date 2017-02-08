@@ -60,7 +60,7 @@ namespace Coremero.Plugin.Classic
             List<string> newUrls = new List<string>();
             using (HttpClient httpClient = new HttpClient())
             {
-                for (int i = 0; i < 100; i += 20)
+                for (int i = 0; i < 200; i += 20)
                 {
                     try
                     {
