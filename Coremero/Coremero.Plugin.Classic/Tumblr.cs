@@ -20,6 +20,7 @@ namespace Coremero.Plugin.Classic
         private readonly string TUMBLR_API_KEY;
 
         private HttpClient _httpClient = new HttpClient();
+        private Dictionary<string, TumblrImageUrlCache> _tumblrImageUrlCaches = new Dictionary<string, TumblrImageUrlCache>();
 
         public Tumblr(ICredentialStorage credentialStorage)
         {
@@ -28,15 +29,12 @@ namespace Coremero.Plugin.Classic
 
         private async Task<Stream> GetRandomTumblrImage(string tumblrUsername)
         {
-            List<Photo> photos = new List<Photo>();
-            for (int i = 0; i < 40; i += 20)
+            if (!_tumblrImageUrlCaches.ContainsKey(tumblrUsername))
             {
-                string blogJson = await _httpClient.GetStringAsync($"http://api.tumblr.com/v2/blog/{tumblrUsername}.tumblr.com/posts?api_key={TUMBLR_API_KEY}&type=photo&offset={i}");
-                var root = JsonConvert.DeserializeObject<Rootobject>(blogJson);
-                photos.AddRange(root.response.posts.SelectMany(x => x.photos));
+                _tumblrImageUrlCaches[tumblrUsername] = new TumblrImageUrlCache(tumblrUsername, TUMBLR_API_KEY, TimeSpan.FromHours(12));
             }
 
-            var imageUrl = photos.GetRandom().original_size.url;
+            string imageUrl = (await _tumblrImageUrlCaches[tumblrUsername].GetImagesAsync()).GetRandom();
 
             // Store image in RAM and pass back.
             MemoryStream ms = new MemoryStream();
@@ -90,6 +88,11 @@ namespace Coremero.Plugin.Classic
             return Message.Create(outputText, new StreamAttachment(await GetRandomTumblrImage("realbusinessmen"), "white_male_over_50.jpg"));
         }
 
+        [Command("y2k")]
+        public async Task<IMessage> Y2K(IInvocationContext context, IMessage message)
+        {
+            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(await GetRandomTumblrImage("y2kaestheticinstitute"), "aesthetic.jpg"));
+        }
 
         public void Dispose()
         {
