@@ -1,4 +1,4 @@
-![logo]((https://raw.githubusercontent.com/darvell/coremero/master/coremero.png)
+![logo](https://raw.githubusercontent.com/darvell/coremero/master/coremero.png)
 
 # Coremero
 .NET Core chat bot that provides abstractions/interfaces to allow any chat service to become a client.
