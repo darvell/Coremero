@@ -63,7 +63,7 @@ namespace Coremero
 
             if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
             {
-                return $"```\n{sb.ToString()}\n```";
+                return $"```css\n{sb.ToString()}\n```";
             }
             return sb.ToString();
         }
