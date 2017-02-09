@@ -28,6 +28,10 @@ namespace Coremero.Plugin.Classic
             foreach (var cmd in cmds)
             {
                 string cmdCall = cmd.Trim().Split(' ').First().Trim();
+                if (!_commandRegistry.Exists(cmdCall))
+                {
+                    continue;
+                }
                 IMessage result = await _commandRegistry.ExecuteCommandAsync(cmdCall, context, basicMessage);
                 if (!string.IsNullOrEmpty(result.Text))
                 {

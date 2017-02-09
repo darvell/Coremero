@@ -72,7 +72,7 @@ namespace Coremero.Services
                     }
                     else
                     {
-                        _messageBus.RaiseOutgoing(context.Raiser, Message.Create(e.StackTrace, new FileAttachment(Path.Combine(PathExtensions.AppDir,"error.jpg"))));
+                        _messageBus.RaiseOutgoing(context.Raiser, Message.Create("```\n" + e.StackTrace + "\n```", new FileAttachment(Path.Combine(PathExtensions.AppDir,"error.jpg"))));
                     }
                 }
             });

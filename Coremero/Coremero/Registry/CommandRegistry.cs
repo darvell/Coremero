@@ -146,5 +146,10 @@ namespace Coremero.Registry
         {
             return GetCommand(commandName)?.Help;
         }
+
+        public List<CommandAttribute> CommandAttributes
+        {
+            get { return _commandMap.Keys.ToList(); }
+        }
     }
 }
