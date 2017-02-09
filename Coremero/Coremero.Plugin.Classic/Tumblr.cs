@@ -99,7 +99,7 @@ namespace Coremero.Plugin.Classic
             return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"aesthetics.{Path.GetExtension(image.Item2)}"));
         }
 
-        [Command("koth")]
+        [Command("koth", Help = "Gets a random King of the Hill screencap.")]
         public async Task<IMessage> KingOfTheHill(IInvocationContext context, IMessage message)
         {
             Tuple<Stream, string> image = await GetRandomTumblrImage("kingofthehillcaps");
