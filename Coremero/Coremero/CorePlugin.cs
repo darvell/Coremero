@@ -17,13 +17,13 @@ namespace Coremero
             _commandRegistry = commandRegistry;
         }
 
-        [Command("echo", Help = ".echo <text> - Return <text>.")]
+        [Command("echo", "Input", Help = "Returns the exact same input.")]
         public string Echo(IInvocationContext context, IMessage message)
         {
             return string.Join(" ", message.Text.GetCommandArguments());
         }
 
-        [Command("woke", Help = ".woke <message> - Return message in uppercase, split by spaces separated by 👏.")]
+        [Command("woke", "Text" ,Help = "Return message in uppercase, split by spaces separated by 👏.")]
         public string Woke(IInvocationContext context, IMessage message)
         {
             return $"👏 {string.Join(" 👏 ", message.Text.ToUpper().GetCommandArguments())} 👏";
@@ -58,7 +58,12 @@ namespace Coremero
             StringBuilder sb = new StringBuilder();
             foreach (var cmd in _commandRegistry.CommandAttributes.OrderBy(x => x.Name))
             {
-                sb.AppendLine($"{"." + cmd.Name,-10} {cmd.Help}");
+                string args = String.Empty;
+                if (cmd.Arguments?.Count > 0)
+                {
+                    args = string.Join(" ", cmd.Arguments?.Select(x => $"[{x}]"));
+                }
+                sb.AppendLine($"{"." + cmd.Name + " " + args,-15} {cmd.Help}");
             }
 
             if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))

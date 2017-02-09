@@ -27,9 +27,13 @@ namespace Coremero.Commands
         /// </summary>
         public bool HasSideEffects { get; set; }
 
-        public CommandAttribute(string name, params string[] arguments)
+        public CommandAttribute(string name)
         {
             this.Name = name;
+        }
+
+        public CommandAttribute(string name, params string[] arguments) : this(name)
+        {
             this.Arguments = arguments?.ToList();
         }
     }
