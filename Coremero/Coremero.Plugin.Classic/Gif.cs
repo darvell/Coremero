@@ -49,7 +49,7 @@ namespace Coremero.Plugin.Classic
         {
             using (HttpClient client = new HttpClient())
             {
-                string json = await client.GetStringAsync($"http://api.riffsy.com/v1/search?key=KXSAYTVBST24&limit=50&tag={WebUtility.HtmlEncode(message.Text.TrimCommand())}");
+                string json = await client.GetStringAsync($"http://api.riffsy.com/v1/search?key=KXSAYTVBST24&limit=50&tag={WebUtility.UrlEncode(message.Text.TrimCommand())}");
 
                 var jsonObj = JsonConvert.DeserializeObject<JObject>(json);
                 var url = jsonObj["results"].Where(x => (int) x["media"][0]["gif"]["size"] < 6000000).GetRandom()["media"][0]["gif"]["url"];
@@ -67,7 +67,7 @@ namespace Coremero.Plugin.Classic
         {
             using (HttpClient client = new HttpClient())
             {
-                string json = await client.GetStringAsync($"http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag={WebUtility.HtmlEncode(message.Text.TrimCommand())}");
+                string json = await client.GetStringAsync($"http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag={WebUtility.UrlEncode(message.Text.TrimCommand())}");
 
                 var jsonObj = JsonConvert.DeserializeObject<JObject>(json);
                 var url = jsonObj["data"]["image_url"];
