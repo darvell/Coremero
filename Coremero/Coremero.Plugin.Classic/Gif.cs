@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -15,12 +16,20 @@ namespace Coremero.Plugin.Classic
 {
     public class Gif : IPlugin
     {
+        /*
         [Command("rightgif")]
         public async Task<IMessage> RightGif(IInvocationContext context, IMessage message)
         {
             using (HttpClient client = new HttpClient())
             {
-                var content = new StringContent($"{{\"text\" : \"{message.Text.TrimCommand().Replace("\"","")}\"}}", Encoding.UTF8, "application/json");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");
+
+                var request = new
+                {
+                    text = message.Text.TrimCommand()
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
                 var result = await client.PostAsync($"http://rightgif.com/search/web", content);
 
@@ -33,6 +42,8 @@ namespace Coremero.Plugin.Classic
                 return Message.Create(null, new StreamAttachment(ms, Path.GetFileName(url.ToString())));
             }
         }
+        */
+
         [Command("gif")]
         public async Task<IMessage> Riffsy(IInvocationContext context, IMessage message)
         {
@@ -41,12 +52,12 @@ namespace Coremero.Plugin.Classic
                 string json = await client.GetStringAsync($"http://api.riffsy.com/v1/search?key=KXSAYTVBST24&limit=50&tag={WebUtility.HtmlEncode(message.Text.TrimCommand())}");
 
                 var jsonObj = JsonConvert.DeserializeObject<JObject>(json);
-                var url = jsonObj["results"].GetRandom()["url"];
+                var url = jsonObj["results"].Where(x => (int) x["media"][0]["gif"]["size"] < 6000000).GetRandom()["media"][0]["gif"]["url"];
 
                 MemoryStream ms = new MemoryStream();
                 await (await client.GetStreamAsync(url.ToString())).CopyToAsync(ms);
                 ms.Seek(0, SeekOrigin.Begin);
-                return Message.Create(null, new StreamAttachment(ms, Path.GetFileName(url.ToString())));
+                return Message.Create(null, new StreamAttachment(ms, message.Text.TrimCommand() + ".gif"));
             }
 
         }
