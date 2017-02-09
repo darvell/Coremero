@@ -24,13 +24,13 @@ namespace Coremero.Plugin.Classic
             "----------- rest in peace tony -----------"
         };
 
-        [Command("clump")]
+        [Command("clump", Help = "bullshit feeligns")]
         public string BsFeelings(IInvocationContext context, IMessage message)
         {
             return "゜・。。・゜゜・。。・゜☆゜・。。・゜ im too bullshit feeligns  。・゜゜・。。・゜☆゜・。。・゜゜・。。・゜";
         }
 
-        [Command("tone")]
+        [Command("tone", Help = "Not for you.")]
         public async Task Tone(IInvocationContext context, IMessage message)
         {
             if (context.User.Mention.Contains("@hardclumping#2389"))
@@ -43,13 +43,13 @@ namespace Coremero.Plugin.Classic
             }
         }
 
-        [Command("depths")]
+        [Command("depths", Help = ".depths <text> - Translate <text> into real, authentic Norwegian.")]
         public string Depths(IInvocationContext context, IMessage message)
         {
             return message.Text.TrimCommand().Replace('o', 'ø');
         }
 
-        [Command("ego")]
+        [Command("ego", Help = "Impersonate ego.")]
         public string Ego(IInvocationContext context, IMessage message)
         {
             int pillAmount = _rnd.Next(20,421);

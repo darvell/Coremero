@@ -8,7 +8,7 @@ namespace Coremero.Plugin.Converter
 {
     public class UnitConversion : IPlugin
     {
-        [Command("beats")]
+        [Command("beats", Help = "Return the current time in .beats.")]
         public string BeatTime(IInvocationContext context, IMessage message)
         {
             var now = DateTime.UtcNow;
@@ -16,7 +16,7 @@ namespace Coremero.Plugin.Converter
             return $"UTC: {now:H:mm:ss} | Beats: @{beatsTime}";
         }
 
-        [Command("temperature", Help = ".temperature <temp> -- converts <temp> from C to F and F to C")]
+        [Command("temperature", Help = ".temperature <temp> - Convert <temp> from Celsius to Fahrenheit and vice versa.")]
         public string Temperature(IInvocationContext context, IMessage message)
         {
             List<String> args = message.Text.GetCommandArguments();
