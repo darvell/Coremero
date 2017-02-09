@@ -13,9 +13,7 @@ namespace Coremero.Plugin.Converter
             return message.Text.TrimCommand().ToUnicodeFullWidth();
         }
 
-        [Command("bigjab", Help = ".bigjab <text> - ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ஜ۩۞۩ஜ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\
-Ｃｏｎｖｅｒｔ　＜ｔｅｘｔ＞　ｔｏ　ｍｕｌｔｉｌｉｎｅ　ｆｕｌｌ　ｗｉｄｔｈ　ｗｉｔｈ　ｂｏｒｄｅｒｓ．\
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ஜ۩۞۩ஜ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬")]
+        [Command("bigjab", Help = ".bigjab <text> - Ｃｏｎｖｅｒｔ　＜ｔｅｘｔ＞　ｔｏ　ｍｕｌｔｉｌｉｎｅ　ｆｕｌｌ　ｗｉｄｔｈ　ｗｉｔｈ　ｂｏｒｄｅｒｓ.")]
         public string FullWidthMultiline(IInvocationContext context, IMessage message)
         {
 
