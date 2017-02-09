@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Coremero.Commands
@@ -14,14 +16,21 @@ namespace Coremero.Commands
         /// Description for using the command.
         /// </summary>
         public string Help { get; set; }
+        
+        /// <summary>
+        /// A list of arguments.
+        /// </summary>
+        public List<String> Arguments { get; set; }
+
         /// <summary>
         /// True if the command works with external state (e.g. direct client manipulation) https://en.wikipedia.org/wiki/Side_effect_(computer_science)
         /// </summary>
         public bool HasSideEffects { get; set; }
 
-        public CommandAttribute(string name)
+        public CommandAttribute(string name, params string[] arguments)
         {
             this.Name = name;
+            this.Arguments = arguments?.ToList();
         }
     }
 }
