@@ -37,6 +37,13 @@ namespace Coremero
             return builder.ToString();
         }
 
+        [Command("exception")]
+        public string ThrowException(IInvocationContext context, IMessage message)
+        {
+            throw new Exception("I broke for you.");
+            return "How?";
+        }
+
         public void Dispose()
         {
             // ignore

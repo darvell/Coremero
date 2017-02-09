@@ -141,5 +141,10 @@ namespace Coremero.Registry
         {
             return GetCommand(commandName) != null;
         }
+
+        public string GetHelp(string commandName)
+        {
+            return GetCommand(commandName)?.Help;
+        }
     }
 }

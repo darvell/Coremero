@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Coremero.Messages;
 using Coremero.Registry;
+using Coremero.Utilities;
 
 namespace Coremero.Services
 {
@@ -52,10 +54,26 @@ namespace Coremero.Services
             // TODO: Per-server task pools.
             Task.Run(async () =>
             {
-                IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
-                if (result != null)
+                try
                 {
-                    _messageBus.RaiseOutgoing(context.Raiser, result);
+                    IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
+                    if (result != null)
+                    {
+                        _messageBus.RaiseOutgoing(context.Raiser, result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    // Check if there is a help function.
+                    var help = _commandRegistry.GetHelp(command);
+                    if (!String.IsNullOrEmpty(help))
+                    {
+                        _messageBus.RaiseOutgoing(context.Raiser, Message.Create(help));
+                    }
+                    else
+                    {
+                        _messageBus.RaiseOutgoing(context.Raiser, Message.Create(e.StackTrace, new FileAttachment(Path.Combine(PathExtensions.AppDir,"error.jpg"))));
+                    }
                 }
             });
         }
