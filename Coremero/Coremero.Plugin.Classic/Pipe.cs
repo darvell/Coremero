@@ -19,7 +19,7 @@ namespace Coremero.Plugin.Classic
             _commandRegistry = cmdRegistry;
         }
 
-        [Command("pipe", Help = ".pipe <command> | <command> - Chain multiple commands together.")]
+        [Command("pipe", "Command | Command", Help = "Chain multiple commands together.")]
         public async Task<IMessage> PipeCommand(IInvocationContext context, IMessage message)
         {
             List<string> cmds = string.Join(" ", message.Text.GetCommandArguments()).Split('|').ToList();
