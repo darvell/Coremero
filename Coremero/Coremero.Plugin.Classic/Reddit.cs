@@ -4,24 +4,14 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Coremero.Commands;
 using Coremero.Utilities;
-using Discord.Commands;
 using Newtonsoft.Json.Linq;
 
 namespace Coremero.Plugin.Classic
 {
     public class Reddit : IPlugin
     {
-        public async Task<string> GetRandomTitleFromSubreddit(string subreddit)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                string json = await client.GetStringAsync($"http://reddit.com/r/{subreddit}.json");
-                var posts = JObject.Parse(json)["data"]["children"].ToObject<List<dynamic>>();
-                return posts.GetRandom()["data"]["title"];
-            }
-        }
-
         [Command("alligator")]
         public async Task<string> BritishProblems(IInvocationContext context, IMessage message)
         {
@@ -85,7 +75,7 @@ namespace Coremero.Plugin.Classic
         #region Danl
         private List<string> _danlSubreddits = new List<string>()
         {
-                                        "TheRedPill",
+                            "TheRedPill",
                             "seduction",
                             "CuckoldCommunity",
                             "BikePorn",
@@ -98,6 +88,7 @@ namespace Coremero.Plugin.Classic
                             "joerogan"
 
         };
+
         [Command("danl")]
         public async Task<string> Daniel(IInvocationContext context, IMessage message)
         {
@@ -108,6 +99,15 @@ namespace Coremero.Plugin.Classic
 
         #endregion Danl
 
+        private async Task<string> GetRandomTitleFromSubreddit(string subreddit)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string json = await client.GetStringAsync($"http://reddit.com/r/{subreddit}.json");
+                var posts = JObject.Parse(json)["data"]["children"].ToObject<List<dynamic>>();
+                return posts.GetRandom()["data"]["title"];
+            }
+        }
     }
 
 
