@@ -56,7 +56,7 @@ namespace Coremero.Plugin.Classic
                 {
                     try
                     {
-                        return (int) x["media"][0]["gif"]["size"] < 6000000;
+                        return (long) x["media"][0]["gif"]["size"] < 6000000;
                     }
                     catch
                     {
