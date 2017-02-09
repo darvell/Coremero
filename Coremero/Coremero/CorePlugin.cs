@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Coremero.Client;
 using Coremero.Commands;
 using Coremero.Registry;
 using Coremero.Utilities;
@@ -55,11 +56,16 @@ namespace Coremero
         public string CommandList(IInvocationContext context, IMessage message)
         {
             StringBuilder sb = new StringBuilder();
-            _commandRegistry.CommandAttributes.ForEach(x =>
+            foreach (var cmd in _commandRegistry.CommandAttributes.OrderBy(x => x.Name))
             {
-                sb.AppendLine($".{x.Name} - {x.Help}");
-            });
-            return $"```\n{sb.ToString()}\n```";
+                sb.AppendLine($"{"." + cmd.Name,-10} {cmd.Help}");
+            }
+
+            if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
+            {
+                return $"```\n{sb.ToString()}\n```";
+            }
+            return sb.ToString();
         }
 
         public void Dispose()
