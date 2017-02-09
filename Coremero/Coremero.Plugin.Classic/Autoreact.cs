@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Coremero.Client.Discord;
 using Coremero.Services;
@@ -29,7 +30,7 @@ namespace Coremero.Plugin.Classic
             if (message == null)
                 return;
 
-            if (message.Text.Contains("anime"))
+            if (message.Text.Split(' ').Any(x => x.Equals("anime")))
             {
                 foreach (var reactId in _animeReactionIds)
                 {
