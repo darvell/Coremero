@@ -99,6 +99,37 @@ namespace Coremero.Plugin.Classic
 
         #endregion Danl
 
+        #region Drug
+        private List<string> _drugSubreddits = new List<string>()
+        {
+            "drugs",
+            "drugscirclejerk",
+            "opiates",
+            "kratom",
+            "researchchemicals",
+            "trees",
+            "stims",
+            "psychonaut",
+            "benzodiazepines",
+            "tripsit",
+            "nootropics",
+            "drugsmart"
+        };
+
+        [Command("drug")]
+        public async Task<string> Drug(IInvocationContext context, IMessage message)
+        {
+            return await GetRandomTitleFromSubreddit(_drugSubreddits.GetRandom());
+        }
+
+        [Command("benzo")]
+        public async Task<string> Benzo(IInvocationContext context, IMessage message)
+        {
+            return await GetRandomTitleFromSubreddit("benzodiazepines");
+        }
+
+        #endregion
+
         private async Task<string> GetRandomTitleFromSubreddit(string subreddit)
         {
             using (HttpClient client = new HttpClient())
