@@ -7,13 +7,13 @@ namespace Coremero.Plugin.Converter
 {
     public class Jab : IPlugin
     {
-        [Command("jab")]
+        [Command("jab", Help = ".jab <text> - Ｃｏｎｖｅｒｔ ＜ｔｅｘｔ＞ ｔｏ ｆｕｌｌ ｗｉｄｔｈ.")]
         public string FullWidth(IInvocationContext context, IMessage message)
         {
             return message.Text.TrimCommand().ToUnicodeFullWidth();
         }
 
-        [Command("bigjab")]
+        [Command("bigjab", Help = ".bigjab <text> - Ｃｏｎｖｅｒｔ　＜ｔｅｘｔ＞　ｔｏ　ｍｕｌｔｉｌｉｎｅ　ｆｕｌｌ　ｗｉｄｔｈ　ｗｉｔｈ　ｂｏｒｄｅｒｓ.")]
         public string FullWidthMultiline(IInvocationContext context, IMessage message)
         {
 

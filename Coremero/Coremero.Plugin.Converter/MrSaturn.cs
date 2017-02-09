@@ -40,7 +40,7 @@ namespace Coremero.Plugin.Converter
             {'\'', 'ᐞ'}
         };
 
-        [Command("saturn")]
+        [Command("saturn", Help = ".saturn <text> - Cᘎᑎᐯᕮᖇᒮ <ᒮᕮ᙭ᒮ> ᒮᘎ Sᗩᒮᘮᖇᑎᓮᗩᑎ.")]
         public string SaturnConvert(IInvocationContext context, IMessage message)
         {
             return String.Concat(message.Text?.TrimCommand().Select(x =>

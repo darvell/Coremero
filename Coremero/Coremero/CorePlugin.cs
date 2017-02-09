@@ -16,13 +16,13 @@ namespace Coremero
             _commandRegistry = commandRegistry;
         }
 
-        [Command("echo")]
+        [Command("echo", Help = ".echo <text> - Return <text>.")]
         public string Echo(IInvocationContext context, IMessage message)
         {
             return string.Join(" ", message.Text.GetCommandArguments());
         }
 
-        [Command("woke")]
+        [Command("woke", Help = ".woke <message> - Return message in uppercase, split by spaces separated by 👏.")]
         public string Woke(IInvocationContext context, IMessage message)
         {
             return $"👏 {string.Join(" 👏 ", message.Text.ToUpper().GetCommandArguments())} 👏";
@@ -51,7 +51,7 @@ namespace Coremero
             return "How?";
         }
 
-        [Command("list")]
+        [Command("list", Help = "List all commands.")]
         public string CommandList(IInvocationContext context, IMessage message)
         {
             StringBuilder sb = new StringBuilder();

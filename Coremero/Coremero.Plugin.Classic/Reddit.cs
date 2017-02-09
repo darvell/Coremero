@@ -12,7 +12,7 @@ namespace Coremero.Plugin.Classic
 {
     public class Reddit : IPlugin
     {
-        [Command("alligator")]
+        [Command("alligator", Help = "Impersonate alligator.")]
         public async Task<string> BritishProblems(IInvocationContext context, IMessage message)
         {
             bool format = message.Text.GetCommandArguments().Count == 0;
@@ -38,7 +38,7 @@ namespace Coremero.Plugin.Classic
 
         };
 
-        [Command("hurt")]
+        [Command("hurt", Help = "Impersonate hurt.")]
         public async Task<string> Hurt(IInvocationContext context, IMessage message)
         {
             bool format = message.Text.GetCommandArguments().Count == 0;
@@ -61,7 +61,7 @@ namespace Coremero.Plugin.Classic
         };
 
         // TODO: Hyle is supposed to be a markov chain of multiple posts.
-        [Command("hyle")]
+        [Command("hyle", Help = "Impersonate hyle.")]
         public async Task<string> Hyle(IInvocationContext context, IMessage message)
         {
             bool format = message.Text.GetCommandArguments().Count == 0;
@@ -89,7 +89,7 @@ namespace Coremero.Plugin.Classic
 
         };
 
-        [Command("danl")]
+        [Command("danl", Help = "Impersonate danl.")]
         public async Task<string> Daniel(IInvocationContext context, IMessage message)
         {
             bool format = message.Text.GetCommandArguments().Count == 0;
@@ -117,13 +117,13 @@ namespace Coremero.Plugin.Classic
             "lsd"
         };
 
-        [Command("drug")]
+        [Command("drug", Help = "Get a random post title from the drugs subreddit.")]
         public async Task<string> Drug(IInvocationContext context, IMessage message)
         {
             return await GetRandomTitleFromSubreddit(_drugSubreddits.GetRandom());
         }
 
-        [Command("benzo")]
+        [Command("benzo", Help = "Get a random post title from the benzodiazepines subreddit.")]
         public async Task<string> Benzo(IInvocationContext context, IMessage message)
         {
             return await GetRandomTitleFromSubreddit("benzodiazepines");
