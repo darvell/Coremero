@@ -52,7 +52,17 @@ namespace Coremero.Plugin.Classic
                 string json = await client.GetStringAsync($"http://api.riffsy.com/v1/search?key=KXSAYTVBST24&limit=50&tag={WebUtility.UrlEncode(message.Text.TrimCommand())}");
 
                 var jsonObj = JsonConvert.DeserializeObject<JObject>(json);
-                var url = jsonObj["results"].Where(x => (int) x["media"][0]["gif"]["size"] < 6000000).GetRandom()["media"][0]["gif"]["url"];
+                var url = jsonObj["results"].Where(x =>
+                {
+                    try
+                    {
+                        return (int) x["media"][0]["gif"]["size"] < 6000000;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }).GetRandom()["media"][0]["gif"]["url"];
 
                 MemoryStream ms = new MemoryStream();
                 await (await client.GetStreamAsync(url.ToString())).CopyToAsync(ms);
