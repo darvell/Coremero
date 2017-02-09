@@ -44,7 +44,7 @@ namespace Coremero.Plugin.Classic
         }
         */
 
-        [Command("gif")]
+        [Command("gif", Help = ".gif <query> Get a random GIF from Riffy.")]
         public async Task<IMessage> Riffsy(IInvocationContext context, IMessage message)
         {
             using (HttpClient client = new HttpClient())
@@ -79,7 +79,7 @@ namespace Coremero.Plugin.Classic
 
         }
 
-        [Command("giphy")]
+        [Command("giphy", Help = ".giphy <query> Get a random GIF from Giphy.")]
         public async Task<IMessage> Giphy(IInvocationContext context, IMessage message)
         {
             using (HttpClient client = new HttpClient())
@@ -96,7 +96,7 @@ namespace Coremero.Plugin.Classic
             }
         }
 
-        [Command("howitsmade")]
+        [Command("howitsmade", Help = "Get a random How It's Made GIF.")]
         public async Task<IMessage> RandomHowItsMade(IInvocationContext context, IMessage message)
         {
             return await Giphy(context, Message.Create("hows its made"));
