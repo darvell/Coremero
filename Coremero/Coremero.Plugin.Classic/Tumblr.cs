@@ -106,6 +106,20 @@ namespace Coremero.Plugin.Classic
             return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"propane.{Path.GetExtension(image.Item2)}"));
         }
 
+        [Command("xfiles")]
+        public async Task<IMessage> XFiles(IInvocationContext context, IMessage message)
+        {
+            Tuple<Stream, string> image = await GetRandomTumblrImage("outofcontextfiles");
+            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"alien.{Path.GetExtension(image.Item2)}"));
+        }
+
+        [Command("spongebob")]
+        public async Task<IMessage> Spongebob(IInvocationContext context, IMessage message)
+        {
+            Tuple<Stream, string> image = await GetRandomTumblrImage("spongecaps");
+            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"spongebob.{Path.GetExtension(image.Item2)}"));
+        }
+
 
         [Command("tumblrcache")]
         public async Task<string> CacheSize(IInvocationContext context, IMessage message)

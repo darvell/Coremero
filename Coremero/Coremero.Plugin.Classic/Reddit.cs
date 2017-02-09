@@ -113,7 +113,8 @@ namespace Coremero.Plugin.Classic
             "benzodiazepines",
             "tripsit",
             "nootropics",
-            "drugsmart"
+            "drugsmart",
+            "lsd"
         };
 
         [Command("drug")]
@@ -129,6 +130,12 @@ namespace Coremero.Plugin.Classic
         }
 
         #endregion
+
+        [Command("reddit", Help = ".reddit <subreddit> - Get a random post title from a subreddit.")]
+        public async Task<string> RandomReddit(IInvocationContext context, IMessage message)
+        {
+            return await GetRandomTitleFromSubreddit(message.Text.GetCommandArguments().First());
+        }
 
         private async Task<string> GetRandomTitleFromSubreddit(string subreddit)
         {
