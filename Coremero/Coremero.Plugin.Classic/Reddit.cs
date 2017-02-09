@@ -141,9 +141,8 @@ namespace Coremero.Plugin.Classic
         {
             using (HttpClient client = new HttpClient())
             {
-                string json = await client.GetStringAsync($"http://reddit.com/r/{subreddit}.json");
-                var posts = JObject.Parse(json)["data"]["children"].ToObject<List<dynamic>>();
-                return posts.GetRandom()["data"]["title"];
+                string json = await client.GetStringAsync($"http://reddit.com/r/{subreddit}/random.json");
+                return JArray.Parse(json)[0]["data"]["children"][0]["data"]["title"].ToString();
             }
         }
     }
