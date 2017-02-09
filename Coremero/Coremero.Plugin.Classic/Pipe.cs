@@ -27,12 +27,14 @@ namespace Coremero.Plugin.Classic
             basicMessage.Text = string.Join(" ",cmds.First().Split(' ').Skip(1).ToList()).Trim();
             foreach (var cmd in cmds)
             {
-                string cmdCall = cmd.Trim().Split(' ').First().Trim();
-                if (!_commandRegistry.Exists(cmdCall))
+                List<string> call = cmd.Trim().Split(' ').ToList();
+                if (!_commandRegistry.Exists(call.First()))
                 {
                     continue;
                 }
-                IMessage result = await _commandRegistry.ExecuteCommandAsync(cmdCall, context, basicMessage);
+
+                IMessage result = await _commandRegistry.ExecuteCommandAsync(call.First(), context, call.Count == 1 ? basicMessage : Message.Create(string.Join(" ", call.Skip(1))));
+
                 if (!string.IsNullOrEmpty(result.Text))
                 {
                     basicMessage.Text = result.Text;
