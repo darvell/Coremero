@@ -36,24 +36,17 @@ namespace Coremero.Registry
 
                     // Check if the parameters are right.
                     ParameterInfo[] methodParams = methodInfo.GetParameters();
-                    if (methodParams.Length != 2)
+                    if (methodParams.Length > 0)
                     {
-                        Debug.Fail($"Command {attribute.Name} has an invalid parameter count of {methodParams.Length}.");
-                        continue;
-                    }
-
-                    if (methodParams[0].ParameterType != typeof(IInvocationContext))
-                    {
-                        Debug.Fail(
-                            $"Command {attribute.Name} has an invalid first argument. You should only use MethodName(IInvocationContext context, IMessage message).");
-                        continue;
-                    }
-
-                    if (methodParams[1].ParameterType != typeof(IMessage))
-                    {
-                        Debug.Fail(
-                            $"Command {attribute.Name} has an invalid second argument. You should only use MethodName(IInvocationContext context, IMessage message).");
-                        continue;
+                        if (methodParams.Any(x =>
+                        {
+                            Type paramType = x.ParameterType;
+                            return !(paramType == (typeof(IInvocationContext)) || paramType == typeof(IMessage));
+                        }))
+                        {
+                            Debug.Fail("Invalid parameter in command.");
+                            continue;
+                        }
                     }
 
 
@@ -67,7 +60,19 @@ namespace Coremero.Registry
                     // Register command
                     _commandMap[attribute] = delegate(IInvocationContext context, IMessage message)
                     {
-                        return methodInfo.Invoke(plugin, new object[] { context, message });
+                        List<object> paramList = new List<object>();
+                        foreach (var param in methodParams)
+                        {
+                            if (param.ParameterType == typeof(IInvocationContext))
+                            {
+                                paramList.Append(context);
+                            }
+                            else if (param.ParameterType == typeof(IMessage))
+                            {
+                                paramList.Append(message);
+                            }
+                        }
+                        return methodInfo.Invoke(plugin, methodParams.Length == 0 ? null : paramList.ToArray());
                     };
 
                 }
