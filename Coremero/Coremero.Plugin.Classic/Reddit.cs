@@ -90,11 +90,9 @@ namespace Coremero.Plugin.Classic
         };
 
         [Command("danl", Help = "Impersonate danl.")]
-        public async Task<string> Daniel(IInvocationContext context, IMessage message)
+        public async Task<string> Daniel()
         {
-            bool format = message.Text.GetCommandArguments().Count == 0;
-
-            return (format ? "<danl>" : "") + await GetRandomTitleFromSubreddit(_danlSubreddits.GetRandom());
+            return "<danl>" + await GetRandomTitleFromSubreddit(_danlSubreddits.GetRandom());
         }
 
         #endregion Danl
@@ -118,9 +116,9 @@ namespace Coremero.Plugin.Classic
         };
 
         [Command("drug", Help = "Get a random post title from the drugs subreddit.")]
-        public async Task<string> Drug(IInvocationContext context, IMessage message)
+        public async Task<string> Drug()
         {
-            return await GetRandomTitleFromSubreddit(_drugSubreddits.GetRandom());
+            return await RandomReddit(string.Join(" ", _drugSubreddits));
         }
 
         [Command("benzo", Help = "Get a random post title from the benzodiazepines subreddit.")]
@@ -132,9 +130,9 @@ namespace Coremero.Plugin.Classic
         #endregion
 
         [Command("reddit", "Subreddit Name", Help = "Get a random post title from a subreddit.")]
-        public async Task<string> RandomReddit(IInvocationContext context, IMessage message)
+        public async Task<string> RandomReddit(string subreddits)
         {
-            return await GetRandomTitleFromSubreddit(message.Text.GetCommandArguments().First());
+            return await GetRandomTitleFromSubreddit(string.Join("+",subreddits.GetCommandArguments()));
         }
 
         private async Task<string> GetRandomTitleFromSubreddit(string subreddit)

@@ -161,11 +161,11 @@ namespace Coremero.Plugin.Classic
         #endregion
 
         [Command("rip", "WHO DIE", Help = "Creates a gravestone for [WHO DIE].")]
-        public string RestInPeace(IInvocationContext context, IMessage message)
+        public string RestInPeace(IInvocationContext context, string text)
         {
             // This is insane and clearly for the old bot.
             // TODO: API cleanup.
-            string output = string.Join("\n", FormatTextToHeadstone(message.Text.TrimCommand().Split('\n').ToList()));
+            string output = string.Join("\n", FormatTextToHeadstone(text.Split('\n').ToList()));
 
             if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
             {
@@ -175,10 +175,10 @@ namespace Coremero.Plugin.Classic
         }
 
         [Command("bread", "Carb Eater", Help = "Creates a bread for [Carb Eater].")]
-        public string Bread(IInvocationContext context, IMessage message)
+        public string Bread(IInvocationContext context, string text)
         {
             // TODO: API cleanup.
-            string output = string.Join("\n", FormatTextToBread(message.Text.TrimCommand().Split('\n').ToList()));
+            string output = string.Join("\n", FormatTextToBread(text.Split('\n').ToList()));
 
             if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
             {

@@ -11,7 +11,7 @@ namespace Coremero.Plugin.Borat
     public class BoratQuote : IPlugin
     {
         [Command("borat", Help = "I like!")]
-        public IMessage Quote(IInvocationContext context, IMessage message)
+        public IMessage Quote()
         {
             return Message.Create("I like!", new FileAttachment(Path.Combine(PathExtensions.PluginDir, "IASIPLaughing.jpg")));
         }
