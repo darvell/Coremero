@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Coremero.Commands;
 using Coremero.Messages;
 using Coremero.Utilities;
 using HtmlAgilityPack;
@@ -15,6 +16,7 @@ namespace Coremero.Plugin.Classic
     {
         private List<string> _wipUrls = new List<string>();
 
+        [Command("wip", Help = "Returns an under construction GIF.")]
         public async Task<IMessage> WorkInProgressGif()
         {
             using (HttpClient client = new HttpClient())
