@@ -11,6 +11,9 @@
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="hys.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="lilpp_list.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
