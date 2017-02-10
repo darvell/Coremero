@@ -22,7 +22,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Contrast(val).Save(ms);
             }
