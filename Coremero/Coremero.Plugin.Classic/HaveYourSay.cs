@@ -62,7 +62,7 @@ namespace Coremero.Plugin.Classic
                 builder.Append($" because {_hysData["because"].GetRandom()}");
             }
 
-            builder.Append($"{GenerateRandomIdiotPunctuation()}{_hysData["imperative"]} {_hysData["moronic_solution"].GetRandom()}{GenerateRandomIdiotPunctuation()}");
+            builder.Append($"{GenerateRandomIdiotPunctuation()}{_hysData["imperative"].GetRandom()} {_hysData["moronic_solution"].GetRandom()}{GenerateRandomIdiotPunctuation()}");
 
             if (_rnd.NextDouble() > 0.4)
             {
