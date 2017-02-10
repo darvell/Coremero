@@ -61,18 +61,18 @@ namespace Coremero.Registry
                     _commandMap[attribute] = delegate(IInvocationContext context, IMessage message)
                     {
                         List<object> paramList = new List<object>();
-                        foreach (var param in methodParams)
+                        foreach (var param in methodInfo.GetParameters())
                         {
                             if (param.ParameterType == typeof(IInvocationContext))
                             {
-                                paramList.Append(context);
+                                paramList.Add(context);
                             }
                             else if (param.ParameterType == typeof(IMessage))
                             {
-                                paramList.Append(message);
+                                paramList.Add(message);
                             }
                         }
-                        return methodInfo.Invoke(plugin, methodParams.Length == 0 ? null : paramList.ToArray());
+                        return methodInfo.Invoke(plugin, paramList.Count == 0 ? null : paramList.ToArray());
                     };
 
                 }

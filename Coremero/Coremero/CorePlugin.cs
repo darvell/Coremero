@@ -27,20 +27,20 @@ namespace Coremero
         }
 
         [Command("upper", "Input", Help = "Returns the exact same input but in uppercase.")]
-        public string Upper(IInvocationContext context, IMessage message)
+        public string Upper(IMessage message)
         {
             return message.Text.TrimCommand().ToUpper();
         }
 
 
-        [Command("woke", "Text" ,Help = "Return message in uppercase, split by spaces separated by 👏.")]
-        public string Woke(IInvocationContext context, IMessage message)
+        [Command("woke", "Text", Help = "Return message in uppercase, split by spaces separated by 👏.")]
+        public string Woke(IMessage message)
         {
             return $"👏 {string.Join(" 👏 ", message.Text.ToUpper().GetCommandArguments())} 👏";
         }
 
         [Command("gc", Help = "Dev only command. Forces a GC.")]
-        public string RunGC(IInvocationContext context, IMessage message)
+        public string RunGC(IInvocationContext context)
         {
             if (context.User?.Permissions != UserPermission.BotOwner)
             {
@@ -56,7 +56,7 @@ namespace Coremero
         }
 
         [Command("tasklist", Help = "Dev only command. Reports task status.")]
-        public string Tasks(IInvocationContext context, IMessage message)
+        public string Tasks(IInvocationContext context)
         {
             if (context.User?.Permissions != UserPermission.BotOwner)
             {
@@ -104,6 +104,12 @@ namespace Coremero
                 return $"```css\n{sb.ToString()}\n```";
             }
             return sb.ToString();
+        }
+
+        [Command("hello", Help = "Just says hello.")]
+        public string Hello()
+        {
+            return "hello";
         }
 
         public void Dispose()
