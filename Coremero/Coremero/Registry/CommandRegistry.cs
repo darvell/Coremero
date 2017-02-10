@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Messages;
@@ -80,14 +81,25 @@ namespace Coremero.Registry
         /// <returns>CommandAttribute if found else null.</returns>
         private CommandAttribute GetCommand(string commandName)
         {
-            CommandAttribute selectedCommand =
-                _commandMap.Keys.Where(x => x.Name.DamerauLevenshteinDistance(commandName, 1) != int.MaxValue).FirstOrDefault();
-
-            // TODO: Can we avoid double calculation by stuffing the result of the calculation temporarily during the LINQ query?
-            if (selectedCommand == null || selectedCommand.Name.DamerauLevenshteinDistance(commandName, 1) == int.MaxValue)
+            List<CommandAttribute> possibleCommands = _commandMap.Keys.Where(x => x.Name.StartsWith(commandName)).ToList();
+            CommandAttribute selectedCommand = null;
+            int nearestEditDistance = int.MaxValue;
+            foreach (var cmd in possibleCommands)
             {
-                // Not even close. Go away.
-                return null;
+                if (cmd.Name.Equals(commandName))
+                {
+                    selectedCommand = cmd;
+                    break;
+                }
+                else
+                {
+                    int edit = cmd.Name.DamerauLevenshteinDistance(commandName, 10);
+                    if (nearestEditDistance > edit)
+                    {
+                        nearestEditDistance = edit;
+                        selectedCommand = cmd;
+                    }
+                }
             }
             return selectedCommand;
         }

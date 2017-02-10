@@ -16,8 +16,7 @@ namespace Coremero.Plugin.Classic
 
             if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
             {
-                output = output.PadLeft(3, '`');
-                output = output.PadRight(3, '`');
+                output = $"```{output}```";
             }
             return output;
         }
