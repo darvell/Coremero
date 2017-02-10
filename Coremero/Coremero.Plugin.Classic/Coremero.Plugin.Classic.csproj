@@ -10,4 +10,12 @@
     <ProjectReference Include="..\Coremero.Client.Discord\Coremero.Client.Discord.csproj" />
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="lilpp_list.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sponge_list.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
