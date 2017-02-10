@@ -7,6 +7,9 @@
     <OutputType>library</OutputType>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack.CssSelectors.NetCore" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Coremero.Client.Discord\Coremero.Client.Discord.csproj" />
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
   </ItemGroup>
