@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -9,42 +10,55 @@ namespace Coremero
 {
     public class AssemblyLoader : AssemblyLoadContext
     {
-        private string _path;
-        private DependencyContext _dependencyContext;
-        public AssemblyLoader(string path = null, DependencyContext dependencyContext = null)
+        // Since writing our own dependency context is probably a bit far off, let's setup our own.
+        private static DependencyContext Context = DependencyContext.Default;
+
+        public AssemblyLoader()
         {
-            if (path == null)
-            {
-                _path = PathExtensions.AppDir;
-            }
+            this.Resolving += AssemblyLoader_Resolving;
         }
+
+        private Assembly AssemblyLoader_Resolving(AssemblyLoadContext arg1, AssemblyName arg2)
+        {
+            string appPath = $"{Path.Combine(PathExtensions.AppDir, arg2.Name)}.dll";
+            string pluginPath = $"{Path.Combine(PathExtensions.PluginDir, arg2.Name)}.dll";
+
+            // Check the plugin folder and then local.
+            if (File.Exists(appPath))
+            {
+                return LoadFromPath(appPath);
+            }
+            else if (File.Exists(pluginPath))
+            {
+                return LoadFromPath(pluginPath);
+            }
+            return null;
+        }
+
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            var deps = DependencyContext.Default;
+            var deps = Context;
             var res = deps.CompileLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
             if (res.Count > 0)
             {
                 var assembly = Assembly.Load(new AssemblyName(res.First().Name));
+                var depContext = DependencyContext.Load(assembly);
+                Context = DependencyContext.Default.Merge(depContext);
+
                 return assembly;
             }
-            /*
-            else if (_dependencyContext != null)
-            {
-                _dependencyContext.CompileLibraries.Where()
-            }
-            */
-            else
-            { 
-                var apiApplicationFileInfo = new FileInfo($"{PathExtensions.PluginDir}{Path.DirectorySeparatorChar}{assemblyName.Name}.dll");
-                if (File.Exists(apiApplicationFileInfo.FullName))
-                {
-                    // Check if there's a depedency context there.
-                    DependencyContext.Load()
-                    var asl = new AssemblyLoader(apiApplicationFileInfo.DirectoryName);
-                    return asl.LoadFromAssemblyPath(apiApplicationFileInfo.FullName);
-                }
-            }
             return null;
+        }
+
+        public Assembly LoadFromPath(string path)
+        {
+            Assembly assembly = LoadFromAssemblyPath(path);
+            var depContext = DependencyContext.Load(assembly);
+            if (depContext != null)
+            {
+                Context = DependencyContext.Default.Merge(depContext);
+            }
+            return assembly;
         }
     }
 }

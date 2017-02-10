@@ -47,7 +47,7 @@ namespace Coremero
             var clientAssemblies =
                 from file in new DirectoryInfo(PlatformServices.Default.Application.ApplicationBasePath).GetFiles()
                 where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Client.")
-                select loader.LoadFromAssemblyPath(file.FullName);
+                select loader.LoadFromPath(file.FullName);
             _container.RegisterCollection<IClient>(clientAssemblies);
 
             // Scan for plugins
@@ -56,7 +56,7 @@ namespace Coremero
                 var pluginAssemblies =
                     from file in new DirectoryInfo(PathExtensions.PluginDir).GetFiles()
                     where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin.")
-                    select loader.LoadFromAssemblyPath(file.FullName);
+                    select loader.LoadFromPath(file.FullName);
 
                 _container.RegisterCollection<IPlugin>(pluginAssemblies);
             }
