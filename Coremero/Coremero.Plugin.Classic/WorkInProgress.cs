@@ -12,7 +12,7 @@ using HtmlAgilityPack;
 
 namespace Coremero.Plugin.Classic
 {
-    public class WorkInProgress
+    public class WorkInProgress : IPlugin
     {
         private List<string> _wipUrls = new List<string>();
 
