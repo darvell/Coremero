@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Coremero.Client;
 using Coremero.Commands;
 using Coremero.Registry;
@@ -42,6 +43,29 @@ namespace Coremero
             GC.Collect();
             GC.WaitForPendingFinalizers();
             builder.AppendLine($"Post: {GC.GetTotalMemory(false) / 1024}KB");
+            return builder.ToString();
+        }
+
+        [Command("tasklist", Help = "Dev only command. Reports task status.")]
+        public string Tasks(IInvocationContext context, IMessage message)
+        {
+            if (context.User?.Permissions != UserPermission.BotOwner)
+            {
+                return null;
+            }
+            StringBuilder builder = new StringBuilder();
+            int taskCount = 0;
+            foreach (var task in TaskScheduler.Current.GetScheduledTasksForDebugger())
+            {
+                builder.AppendLine($"{task.Id} - {task.Status}");
+                taskCount++;
+            }
+            builder.AppendLine($"Tasks total: {taskCount}");
+
+            if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
+            {
+                return $"```\n{builder.ToString()}\n```";
+            }
             return builder.ToString();
         }
 
