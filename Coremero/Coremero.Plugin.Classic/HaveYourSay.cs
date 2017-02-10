@@ -82,9 +82,9 @@ namespace Coremero.Plugin.Classic
         }
 
         [Command("hys", "Subject", Help = "Generates a fake Have Your Say style comment targeting [Subject].")]
-        public string OutrageCommand(IInvocationContext context, IMessage message)
+        public string OutrageCommand(string subject)
         {
-            return GenerateFakeOutrageComment(message.Text?.TrimCommand());
+            return GenerateFakeOutrageComment(subject);
         }
     }
 }

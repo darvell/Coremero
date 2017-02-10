@@ -55,19 +55,19 @@ namespace Coremero.Plugin.Classic
         }
 
         [Command("lilpp", Help = "Impersonates LilPP.")]
-        public string LilPPHates(IInvocationContext context, IMessage message)
+        public string LilPPHates()
         {
             return $"LilPP: i hate {GetRandomLine(_ppFile, ref _ppLineIndexes)}";
         }
         [Command("hate", Help = "Hate a random object.")]
-        public string PlainHate(IInvocationContext context, IMessage message)
+        public string PlainHate()
         {
             return $"i hate {GetRandomLine(_ppFile, ref _ppLineIndexes)}";
         }
 
 
         [Command("love", Help = "Love a random object.")]
-        public string PlainLove(IInvocationContext context, IMessage message)
+        public string PlainLove()
         {
             return $"i love {GetRandomLine(_ppFile, ref _ppLineIndexes)}";
         }
@@ -75,7 +75,7 @@ namespace Coremero.Plugin.Classic
 
 
         [Command("sponge", Help = "Impersonates sponge.")]
-        public string SpongeFeels(IInvocationContext context, IMessage message)
+        public string SpongeFeels()
         {
             var i = _rnd.Next(10);
             var verb = i % 3 == 0 ? "love" : i % 3 == 1 ? "am ambivalent towards" : "hate";
