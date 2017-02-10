@@ -41,7 +41,7 @@ namespace Coremero.Registry
                         if (methodParams.Any(x =>
                         {
                             Type paramType = x.ParameterType;
-                            return !(paramType == (typeof(IInvocationContext)) || paramType == typeof(IMessage));
+                            return !(paramType == (typeof(IInvocationContext)) || paramType == typeof(IMessage) || paramType == typeof(string));
                         }))
                         {
                             Debug.Fail("Invalid parameter in command.");
@@ -70,6 +70,10 @@ namespace Coremero.Registry
                             else if (param.ParameterType == typeof(IMessage))
                             {
                                 paramList.Add(message);
+                            }
+                            else if (param.ParameterType == typeof(string))
+                            {
+                                paramList.Add(message.Text.TrimCommand());
                             }
                         }
                         return methodInfo.Invoke(plugin, paramList.Count == 0 ? null : paramList.ToArray());
