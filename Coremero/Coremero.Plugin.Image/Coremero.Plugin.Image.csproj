@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputType>library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <OutputType>library</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha2-00052" />
+    <PackageReference Include="ImageSharp.Formats.Gif" Version="1.0.0-alpha2-00052" />
+    <PackageReference Include="ImageSharp.Formats.Jpeg" Version="1.0.0-alpha2-00052" />
+    <PackageReference Include="ImageSharp.Formats.Png" Version="1.0.0-alpha2-00048" />
+    <PackageReference Include="ImageSharp.Processing" Version="1.0.0-alpha2-00040" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Coremero\Coremero.csproj" />
+  </ItemGroup>
+</Project>
