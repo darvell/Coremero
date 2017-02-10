@@ -11,7 +11,7 @@ namespace Coremero.Plugin.Converter
         [Command("beats", Help = "Return the current time in .beats.")]
         public string BeatTime(IInvocationContext context, IMessage message)
         {
-            var now = DateTime.UtcNow;
+            var now = DateTime.UtcNow + TimeSpan.FromHours(1);
             var beatsTime = Math.Floor((now.Second + (now.Minute * 60) + (now.Hour * 3600)) / 86.4f);
             return $"UTC: {now:H:mm:ss} | Beats: @{beatsTime}";
         }
