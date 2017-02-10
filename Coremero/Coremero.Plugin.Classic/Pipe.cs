@@ -33,7 +33,7 @@ namespace Coremero.Plugin.Classic
                     continue;
                 }
 
-                IMessage result = await _commandRegistry.ExecuteCommandAsync(call.First(), context, call.Count == 1 ? basicMessage : Message.Create(string.Join(" ", call.Skip(1)), message.Attachments?.ToArray()));
+                IMessage result = await _commandRegistry.ExecuteCommandAsync(call.First(), context, call.Count == 1 ? basicMessage : Message.Create(string.Join(" ", call.Skip(1)), basicMessage.Attachments?.ToArray()));
 
                 if (!string.IsNullOrEmpty(result.Text))
                 {
