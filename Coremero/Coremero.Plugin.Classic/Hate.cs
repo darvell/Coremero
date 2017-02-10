@@ -59,6 +59,20 @@ namespace Coremero.Plugin.Classic
         {
             return $"LilPP: i hate {GetRandomLine(_ppFile, ref _ppLineIndexes)}";
         }
+        [Command("hate", Help = "Hate a random object.")]
+        public string PlainHate(IInvocationContext context, IMessage message)
+        {
+            return $"i hate {GetRandomLine(_ppFile, ref _ppLineIndexes)}";
+        }
+
+
+        [Command("love", Help = "Love a random object.")]
+        public string PlainLove(IInvocationContext context, IMessage message)
+        {
+            return $"i love {GetRandomLine(_ppFile, ref _ppLineIndexes)}";
+        }
+
+
 
         [Command("sponge", Help = "Impersonates sponge.")]
         public string SpongeFeels(IInvocationContext context, IMessage message)

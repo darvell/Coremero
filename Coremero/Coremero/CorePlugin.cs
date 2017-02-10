@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Coremero.Client;
 using Coremero.Commands;
@@ -23,6 +25,13 @@ namespace Coremero
         {
             return string.Join(" ", message.Text.GetCommandArguments());
         }
+
+        [Command("upper", "Input", Help = "Returns the exact same input but in uppercase.")]
+        public string Upper(IInvocationContext context, IMessage message)
+        {
+            return message.Text.TrimCommand().ToUpper();
+        }
+
 
         [Command("woke", "Text" ,Help = "Return message in uppercase, split by spaces separated by 👏.")]
         public string Woke(IInvocationContext context, IMessage message)
