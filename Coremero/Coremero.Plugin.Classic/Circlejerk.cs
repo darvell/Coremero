@@ -31,9 +31,9 @@ namespace Coremero.Plugin.Classic
         }
 
         [Command("tone", Help = "Not for you.")]
-        public async Task Tone(IInvocationContext context, IMessage message)
+        public async Task Tone(IInvocationContext context)
         {
-            if (context.User.Mention.Contains("@hardclumping#2389"))
+            if (context.User.Mention.Contains("hardclumping#2389"))
             {
                 foreach (var tonyLine in _tonyOutput)
                 {
@@ -43,21 +43,21 @@ namespace Coremero.Plugin.Classic
             }
         }
 
-        [Command("depths", Help = ".depths <text> - Translate <text> into real, authentic Norwegian.")]
-        public string Depths(IInvocationContext context, IMessage message)
+        [Command("depths", "Text", Help = ".Translate [Text] into real, authentic Norwegian.")]
+        public string Depths(string text)
         {
-            return message.Text.TrimCommand().Replace('o', 'ø');
+            return text.Replace('o', 'ø');
         }
 
         [Command("ego", Help = "Impersonate ego.")]
-        public string Ego(IInvocationContext context, IMessage message)
+        public string Ego(IInvocationContext context)
         {
             int pillAmount = _rnd.Next(20,421);
             string egoName = "<ego>";
             // Snatch pepitos name if it's in SA-MC.
-            if (context.OriginClient is DiscordClient)
+            if (context.Channel is DiscordChannel)
             {
-                IUser ego = context.Channel.Users.FirstOrDefault(x => x.Mention.Contains("ego#"));
+                IUser ego = context.Channel.Users.FirstOrDefault(x => ((DiscordUser)x).Username.Contains("ego"));
                 if (ego != null)
                 {
                     egoName = $"{ego.Name}:";

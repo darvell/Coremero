@@ -60,6 +60,11 @@ namespace Coremero.Client.Discord
             }
         }
 
+        public string Username
+        {
+            get { return _user.Username; }
+        }
+
         public string Mention
         {
             get { return _user.Mention; }
