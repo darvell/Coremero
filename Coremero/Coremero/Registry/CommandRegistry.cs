@@ -81,17 +81,16 @@ namespace Coremero.Registry
         /// <returns>CommandAttribute if found else null.</returns>
         private CommandAttribute GetCommand(string commandName)
         {
-            List<CommandAttribute> possibleCommands = _commandMap.Keys.Where(x => x.Name.StartsWith(commandName)).ToList();
             CommandAttribute selectedCommand = null;
             int nearestEditDistance = int.MaxValue;
-            foreach (var cmd in possibleCommands)
+            foreach (var cmd in _commandMap.Keys)
             {
                 if (cmd.Name.Equals(commandName))
                 {
                     selectedCommand = cmd;
                     break;
                 }
-                else
+                else if(cmd.Name.StartsWith(commandName))
                 {
                     int edit = cmd.Name.DamerauLevenshteinDistance(commandName, 10);
                     if (nearestEditDistance > edit)
