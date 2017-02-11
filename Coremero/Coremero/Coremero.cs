@@ -58,7 +58,8 @@ namespace Coremero
                     where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin.")
                     select loader.LoadFromPath(file.FullName);
 
-                _container.RegisterCollection<IPlugin>(pluginAssemblies);
+                if(pluginAssemblies?.Any() == true)
+                    _container.RegisterCollection<IPlugin>(pluginAssemblies);
             }
 
             _container.Verify();
