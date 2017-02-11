@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Coremero.Messages;
@@ -24,12 +25,16 @@ namespace Coremero.Client.Discord
             get { return _message.Content; }
         }
 
+        private List<IAttachment> _attachments;
         public List<IAttachment> Attachments
         {
             get
             {
-                // TODO: Convert attachments.
-                return null;
+                if (_attachments == null)
+                {
+                    _attachments = _message.Attachments.Select(x => new UrlAttachment(x.Url)).Cast<IAttachment>().ToList();
+                }
+                return _attachments;
             }
         }
 
