@@ -87,11 +87,11 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
-        [Command("sharpen", "Sharpen Value", Help = "Sharpens the image by a factor of [Sharpen Value]. Values between 0 and 64.")]
+        [Command("sharpen", "Sharpen Value", Help = "Sharpens the image by a factor of [Sharpen Value]. Values between 0 and 100.")]
         public IMessage Sharpen(IInvocationContext context, IMessage message)
         {
             int val = int.Parse(message.Text.GetCommandArguments()[0]);
-            if (val > 64 || 0 > val)
+            if (val > 100 || 0 > val)
             {
                 throw new InvalidOperationException();
             }
@@ -106,7 +106,7 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
-        [Command("huge", "Hue Degrees", Help = "Rotates the image huge by a factor of [Hue Degrees]. Values between -360 and 360.")]
+        [Command("hue", "Hue Degrees", Help = "Rotates the image huge by a factor of [Hue Degrees]. Values between -360 and 360.")]
         public IMessage Hue(IInvocationContext context, IMessage message)
         {
             int val = int.Parse(message.Text.GetCommandArguments()[0]);
@@ -120,6 +120,32 @@ namespace Coremero.Plugin.Image
             using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Hue(val).Save(ms);
+            }
+            ms.Seek(0, SeekOrigin.Begin);
+            return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
+        }
+
+        [Command("edge", Help = "Detects edges in an image.")]
+        public IMessage EdgeDetection(IInvocationContext context, IMessage message)
+        {
+            MemoryStream ms = new MemoryStream();
+
+            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            {
+                image.DetectEdges().Save(ms);
+            }
+            ms.Seek(0, SeekOrigin.Begin);
+            return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
+        }
+
+        [Command("invert", Help = "Inverts an image.")]
+        public IMessage Invert(IInvocationContext context, IMessage message)
+        {
+            MemoryStream ms = new MemoryStream();
+
+            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            {
+                image.Invert().Save(ms);
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
