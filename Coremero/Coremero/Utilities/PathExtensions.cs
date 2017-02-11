@@ -12,7 +12,12 @@ namespace Coremero.Utilities
         {
             get
             {
-                return Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Plugins");
+                string pluginDir = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Plugins");
+                if (Directory.Exists(pluginDir))
+                {
+                    return pluginDir;
+                }
+                return AppDir;
             }
         }
 
