@@ -11,7 +11,7 @@ using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
-    public class DiscordMessage : IDeletableMessage
+    public class DiscordMessage : IDeletableMessage, IReactableMessage
     {
         private global::Discord.IMessage _message;
 
@@ -40,7 +40,14 @@ namespace Coremero.Client.Discord
 
         public async Task React(string emoji)
         {
-            await ((SocketUserMessage)_message).AddReactionAsync(Emoji.Parse(emoji));
+            if (emoji.StartsWith("<")) // I guess Discord.Net doesn't use the same methods internally?
+            {
+                await ((SocketUserMessage)_message).AddReactionAsync(Emoji.Parse(emoji));
+            }
+            else
+            {
+                await ((SocketUserMessage)_message).AddReactionAsync(emoji);
+            }
         }
 
         public async Task<List<string>> GetReactions()

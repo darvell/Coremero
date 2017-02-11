@@ -45,7 +45,13 @@ namespace Coremero.Services
 
             if (!_commandRegistry.Exists(command))
             {
-                Debug.WriteLine($"Invalid command called: {command}");
+                if (command[0] != '.')
+                {
+                    if (message is IReactableMessage)
+                    {
+                        ((IReactableMessage) message).React("🚫").Wait(TimeSpan.FromMilliseconds(250));
+                    }
+                }
                 return;
             }
 
@@ -64,15 +70,24 @@ namespace Coremero.Services
                 }
                 catch (Exception e)
                 {
-                    // Check if there is a help function.
-                    var help = _commandRegistry.GetHelp(command);
-                    if (!String.IsNullOrEmpty(help))
+                    if (message is IReactableMessage)
                     {
-                        _messageBus.RaiseOutgoing(context.Raiser, Message.Create(help));
+                        await ((IReactableMessage)message).React("💔");
                     }
                     else
                     {
-                        _messageBus.RaiseOutgoing(context.Raiser, Message.Create("```\n" + e.StackTrace + "\n```", new FileAttachment(Path.Combine(PathExtensions.AppDir,"error.jpg"))));
+                        // Check if there is a help function.
+                        var help = _commandRegistry.GetHelp(command);
+                        if (!String.IsNullOrEmpty(help))
+                        {
+                            _messageBus.RaiseOutgoing(context.Raiser, Message.Create(help));
+                        }
+                        else
+                        {
+#if DEBUG
+                            _messageBus.RaiseOutgoing(context.Raiser, Message.Create("```\n" + e.StackTrace + "\n```", new FileAttachment(Path.Combine(PathExtensions.AppDir, "error.jpg"))));
+#endif
+                        }
                     }
                 }
             });
