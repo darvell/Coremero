@@ -96,7 +96,7 @@ namespace Coremero
                 {
                     args = string.Join(" ", cmd.Arguments?.Select(x => $"[{x}]"));
                 }
-                sb.AppendLine($"{"." + cmd.Name + " " + args,-15} {cmd.Help}");
+                sb.AppendLine($"{"." + cmd.Name + " " + args}");
             }
 
             if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
@@ -104,6 +104,12 @@ namespace Coremero
                 return $"```css\n{sb.ToString()}\n```";
             }
             return sb.ToString();
+        }
+
+        [Command("help", "Command", Help = "Get info on a command.")]
+        public string Help(string command)
+        {
+            return _commandRegistry.GetHelp(command);
         }
 
         [Command("hello", Help = "Just says hello.")]
