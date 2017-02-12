@@ -15,28 +15,14 @@ namespace Coremero.Services
 
         public void RaiseIncoming(IInvocationContext context, IMessage message)
         {
-#if DEBUG
-            Debug.WriteLine($"[{context.Channel.Name}] {context.User.Name}: {message.Text}");
-#endif
-            _incomingStopwatch.Start();
+            Log.Trace($"[{context.OriginClient.Name} @ {context.Channel.Name}] {context.User.Name}: {message.Text}");
             Received?.Invoke(this, new MessageReceivedEventArgs(context, message));
-            _incomingStopwatch.Stop();
-            if (_incomingStopwatch.ElapsedMilliseconds > 100)
-            {
-                Debug.WriteLine($"Incoming message bus took {_incomingStopwatch.ElapsedMilliseconds}ms!");
-            }
-            _incomingStopwatch.Reset();
         }
 
         public void RaiseOutgoing(ISendable target, IMessage message)
         {
-            _outgoingStopwatch.Start();
+            Log.Trace($"[OUT (A {message.Attachments?.Count}] {message.Text}");
             Sent?.Invoke(this, new MessageSentEventArgs(target, message));
-            _outgoingStopwatch.Stop();
-            if (_outgoingStopwatch.ElapsedMilliseconds > 100)
-            {
-                Debug.WriteLine($"Outgoing message bus took {_incomingStopwatch.ElapsedMilliseconds}ms!");
-            }
             _outgoingStopwatch.Reset();
         }
     }
