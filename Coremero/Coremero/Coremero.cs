@@ -35,7 +35,7 @@ namespace Coremero
             // Log init.
             var loggingConfig = new LoggingConfiguration();
 
-            var consoleTarget = new ColoredConsoleTarget {Name = "console", Layout = @"${date:format=HH\:mm\:ss} ${message}"};
+            var consoleTarget = new ColoredConsoleTarget { Name = "console", Layout = @"${date:format=HH\:mm\:ss} ${message}" };
 
             var fileTarget = new FileTarget()
             {
@@ -59,7 +59,7 @@ namespace Coremero
             _container = new Container();
             _container.ExpressionBuilt +=
                 (sender, args) => { Log.Trace($"Type {args.RegisteredServiceType} registered."); };
-            
+
             _container.Options.LifestyleSelectionBehavior = new SingletonLifestyleSelectionBehavior(); // Lazy hack to force all plugins to be singleton.
 
             // Register registries
@@ -75,30 +75,39 @@ namespace Coremero
 
             // Scan for clients
             var clientAssemblies =
-                from file in new DirectoryInfo(PlatformServices.Default.Application.ApplicationBasePath).GetFiles()
-                where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Client.")
-                select loader.LoadFromPath(file.FullName);
+                new DirectoryInfo(PlatformServices.Default.Application.ApplicationBasePath).GetFiles()
+                    .Where(file => file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Client."))
+                    .Select(file => loader.LoadFromPath(file.FullName));
             _container.RegisterCollection<IClient>(clientAssemblies);
 
             // Scan for plugins
             if (Directory.Exists(PathExtensions.PluginDir))
             {
                 var pluginAssemblies =
-                    from file in new DirectoryInfo(PathExtensions.PluginDir).GetFiles()
-                    where file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin.")
-                    select loader.LoadFromPath(file.FullName);
+                    new DirectoryInfo(PathExtensions.PluginDir).GetFiles()
+                        .Where(file => file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin."))
+                        .Select(file => loader.LoadFromPath(file.FullName));
 
-                if(pluginAssemblies?.Any() == true)
+                if (pluginAssemblies?.Any() == true)
                     _container.RegisterCollection<IPlugin>(pluginAssemblies);
             }
 
             _container.Verify();
-            
+
             // TODO: Allow host application to control this.
             Debug.WriteLine("Connecting all clients.");
             foreach (IClient client in _container.GetAllInstances<IClient>())
             {
-                client.Connect();
+                var clientTask = client.Connect();
+                clientTask.Wait();
+                if (clientTask.Exception != null)
+                {
+                    Log.Exception(clientTask.Exception.GetBaseException(), $"Failed to connect to {client.Name}");
+                }
+                else
+                {
+                    Log.Info($"Connected {client.Name}.");
+                }
             }
 
             Debug.WriteLine("Loading all plugins.");
@@ -108,16 +117,23 @@ namespace Coremero
             {
                 foreach (IPlugin plugin in _container.GetAllInstances<IPlugin>())
                 {
-                    cmdRegistry.Register(plugin);
+                    try
+                    {
+                        cmdRegistry.Register(plugin);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Exception(e, $"Failed to register ${plugin.GetType()} in to the command registry.");
+                    }
                 }
             }
-            catch (Exception e)
+            catch
             {
-                Debug.WriteLine(e);
+                // No plugins registered.
+                Log.Warn("No plugins were registered.");
             }
 
             cmdRegistry.Register(_container.GetInstance<CorePlugin>());
-                    
 
             _hasInit = true;
         }
