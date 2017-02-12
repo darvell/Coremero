@@ -95,7 +95,7 @@ namespace Coremero
             _container.Verify();
 
             // TODO: Allow host application to control this.
-            Debug.WriteLine("Connecting all clients.");
+            Log.Info("Connecting all clients.");
             foreach (IClient client in _container.GetAllInstances<IClient>())
             {
                 var clientTask = client.Connect();
@@ -110,7 +110,7 @@ namespace Coremero
                 }
             }
 
-            Debug.WriteLine("Loading all plugins.");
+            Log.Info("Loading all plugins.");
             CommandRegistry cmdRegistry = _container.GetInstance<CommandRegistry>();
 
             try

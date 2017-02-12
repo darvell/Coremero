@@ -34,7 +34,7 @@ namespace Coremero.Client.Discord
                     catch (Exception e)
                     {
                         attachment.Contents?.Dispose();
-                        Debug.WriteLine(e);
+                        Log.Exception(e, "Discord file send fail");
                         return;
                     }
                 }
