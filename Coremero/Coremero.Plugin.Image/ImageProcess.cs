@@ -11,6 +11,7 @@ namespace Coremero.Plugin.Image
 {
     public class ImageProcess : IPlugin
     {
+
         [Command("contrast","Contrast Value", Help = "Increases or decreases the contrast in the attached images. Values between -100 and 100.")]
         public IMessage Contrast(IInvocationContext context, IMessage message)
         {
@@ -22,7 +23,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Contrast(val).Save(ms);
             }
@@ -41,7 +42,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Saturation(val).Save(ms);
             }
@@ -60,7 +61,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Brightness(val).Save(ms);
             }
@@ -79,7 +80,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Pixelate(val).Save(ms);
             }
@@ -98,7 +99,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.GaussianSharpen(val).Save(ms);
             }
@@ -117,7 +118,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Hue(val).Save(ms);
             }
@@ -130,7 +131,7 @@ namespace Coremero.Plugin.Image
         {
             MemoryStream ms = new MemoryStream();
 
-            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.DetectEdges().Save(ms);
             }
@@ -143,7 +144,7 @@ namespace Coremero.Plugin.Image
         {
             MemoryStream ms = new MemoryStream();
 
-            using (Image<Color> image = new ImageSharp.Image(message.Attachments[0].Contents))
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Invert().Save(ms);
             }

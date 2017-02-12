@@ -17,7 +17,7 @@ namespace Coremero.Plugin.Classic
         {
             _hysData =
                 JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(
-                    File.ReadAllText(Path.Combine(PathExtensions.PluginDir, "hys.json")));
+                    File.ReadAllText(Path.Combine(PathExtensions.ResourceDir, "hys.json")));
         }
 
         private string GenerateRandomIdiotPunctuation()

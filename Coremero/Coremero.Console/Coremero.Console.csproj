@@ -7,11 +7,13 @@
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Coremero.Client.Discord\Coremero.Client.Discord.csproj">
       <Private>true</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Coremero.Plugin.Borat\Coremero.Plugin.Borat.csproj" />
+    <ProjectReference Include="..\Coremero.Plugin.Classic\Coremero.Plugin.Classic.csproj" />
+    <ProjectReference Include="..\Coremero.Plugin.Converter\Coremero.Plugin.Converter.csproj" />
+    <ProjectReference Include="..\Coremero.Plugin.Image\Coremero.Plugin.Image.csproj" />
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
   </ItemGroup>
 </Project>

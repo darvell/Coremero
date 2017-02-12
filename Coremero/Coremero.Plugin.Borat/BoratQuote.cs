@@ -13,7 +13,7 @@ namespace Coremero.Plugin.Borat
         [Command("borat", Help = "I like!")]
         public IMessage Quote()
         {
-            return Message.Create("I like!", new FileAttachment(Path.Combine(PathExtensions.PluginDir, "IASIPLaughing.jpg")));
+            return Message.Create("I like!", new FileAttachment(Path.Combine(PathExtensions.ResourceDir, "IASIPLaughing.jpg")));
         }
     }
 }

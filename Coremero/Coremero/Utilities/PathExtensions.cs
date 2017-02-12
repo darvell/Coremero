@@ -8,22 +8,35 @@ namespace Coremero.Utilities
 {
     public static class PathExtensions
     {
+        private static string _pluginDirCache;
         public static string PluginDir
         {
             get
             {
-                string pluginDir = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Plugins");
-                if (Directory.Exists(pluginDir))
+                if (_pluginDirCache == null)
                 {
-                    return pluginDir;
+                    string pluginDir = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "Plugins");
+                    if (Directory.Exists(pluginDir))
+                    {
+                        _pluginDirCache = pluginDir;
+                    }
+                    else
+                    {
+                        _pluginDirCache = AppDir;
+                    }
                 }
-                return AppDir;
+                return _pluginDirCache;
             }
         }
 
         public static string AppDir
         {
             get { return PlatformServices.Default.Application.ApplicationBasePath; }
+        }
+
+        public static string ResourceDir
+        {
+            get { return Path.Combine(PluginDir, "Resources"); }
         }
     }
 }

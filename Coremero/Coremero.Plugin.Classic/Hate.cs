@@ -13,8 +13,8 @@ namespace Coremero.Plugin.Classic
         private List<long> _spongeLineIndexes = new List<long>();
         private List<long> _ppLineIndexes = new List<long>();
 
-        private string _spongeFile = Path.Combine(PathExtensions.PluginDir, "sponge_list.txt");
-        private string _ppFile = Path.Combine(PathExtensions.PluginDir, "lilpp_list.txt");
+        private string _spongeFile = Path.Combine(PathExtensions.ResourceDir, "sponge_list.txt");
+        private string _ppFile = Path.Combine(PathExtensions.ResourceDir, "lilpp_list.txt");
 
         private Random _rnd = new Random();
 

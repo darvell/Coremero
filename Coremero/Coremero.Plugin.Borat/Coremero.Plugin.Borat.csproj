@@ -6,14 +6,12 @@
     <OutputType>library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="IASIPLaughing.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Coremero.Client.Discord\Coremero.Client.Discord.csproj" />
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\IASIPLaughing.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
