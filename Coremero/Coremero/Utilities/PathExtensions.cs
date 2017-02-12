@@ -22,6 +22,7 @@ namespace Coremero.Utilities
                     }
                     else
                     {
+                        Log.Debug("No plugin directory found, reverting to application directory.");
                         _pluginDirCache = AppDir;
                     }
                 }

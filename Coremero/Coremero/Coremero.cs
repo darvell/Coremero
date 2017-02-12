@@ -35,10 +35,11 @@ namespace Coremero
             // Log init.
             var loggingConfig = new LoggingConfiguration();
 
-            var consoleTarget = new ColoredConsoleTarget {Layout = @"${date:format=HH\:mm\:ss} ${message}"};
+            var consoleTarget = new ColoredConsoleTarget {Name = "console", Layout = @"${date:format=HH\:mm\:ss} ${message}"};
 
             var fileTarget = new FileTarget()
             {
+                Name = "file",
                 FileName = "${basedir}/coremero.log",
                 Layout = @"${yyyy-MM-dd date:format=HH\:mm\:ss} {message}",
             };
@@ -54,9 +55,11 @@ namespace Coremero
             loggingConfig.AddRule(LogLevel.Info, LogLevel.Fatal, fileTarget);
             LogManager.Configuration = loggingConfig;
 
-
-
+            Log.Info("Coremero initializing.");
             _container = new Container();
+            _container.ExpressionBuilt +=
+                (sender, args) => { Log.Trace($"Type {args.RegisteredServiceType} registered."); };
+            
             _container.Options.LifestyleSelectionBehavior = new SingletonLifestyleSelectionBehavior(); // Lazy hack to force all plugins to be singleton.
 
             // Register registries
