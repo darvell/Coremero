@@ -12,6 +12,9 @@ using Coremero.Services;
 using Coremero.Storage;
 using Coremero.Utilities;
 using Microsoft.Extensions.PlatformAbstractions;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 using SimpleInjector;
 using SimpleInjector.Advanced;
 
@@ -28,6 +31,30 @@ namespace Coremero
             {
                 throw new InvalidOperationException();
             }
+
+            // Log init.
+            var loggingConfig = new LoggingConfiguration();
+
+            var consoleTarget = new ColoredConsoleTarget {Layout = @"${date:format=HH\:mm\:ss} ${message}"};
+
+            var fileTarget = new FileTarget()
+            {
+                FileName = "${basedir}/coremero.log",
+                Layout = @"${yyyy-MM-dd date:format=HH\:mm\:ss} {message}",
+            };
+
+            loggingConfig.AddTarget(fileTarget);
+            loggingConfig.AddTarget(consoleTarget);
+
+#if DEBUG
+            loggingConfig.AddRule(LogLevel.Trace, LogLevel.Fatal, consoleTarget);
+#else
+            loggingConfig.AddRule(LogLevel.Info, LogLevel.Fatal, consoleTarget);
+#endif
+            loggingConfig.AddRule(LogLevel.Info, LogLevel.Fatal, fileTarget);
+            LogManager.Configuration = loggingConfig;
+
+
 
             _container = new Container();
             _container.Options.LifestyleSelectionBehavior = new SingletonLifestyleSelectionBehavior(); // Lazy hack to force all plugins to be singleton.

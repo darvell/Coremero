@@ -9,6 +9,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="NLog" Version="5.0.0-beta05" />
     <PackageReference Include="SimpleInjector" Version="3.3.2" />
     <PackageReference Include="System.IO.FileSystem.Watcher" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
