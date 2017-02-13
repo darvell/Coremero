@@ -118,6 +118,12 @@ namespace Coremero
             return "hello";
         }
 
+        [Command("bye", Help = "Just says bye.")]
+        public string Bye()
+        {
+            return "Bye";
+        }
+
         public void Dispose()
         {
             // ignore
