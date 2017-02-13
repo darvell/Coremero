@@ -62,6 +62,7 @@ namespace Coremero.Services
             {
                 try
                 {
+                    Log.Trace($"CMD INVOCATION {command}");
                     IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
                     if (result != null)
                     {
@@ -70,6 +71,8 @@ namespace Coremero.Services
                 }
                 catch (Exception e)
                 {
+                    Log.Trace($"{command} FAIL: {e}");
+
                     if (message is IReactableMessage)
                     {
                         await ((IReactableMessage)message).React("💔");
