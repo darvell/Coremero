@@ -15,7 +15,7 @@ namespace Coremero.Services
 
         public void RaiseIncoming(IInvocationContext context, IMessage message)
         {
-            Log.Trace($"[{context.OriginClient.Name} @ {context.Channel.Name}] {context.User.Name}: {message.Text}");
+            Log.Trace($"[{context.OriginClient.Name}] [{context.Channel.Name}] {context.User.Name}: {message.Text}");
             Received?.Invoke(this, new MessageReceivedEventArgs(context, message));
         }
 
