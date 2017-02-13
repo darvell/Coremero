@@ -93,7 +93,7 @@ namespace Coremero.Client.Discord
             return Task.Run(() =>
             {
 #if RELEASE
-                if (_lastTime != DateTime.MinValue && (DateTime.Now - _lastIgnoreTime).Seconds < 30)
+                if (_lastIgnoreTime != DateTime.MinValue && (DateTime.Now - _lastIgnoreTime).Seconds < 30)
                 {
                     return;
                 }
