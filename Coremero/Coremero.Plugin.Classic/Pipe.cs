@@ -30,6 +30,16 @@ namespace Coremero.Plugin.Classic
                 List<string> call = cmd.Trim().Split(' ').ToList();
                 if (!_commandRegistry.Exists(call.First()))
                 {
+                    // Special commands.
+                    if (call[0] == "cleartext")
+                    {
+                        basicMessage.Text = string.Empty;
+                    }
+                    else if (call[0] == "clearattachment")
+                    {
+                        basicMessage.Attachments?.ForEach(x => x.Contents?.Dispose());
+                        basicMessage.Attachments = null;
+                    }
                     continue;
                 }
 

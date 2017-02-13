@@ -14,6 +14,7 @@
     <ProjectReference Include="..\Coremero.Plugin.Classic\Coremero.Plugin.Classic.csproj" />
     <ProjectReference Include="..\Coremero.Plugin.Converter\Coremero.Plugin.Converter.csproj" />
     <ProjectReference Include="..\Coremero.Plugin.Image\Coremero.Plugin.Image.csproj" />
+    <ProjectReference Include="..\Coremero.Plugin.Playground\Coremero.Plugin.Playground.csproj" />
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
   </ItemGroup>
 </Project>
