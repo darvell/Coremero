@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Utilities;
 using Newtonsoft.Json.Linq;
+using MarkovSharpNetCore.TokenisationStrategies;
 
 namespace Coremero.Plugin.Classic
 {
@@ -149,6 +151,31 @@ namespace Coremero.Plugin.Classic
                 var posts = token["data"]["children"].ToObject<List<dynamic>>();
                 return posts.GetRandom()["data"]["title"];
             }
+        }
+
+        private async Task<List<string>> GetTitlesFromSubreddit(string subreddit)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string json = await client.GetStringAsync($"http://reddit.com/r/{subreddit}.json");
+                var token = JToken.Parse(json);
+                var posts = token["data"]["children"].ToObject<List<dynamic>>();
+                return posts.Select(x => x["data"]["title"].ToString()).Cast<string>().ToList();
+            }
+        }
+
+        [Command("imireddit", "Subreddit Name", Help = "Imitates a subreddit.")]
+        public async Task<string> MarkovReddit(string subreddit)
+        {
+            var model = new StringMarkov();
+            model.EnsureUniqueWalk = true;
+            model.Learn(await GetTitlesFromSubreddit(subreddit));
+            return model.Walk(10).Select(x =>
+            {
+                Debug.WriteLine(x);
+                return x;
+            }).GetRandom();
+
         }
     }
 
