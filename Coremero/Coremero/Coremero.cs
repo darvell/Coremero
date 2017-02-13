@@ -41,7 +41,7 @@ namespace Coremero
             {
                 Name = "file",
                 FileName = "${basedir}/coremero.log",
-                Layout = @"[${yyyy-MM-dd date:format=HH\:mm\:ss}] ${message}",
+                Layout = @"[${date:format=yyyy-MM-dd HH\:mm\:ss}] ${message}",
             };
 
             loggingConfig.AddTarget(fileTarget);
