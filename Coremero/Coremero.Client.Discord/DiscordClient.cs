@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Coremero;
 using Coremero.Services;
@@ -39,7 +40,10 @@ namespace Coremero.Client.Discord
 
         private IMessageBus _messageBus;
         private DiscordSocketClient _discordClient;
-
+        private DateTime _lastIgnoreTime = DateTime.MinValue;
+        private const string DEBUG_IGNORE_PING = "DEBUG_RUNNING_IGNORE";
+        private const long DEBUG_CNC_CHANNEL_ID = 280827972720525313;
+        private const long DEBUG_GUILD = 109063664560009216;
         private readonly string DISCORD_BOT_KEY;
 
         public DiscordClient(IMessageBus messageBus, ICredentialStorage credentialStorage)
@@ -58,17 +62,54 @@ namespace Coremero.Client.Discord
 
             await _discordClient.LoginAsync(TokenType.Bot, DISCORD_BOT_KEY);
             await _discordClient.ConnectAsync();
+            await _discordClient.WaitForGuildsAsync();
             IsConnected = true;
 
+#if DEBUG
+            var cncChannel = _discordClient.GetGuild(DEBUG_GUILD)?.Channels.FirstOrDefault(x => x.Id == DEBUG_CNC_CHANNEL_ID);
+            if (cncChannel != null)
+            {
+                var token = new CancellationToken();
+                Task.Run(async () =>
+                {
+                    IMessageChannel cncMessageChannel = cncChannel as IMessageChannel;
+                    while (true)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        await cncMessageChannel.SendMessageAsync(DEBUG_IGNORE_PING);
+                        Thread.Sleep(TimeSpan.FromSeconds(25));
+                    }
+                }, token);
+            }
+#endif
+
+            // TODO: Abstract in to config.
             _discordClient.MessageReceived += DiscordClientOnMessageReceived;
+
         }
 
         private Task DiscordClientOnMessageReceived(SocketMessage socketMessage)
         {
             return Task.Run(() =>
             {
+#if RELEASE
+                if (_lastTime != DateTime.MinValue && (DateTime.Now - _lastIgnoreTime).Seconds < 30)
+                {
+                    return;
+                }
+#endif
                 if (socketMessage.Author.Id == _discordClient.CurrentUser.Id)
                 {
+#if RELEASE
+                    // TODO: Configurable CNC channel ID.
+                    if (socketMessage.Channel.Id == DEBUG_CNC_CHANNEL_ID)
+                    {
+                        if (socketMessage.Content == DEBUG_IGNORE_PING)
+                        {
+                            _lastIgnoreTime = DateTime.Now;
+                        }
+                    }
+#endif
                     return;
                 }
 
