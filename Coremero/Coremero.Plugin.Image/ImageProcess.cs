@@ -17,11 +17,6 @@ namespace Coremero.Plugin.Image
     public class ImageProcess : IPlugin
     {
 
-        public ImageProcess()
-        {
-            Configuration.Default.ParallelOptions.MaxDegreeOfParallelism = 4;
-        }
-
         [Command("contrast", Arguments = "Contrast Value",
             Help = "Increases or decreases the contrast in the attached images. Values between -100 and 100.")]
         public IMessage Contrast(IInvocationContext context, IMessage message)
