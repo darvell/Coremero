@@ -25,12 +25,14 @@ namespace Coremero.Utilities
         /// <returns>Int.MaxValue if threshhold exceeded; otherwise the Damerau-Leveshteim distance between the strings</returns>
         public static int DamerauLevenshteinDistance(this string source, string target, int threshold)
         {
-
             int length1 = source.Length;
             int length2 = target.Length;
 
             // Return trivial case - difference in string lengths exceeds threshhold
-            if (Math.Abs(length1 - length2) > threshold) { return int.MaxValue; }
+            if (Math.Abs(length1 - length2) > threshold)
+            {
+                return int.MaxValue;
+            }
 
             // Ensure arrays [i] / length1 use shorter length 
             if (length1 > length2)
@@ -47,13 +49,15 @@ namespace Coremero.Utilities
             int[] dMinus2 = new int[maxi + 1];
             int[] dSwap;
 
-            for (int i = 0; i <= maxi; i++) { dCurrent[i] = i; }
+            for (int i = 0; i <= maxi; i++)
+            {
+                dCurrent[i] = i;
+            }
 
             int jm1 = 0, im1 = 0, im2 = -1;
 
             for (int j = 1; j <= maxj; j++)
             {
-
                 // Rotate
                 dSwap = dMinus2;
                 dMinus2 = dMinus1;
@@ -68,7 +72,6 @@ namespace Coremero.Utilities
 
                 for (int i = 1; i <= maxi; i++)
                 {
-
                     int cost = source[im1] == target[jm1] ? 0 : 1;
 
                     int del = dCurrent[im1] + 1;
@@ -82,12 +85,18 @@ namespace Coremero.Utilities
                         min = Math.Min(min, dMinus2[im2] + cost);
 
                     dCurrent[i] = min;
-                    if (min < minDistance) { minDistance = min; }
+                    if (min < minDistance)
+                    {
+                        minDistance = min;
+                    }
                     im1++;
                     im2++;
                 }
                 jm1++;
-                if (minDistance > threshold) { return int.MaxValue; }
+                if (minDistance > threshold)
+                {
+                    return int.MaxValue;
+                }
             }
 
             int result = dCurrent[maxi];
@@ -117,7 +126,8 @@ namespace Coremero.Utilities
             return input.IndexOf(toCheck, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
-        public static string ReplaceString(this string str, string oldValue, string newValue, StringComparison comparison)
+        public static string ReplaceString(this string str, string oldValue, string newValue,
+            StringComparison comparison)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -137,6 +147,4 @@ namespace Coremero.Utilities
             return sb.ToString();
         }
     }
-
-
 }

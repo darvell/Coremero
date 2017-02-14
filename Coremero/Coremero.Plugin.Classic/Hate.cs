@@ -59,6 +59,7 @@ namespace Coremero.Plugin.Classic
         {
             return $"LilPP: i hate {GetRandomLine(_ppFile, ref _ppLineIndexes)}";
         }
+
         [Command("hate", Help = "Hate a random object.")]
         public string PlainHate()
         {
@@ -73,7 +74,6 @@ namespace Coremero.Plugin.Classic
         }
 
 
-
         [Command("sponge", Help = "Impersonates sponge.")]
         public string SpongeFeels()
         {
@@ -81,6 +81,5 @@ namespace Coremero.Plugin.Classic
             var verb = i % 3 == 0 ? "love" : i % 3 == 1 ? "am ambivalent towards" : "hate";
             return $"sponge: i {verb} {GetRandomLine(_spongeFile, ref _spongeLineIndexes)}";
         }
-
     }
 }

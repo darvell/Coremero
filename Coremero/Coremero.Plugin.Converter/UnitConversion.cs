@@ -16,7 +16,8 @@ namespace Coremero.Plugin.Converter
             return $"UTC: {now:H:mm:ss} | Beats: @{beatsTime}";
         }
 
-        [Command("temperature", Help = ".temperature <temp> - Convert <temp> from Celsius to Fahrenheit and vice versa.")]
+        [Command("temperature", Help = ".temperature <temp> - Convert <temp> from Celsius to Fahrenheit and vice versa."
+        )]
         public string Temperature(IInvocationContext context, IMessage message)
         {
             List<String> args = message.Text.GetCommandArguments();

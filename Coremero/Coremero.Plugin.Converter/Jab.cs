@@ -16,7 +16,6 @@ namespace Coremero.Plugin.Converter
         [Command("bigjab", Help = ".bigjab <text> - Ｃｏｎｖｅｒｔ　＜ｔｅｘｔ＞　ｔｏ　ｍｕｌｔｉｌｉｎｅ　ｆｕｌｌ　ｗｉｄｔｈ　ｗｉｔｈ　ｂｏｒｄｅｒｓ.")]
         public string FullWidthMultiline(IInvocationContext context, IMessage message)
         {
-
             string jab = FullWidth(context, message);
 
             // Generate borders.

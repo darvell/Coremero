@@ -60,7 +60,5 @@ namespace Coremero
         {
             Logger.Fatal(e, message);
         }
-
-
     }
 }

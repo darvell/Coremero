@@ -15,6 +15,7 @@ namespace Coremero.Client.Discord
     public class DiscordClient : IClient
     {
         #region IClient Properties
+
         public string Name
         {
             get { return "Discord"; }
@@ -36,7 +37,6 @@ namespace Coremero.Client.Discord
         public bool IsConnected { get; private set; }
 
         #endregion
-
 
         private IMessageBus _messageBus;
         private DiscordSocketClient _discordClient;
@@ -66,7 +66,8 @@ namespace Coremero.Client.Discord
             IsConnected = true;
 
 #if DEBUG
-            var cncChannel = _discordClient.GetGuild(DEBUG_GUILD)?.Channels.FirstOrDefault(x => x.Id == DEBUG_CNC_CHANNEL_ID);
+            var cncChannel =
+                _discordClient.GetGuild(DEBUG_GUILD)?.Channels.FirstOrDefault(x => x.Id == DEBUG_CNC_CHANNEL_ID);
             if (cncChannel != null)
             {
                 var token = new CancellationToken();
@@ -85,7 +86,6 @@ namespace Coremero.Client.Discord
 
             // TODO: Abstract in to config.
             _discordClient.MessageReceived += DiscordClientOnMessageReceived;
-
         }
 
         private Task DiscordClientOnMessageReceived(SocketMessage socketMessage)
@@ -101,7 +101,7 @@ namespace Coremero.Client.Discord
                 if (socketMessage.Author.Id == _discordClient.CurrentUser.Id)
                 {
 #if RELEASE
-                    // TODO: Configurable CNC channel ID.
+// TODO: Configurable CNC channel ID.
                     if (socketMessage.Channel.Id == DEBUG_CNC_CHANNEL_ID)
                     {
                         if (socketMessage.Content == DEBUG_IGNORE_PING)

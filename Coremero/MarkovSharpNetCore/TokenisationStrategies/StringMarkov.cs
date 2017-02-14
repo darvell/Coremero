@@ -8,13 +8,14 @@ namespace MarkovSharpNetCore.TokenisationStrategies
     {
         public StringMarkov(int level = 2)
             : base(level)
-        { }
+        {
+        }
 
         public override IEnumerable<string> SplitTokens(string input)
         {
             if (input == null)
             {
-                return new List<string>() { GetPrepadGram() };
+                return new List<string>() {GetPrepadGram()};
             }
 
             return input?.Split(' ');

@@ -10,7 +10,6 @@ namespace Coremero.Plugin.Borat
 {
     public class BoratReact : IPlugin
     {
-
         private readonly List<string> _boratPhrases = new List<string>()
         {
             "i like",
@@ -38,6 +37,5 @@ namespace Coremero.Plugin.Borat
                 }
             }
         }
-       
     }
 }

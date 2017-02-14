@@ -52,6 +52,5 @@ namespace Coremero.Plugin.Converter
                 return x;
             }) ?? String.Empty);
         }
-
     }
 }

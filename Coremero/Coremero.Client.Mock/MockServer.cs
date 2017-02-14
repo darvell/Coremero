@@ -13,7 +13,6 @@ namespace Coremero.Client.Mock
 
         public void AddChannel(string name)
         {
-            
         }
 
         public string Name { get; private set; }

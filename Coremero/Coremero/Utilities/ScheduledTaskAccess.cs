@@ -10,17 +10,20 @@ namespace Coremero.Utilities
     {
         public static Task[] GetScheduledTasksForDebugger(this TaskScheduler ts)
         {
-            var mi = ts.GetType().GetMethod("GetScheduledTasksForDebugger", BindingFlags.NonPublic | BindingFlags.Instance);
+            var mi = ts.GetType()
+                .GetMethod("GetScheduledTasksForDebugger", BindingFlags.NonPublic | BindingFlags.Instance);
             if (mi == null)
                 return null;
-            return (Task[])mi.Invoke(ts, new object[0]);
+            return (Task[]) mi.Invoke(ts, new object[0]);
         }
+
         public static TaskScheduler[] GetTaskSchedulersForDebugger()
         {
-            var mi = typeof(TaskScheduler).GetMethod("GetTaskSchedulersForDebugger", BindingFlags.NonPublic | BindingFlags.Static);
+            var mi = typeof(TaskScheduler).GetMethod("GetTaskSchedulersForDebugger",
+                BindingFlags.NonPublic | BindingFlags.Static);
             if (mi == null)
                 return null;
-            return (TaskScheduler[])mi.Invoke(null, new object[0]);
+            return (TaskScheduler[]) mi.Invoke(null, new object[0]);
         }
     }
 }

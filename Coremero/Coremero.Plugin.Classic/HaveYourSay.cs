@@ -54,7 +54,8 @@ namespace Coremero.Plugin.Classic
             else
             {
                 string plural = subject.EndsWith("s", StringComparison.OrdinalIgnoreCase) ? "are" : "is";
-                builder.Append($"{_hysData[opening].GetRandom()} {subject} {plural} {_hysData["terrible_thing"].GetRandom()}");
+                builder.Append(
+                    $"{_hysData[opening].GetRandom()} {subject} {plural} {_hysData["terrible_thing"].GetRandom()}");
             }
 
             if (_rnd.NextDouble() > 0.5)
@@ -62,7 +63,8 @@ namespace Coremero.Plugin.Classic
                 builder.Append($" because {_hysData["because"].GetRandom()}");
             }
 
-            builder.Append($"{GenerateRandomIdiotPunctuation()}{_hysData["imperative"].GetRandom().Replace("[number]", _rnd.Next(0,14).ToString())} {_hysData["moronic_solution"].GetRandom()}{GenerateRandomIdiotPunctuation()}");
+            builder.Append(
+                $"{GenerateRandomIdiotPunctuation()}{_hysData["imperative"].GetRandom().Replace("[number]", _rnd.Next(0, 14).ToString())} {_hysData["moronic_solution"].GetRandom()}{GenerateRandomIdiotPunctuation()}");
 
             if (_rnd.NextDouble() > 0.4)
             {
@@ -81,7 +83,8 @@ namespace Coremero.Plugin.Classic
             return builder.ToString();
         }
 
-        [Command("hys", "Subject", Help = "Generates a fake Have Your Say style comment targeting [Subject].")]
+        [Command("hys", Arguments = "Subject",
+            Help = "Generates a fake Have Your Say style comment targeting [Subject].")]
         public string OutrageCommand(string subject)
         {
             return GenerateFakeOutrageComment(subject);

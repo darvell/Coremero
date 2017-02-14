@@ -21,18 +21,22 @@ namespace Coremero.Plugin.Classic
         private readonly string TUMBLR_API_KEY;
 
         private HttpClient _httpClient = new HttpClient();
-        private Dictionary<string, TumblrImageUrlCache> _tumblrImageUrlCaches = new Dictionary<string, TumblrImageUrlCache>();
+
+        private Dictionary<string, TumblrImageUrlCache> _tumblrImageUrlCaches =
+            new Dictionary<string, TumblrImageUrlCache>();
 
         public Tumblr(ICredentialStorage credentialStorage)
         {
-            TUMBLR_API_KEY = credentialStorage.GetKey("tumblr", "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4"); // Public testing API key from Tumblr.
+            TUMBLR_API_KEY = credentialStorage.GetKey("tumblr", "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4");
+                // Public testing API key from Tumblr.
         }
 
         private async Task<Tuple<Stream, string>> GetRandomTumblrImage(string tumblrUsername)
         {
             if (!_tumblrImageUrlCaches.ContainsKey(tumblrUsername))
             {
-                _tumblrImageUrlCaches[tumblrUsername] = new TumblrImageUrlCache(tumblrUsername, TUMBLR_API_KEY, TimeSpan.FromHours(12));
+                _tumblrImageUrlCaches[tumblrUsername] = new TumblrImageUrlCache(tumblrUsername, TUMBLR_API_KEY,
+                    TimeSpan.FromHours(12));
             }
 
             string imageUrl = await _tumblrImageUrlCaches[tumblrUsername].Pop();
@@ -52,14 +56,16 @@ namespace Coremero.Plugin.Classic
         public async Task<IMessage> Homero(IInvocationContext context, IMessage message)
         {
             Tuple<Stream, string> image = await GetRandomTumblrImage("simpsons-latino");
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"homero.{Path.GetExtension(image.Item2)}"));
+            return Message.Create(message.Text?.TrimCommand(),
+                new StreamAttachment(image.Item1, $"homero.{Path.GetExtension(image.Item2)}"));
         }
 
         [Command("dog", Help = "Get a random image of a dog.")]
         public async Task<IMessage> Dog(IInvocationContext context, IMessage message)
         {
             Tuple<Stream, string> image = await GetRandomTumblrImage("goodassdog");
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"good_pupper.{Path.GetExtension(image.Item2)}"));
+            return Message.Create(message.Text?.TrimCommand(),
+                new StreamAttachment(image.Item1, $"good_pupper.{Path.GetExtension(image.Item2)}"));
         }
 
         #region Business Titles
@@ -89,35 +95,40 @@ namespace Coremero.Plugin.Classic
                 IUser randomUser = context.Channel?.Users.GetRandom();
                 outputText = $"{_businessTitles.GetRandom()} {randomUser?.Name} hard at work.";
             }
-            return Message.Create(outputText, new StreamAttachment((await GetRandomTumblrImage("realbusinessmen")).Item1, "white_male_over_50.jpg"));
+            return Message.Create(outputText,
+                new StreamAttachment((await GetRandomTumblrImage("realbusinessmen")).Item1, "white_male_over_50.jpg"));
         }
 
         [Command("y2k", Help = "Get a random image of ａｅｓｔｈｅｔｉｃ.")]
         public async Task<IMessage> Y2K(IInvocationContext context, IMessage message)
         {
             Tuple<Stream, string> image = await GetRandomTumblrImage("y2kaestheticinstitute");
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"aesthetics.{Path.GetExtension(image.Item2)}"));
+            return Message.Create(message.Text?.TrimCommand(),
+                new StreamAttachment(image.Item1, $"aesthetics.{Path.GetExtension(image.Item2)}"));
         }
 
         [Command("koth", Help = "Get a random image from King of the Hill.")]
         public async Task<IMessage> KingOfTheHill(IInvocationContext context, IMessage message)
         {
             Tuple<Stream, string> image = await GetRandomTumblrImage("kingofthehillcaps");
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"propane.{Path.GetExtension(image.Item2)}"));
+            return Message.Create(message.Text?.TrimCommand(),
+                new StreamAttachment(image.Item1, $"propane.{Path.GetExtension(image.Item2)}"));
         }
 
         [Command("xfiles", Help = "Get a random image from The X-Files.")]
         public async Task<IMessage> XFiles(IInvocationContext context, IMessage message)
         {
             Tuple<Stream, string> image = await GetRandomTumblrImage("outofcontextfiles");
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"alien.{Path.GetExtension(image.Item2)}"));
+            return Message.Create(message.Text?.TrimCommand(),
+                new StreamAttachment(image.Item1, $"alien.{Path.GetExtension(image.Item2)}"));
         }
 
         [Command("spongebob", Help = "Get a random image from SpongeBob SquarePants.")]
         public async Task<IMessage> Spongebob(IInvocationContext context, IMessage message)
         {
             Tuple<Stream, string> image = await GetRandomTumblrImage("spongecaps");
-            return Message.Create(message.Text?.TrimCommand(), new StreamAttachment(image.Item1, $"spongebob.{Path.GetExtension(image.Item2)}"));
+            return Message.Create(message.Text?.TrimCommand(),
+                new StreamAttachment(image.Item1, $"spongebob.{Path.GetExtension(image.Item2)}"));
         }
 
 

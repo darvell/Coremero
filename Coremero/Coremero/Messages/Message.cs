@@ -15,7 +15,7 @@ namespace Coremero.Messages
             Message message = new Message()
             {
                 Text = text,
-                Attachments =  attachments?.ToList()
+                Attachments = attachments?.ToList()
             };
             return message;
         }
@@ -24,6 +24,5 @@ namespace Coremero.Messages
         {
             return Message.Create(text, null);
         }
-
     }
 }

@@ -26,13 +26,15 @@ namespace Coremero.Client.Discord
         }
 
         private List<IAttachment> _attachments;
+
         public List<IAttachment> Attachments
         {
             get
             {
                 if (_attachments == null)
                 {
-                    _attachments = _message.Attachments.Select(x => new UrlAttachment(x.Url)).Cast<IAttachment>().ToList();
+                    _attachments =
+                        _message.Attachments.Select(x => new UrlAttachment(x.Url)).Cast<IAttachment>().ToList();
                 }
                 return _attachments;
             }
@@ -42,11 +44,11 @@ namespace Coremero.Client.Discord
         {
             if (emoji.StartsWith("<")) // I guess Discord.Net doesn't use the same methods internally?
             {
-                await ((SocketUserMessage)_message).AddReactionAsync(Emoji.Parse(emoji));
+                await ((SocketUserMessage) _message).AddReactionAsync(Emoji.Parse(emoji));
             }
             else
             {
-                await ((SocketUserMessage)_message).AddReactionAsync(emoji);
+                await ((SocketUserMessage) _message).AddReactionAsync(emoji);
             }
         }
 

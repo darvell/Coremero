@@ -7,37 +7,28 @@ namespace Coremero.Client.Mock
 {
     public class MockClient : IClient
     {
-
         #region Private Fields
 
         private bool _isConnected = false;
         private IMessageBus _messageBus;
+
         #endregion
 
         #region Public Interface Properties
 
         public string Name
         {
-            get
-            {
-                return "Mock Client";
-            }
+            get { return "Mock Client"; }
         }
 
         public string Description
         {
-            get
-            {
-                return "A client used for mocking, testing, et al.";
-            }
+            get { return "A client used for mocking, testing, et al."; }
         }
 
         public ClientFeature Features
         {
-            get
-            {
-                return ClientFeature.All;
-            }
+            get { return ClientFeature.All; }
         }
 
         public bool IsConnected => _isConnected;

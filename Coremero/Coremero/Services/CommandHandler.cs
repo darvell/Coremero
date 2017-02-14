@@ -75,7 +75,7 @@ namespace Coremero.Services
 
                     if (message is IReactableMessage)
                     {
-                        await ((IReactableMessage)message).React("💔");
+                        await ((IReactableMessage) message).React("💔");
                     }
                     else
                     {
@@ -88,7 +88,9 @@ namespace Coremero.Services
                         else
                         {
 #if DEBUG
-                            _messageBus.RaiseOutgoing(context.Raiser, Message.Create("```\n" + e.StackTrace + "\n```", new FileAttachment(Path.Combine(PathExtensions.AppDir, "error.jpg"))));
+                            _messageBus.RaiseOutgoing(context.Raiser,
+                                Message.Create("```\n" + e.StackTrace + "\n```",
+                                    new FileAttachment(Path.Combine(PathExtensions.AppDir, "error.jpg"))));
 #endif
                         }
                     }
@@ -104,6 +106,5 @@ namespace Coremero.Services
                 messageSentEventArgs.Target.Send(messageSentEventArgs.Message);
             }
         }
-
     }
 }

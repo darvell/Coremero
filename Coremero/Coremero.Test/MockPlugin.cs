@@ -8,7 +8,6 @@ namespace Coremero.Test
 {
     public class MockPlugin : IPlugin
     {
-
         [Command("example")]
         public string Example(IInvocationContext context, IMessage message)
         {

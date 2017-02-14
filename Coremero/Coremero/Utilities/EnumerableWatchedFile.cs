@@ -11,7 +11,7 @@ namespace Coremero.Utilities
         private readonly List<string> _cachedContents = new List<string>();
         private readonly char _fileSeparator;
         private readonly FileSystemWatcher _fileSystemWatcher;
-        
+
         public IEnumerator<string> GetEnumerator()
         {
             return _cachedContents.GetEnumerator();
@@ -21,7 +21,7 @@ namespace Coremero.Utilities
         {
             return GetEnumerator();
         }
-        
+
         /// <summary>
         /// Creates an IEnumerable<string> from a file that is backed in to RAM and updated on file changes.
         /// </summary>

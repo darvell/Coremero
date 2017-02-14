@@ -16,10 +16,7 @@ namespace Coremero.Messages
 
         public string Name
         {
-            get
-            {
-                return _filePath;
-            }
+            get { return _filePath; }
         }
 
         public Stream Contents

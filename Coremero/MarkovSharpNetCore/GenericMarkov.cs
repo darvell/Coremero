@@ -48,7 +48,8 @@ namespace MarkovSharpNetCore
         /// <returns></returns>
         public virtual IEnumerable<TGram> SplitTokens(TPhrase phrase)
         {
-            throw new ArgumentException("Please do not use GenericMarkov directly - instead, inherit from GenericMarkov and extend SplitTokens and RebuildPhrase methods. An interface IMarkovModel is provided for ease of use.");
+            throw new ArgumentException(
+                "Please do not use GenericMarkov directly - instead, inherit from GenericMarkov and extend SplitTokens and RebuildPhrase methods. An interface IMarkovModel is provided for ease of use.");
         }
 
         /// <summary>
@@ -170,7 +171,8 @@ namespace MarkovSharpNetCore
         {
             if (newLevel < 1)
             {
-                throw new ArgumentException("Invalid argument - retrain level must be a positive integer", nameof(newLevel));
+                throw new ArgumentException("Invalid argument - retrain level must be a positive integer",
+                    nameof(newLevel));
             }
 
             Level = newLevel;
@@ -189,7 +191,7 @@ namespace MarkovSharpNetCore
             {
                 if (!Model.ContainsKey(key))
                 {
-                    Model.TryAdd(key, new List<TGram> { value });
+                    Model.TryAdd(key, new List<TGram> {value});
                 }
                 else
                 {
@@ -202,12 +204,13 @@ namespace MarkovSharpNetCore
         {
             if (seed == null)
             {
-                seed = RebuildPhrase(new List<TGram>() { GetPrepadGram() });
+                seed = RebuildPhrase(new List<TGram>() {GetPrepadGram()});
             }
 
             if (lines < 1)
             {
-                throw new ArgumentException("Invalid argument - line count for walk must be a positive integer", nameof(lines));
+                throw new ArgumentException("Invalid argument - line count for walk must be a positive integer",
+                    nameof(lines));
             }
 
             var sentences = new List<TPhrase>();
@@ -222,7 +225,8 @@ namespace MarkovSharpNetCore
                     break;
                 }
                 var result = WalkLine(seed);
-                if ((!EnsureUniqueWalk || !SourceLines.Contains(result)) && (!EnsureUniqueWalk || !sentences.Contains(result)))
+                if ((!EnsureUniqueWalk || !SourceLines.Contains(result)) &&
+                    (!EnsureUniqueWalk || !sentences.Contains(result)))
                 {
                     sentences.Add(result);
                     created++;

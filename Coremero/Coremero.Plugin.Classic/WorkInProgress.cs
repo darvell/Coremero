@@ -32,7 +32,8 @@ namespace Coremero.Plugin.Classic
                 string imageName = _wipUrls.GetRandom();
 
                 MemoryStream ms = new MemoryStream();
-                await (await client.GetStreamAsync($"http://www.textfiles.com/underconstruction/{imageName}")).CopyToAsync(ms);
+                await (await client.GetStreamAsync($"http://www.textfiles.com/underconstruction/{imageName}"))
+                    .CopyToAsync(ms);
                 ms.Seek(0, SeekOrigin.Begin);
                 return Message.Create(null, new StreamAttachment(ms, imageName));
             }

@@ -9,6 +9,7 @@ namespace Coremero.Client.Discord
     public class DiscordServer : IServer
     {
         private IGuild _guild;
+
         public DiscordServer(IGuild guild)
         {
             _guild = guild;

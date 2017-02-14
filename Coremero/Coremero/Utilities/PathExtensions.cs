@@ -9,6 +9,7 @@ namespace Coremero.Utilities
     public static class PathExtensions
     {
         private static string _pluginDirCache;
+
         public static string PluginDir
         {
             get

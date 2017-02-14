@@ -57,9 +57,7 @@ namespace Coremero.Client.Discord
 
         public string Topic
         {
-            get
-            {
-                return String.Empty; // Channel interface has no topic? Do we need to cast?
+            get { return String.Empty; // Channel interface has no topic? Do we need to cast?
             }
         }
 
@@ -69,7 +67,7 @@ namespace Coremero.Client.Discord
             {
                 List<IUser> result = new List<IUser>();
                 var enumerator = _channel.GetUsersAsync().GetEnumerator();
-                while(enumerator.MoveNext().Result == true)
+                while (enumerator.MoveNext().Result == true)
                 {
                     foreach (var user in enumerator.Current)
                     {

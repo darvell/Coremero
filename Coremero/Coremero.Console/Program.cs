@@ -7,7 +7,8 @@ class Program
     {
         var exitEvent = new ManualResetEvent(false);
 
-        Console.CancelKeyPress += (sender, eventArgs) => {
+        Console.CancelKeyPress += (sender, eventArgs) =>
+        {
             eventArgs.Cancel = true;
             exitEvent.Set();
         };

@@ -127,6 +127,7 @@ namespace Coremero.Plugin.Classic
 
             return outputLines;
         }
+
         #region utility class
 
         private class BorderedLine
@@ -186,7 +187,5 @@ namespace Coremero.Plugin.Classic
             }
             return output;
         }
-
     }
-
 }

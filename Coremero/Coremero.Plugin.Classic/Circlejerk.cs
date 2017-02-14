@@ -12,6 +12,7 @@ namespace Coremero.Plugin.Classic
     public class Circlejerk : IPlugin
     {
         private Random _rnd = new Random();
+
         private List<string> _tonyOutput = new List<string>
         {
             "Tony is sitting opposite you, examinig each of his fingers in turn.",
@@ -52,12 +53,12 @@ namespace Coremero.Plugin.Classic
         [Command("ego", Help = "Impersonate ego.")]
         public string Ego(IInvocationContext context)
         {
-            int pillAmount = _rnd.Next(20,421);
+            int pillAmount = _rnd.Next(20, 421);
             string egoName = "<ego>";
             // Snatch pepitos name if it's in SA-MC.
             if (context.Channel is DiscordChannel)
             {
-                IUser ego = context.Channel.Users.FirstOrDefault(x => ((DiscordUser)x).Username.Contains("ego"));
+                IUser ego = context.Channel.Users.FirstOrDefault(x => ((DiscordUser) x).Username.Contains("ego"));
                 if (ego != null)
                 {
                     egoName = $"{ego.Name}:";
@@ -65,7 +66,5 @@ namespace Coremero.Plugin.Classic
             }
             return $"{egoName} hey guys i ate {(pillAmount == 100 ? "💯" : pillAmount.ToString())} pills";
         }
-
-
     }
 }

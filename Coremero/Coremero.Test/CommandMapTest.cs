@@ -8,7 +8,6 @@ using Xunit;
 
 namespace Coremero.Test
 {
-
     public class CommandMapTest
     {
         public CommandRegistry Registry { get; set; }
@@ -45,6 +44,5 @@ namespace Coremero.Test
                 Debug.Fail("Result was not null.");
             }
         }
-
     }
 }

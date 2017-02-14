@@ -13,8 +13,8 @@ namespace Coremero.Registry
 {
     public class CommandRegistry
     {
-        private readonly Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>> _commandMap =
-            new Dictionary<CommandAttribute, Func<IInvocationContext,IMessage, object>>();
+        private readonly Dictionary<CommandAttribute, Func<IInvocationContext, IMessage, object>> _commandMap =
+            new Dictionary<CommandAttribute, Func<IInvocationContext, IMessage, object>>();
 
         /// <summary>
         /// Registers all methods with the [Command] attribute in to the command map.
@@ -41,7 +41,9 @@ namespace Coremero.Registry
                         if (methodParams.Any(x =>
                         {
                             Type paramType = x.ParameterType;
-                            return !(paramType == (typeof(IInvocationContext)) || paramType == typeof(IMessage) || paramType == typeof(string));
+                            return
+                                !(paramType == (typeof(IInvocationContext)) || paramType == typeof(IMessage) ||
+                                  paramType == typeof(string));
                         }))
                         {
                             Debug.Fail("Invalid parameter in command.");
@@ -78,7 +80,6 @@ namespace Coremero.Registry
                         }
                         return methodInfo.Invoke(plugin, paramList.Count == 0 ? null : paramList.ToArray());
                     };
-
                 }
             }
         }
@@ -99,7 +100,7 @@ namespace Coremero.Registry
                     selectedCommand = cmd;
                     break;
                 }
-                else if(cmd.Name.StartsWith(commandName))
+                else if (cmd.Name.StartsWith(commandName))
                 {
                     int edit = cmd.Name.DamerauLevenshteinDistance(commandName, 10);
                     if (nearestEditDistance > edit)

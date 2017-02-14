@@ -44,12 +44,14 @@ namespace Coremero.Plugin.Classic
         }
         */
 
-        [Command("gif", "Query", Help = "Get a random GIF from Riffy.")]
+        [Command("gif", Arguments = "Query", Help = "Get a random GIF from Riffy.")]
         public async Task<IMessage> Riffsy(IInvocationContext context, IMessage message)
         {
             using (HttpClient client = new HttpClient())
             {
-                string json = await client.GetStringAsync($"http://api.riffsy.com/v1/search?key=KXSAYTVBST24&limit=50&tag={WebUtility.UrlEncode(message.Text.TrimCommand())}");
+                string json =
+                    await client.GetStringAsync(
+                        $"http://api.riffsy.com/v1/search?key=KXSAYTVBST24&limit=50&tag={WebUtility.UrlEncode(message.Text.TrimCommand())}");
 
                 var jsonObj = JsonConvert.DeserializeObject<JObject>(json);
                 var smallGifs = jsonObj["results"].Where(x =>
@@ -76,15 +78,16 @@ namespace Coremero.Plugin.Classic
                 ms.Seek(0, SeekOrigin.Begin);
                 return Message.Create(null, new StreamAttachment(ms, message.Text.TrimCommand() + ".gif"));
             }
-
         }
 
-        [Command("giphy", "Query", Help = "Get a random GIF from Giphy.")]
+        [Command("giphy", Arguments = "Query", Help = "Get a random GIF from Giphy.")]
         public async Task<IMessage> Giphy(IInvocationContext context, IMessage message)
         {
             using (HttpClient client = new HttpClient())
             {
-                string json = await client.GetStringAsync($"http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag={WebUtility.UrlEncode(message.Text.TrimCommand())}");
+                string json =
+                    await client.GetStringAsync(
+                        $"http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag={WebUtility.UrlEncode(message.Text.TrimCommand())}");
 
                 var jsonObj = JsonConvert.DeserializeObject<JObject>(json);
                 var url = jsonObj["data"]["image_url"];
@@ -101,6 +104,5 @@ namespace Coremero.Plugin.Classic
         {
             return await Giphy(context, Message.Create("hows its made"));
         }
-
     }
 }

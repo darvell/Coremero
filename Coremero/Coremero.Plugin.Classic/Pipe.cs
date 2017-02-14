@@ -19,12 +19,12 @@ namespace Coremero.Plugin.Classic
             _commandRegistry = cmdRegistry;
         }
 
-        [Command("pipe", "Command | Command", Help = "Chain multiple commands together.")]
+        [Command("pipe", Arguments = "Command | Command", Help = "Chain multiple commands together.")]
         public async Task<IMessage> PipeCommand(IInvocationContext context, IMessage message)
         {
             List<string> cmds = string.Join(" ", message.Text.GetCommandArguments()).Split('|').ToList();
             Message basicMessage = Message.Create(message.Text, message.Attachments?.ToArray());
-            basicMessage.Text = string.Join(" ",cmds.First().Split(' ').Skip(1).ToList()).Trim();
+            basicMessage.Text = string.Join(" ", cmds.First().Split(' ').Skip(1).ToList()).Trim();
             foreach (var cmd in cmds)
             {
                 List<string> call = cmd.Trim().Split(' ').ToList();
@@ -43,7 +43,10 @@ namespace Coremero.Plugin.Classic
                     continue;
                 }
 
-                IMessage result = await _commandRegistry.ExecuteCommandAsync(call.First(), context, call.Count == 1 ? basicMessage : Message.Create(string.Join(" ", call.Skip(1)), basicMessage.Attachments?.ToArray()));
+                IMessage result = await _commandRegistry.ExecuteCommandAsync(call.First(), context,
+                    call.Count == 1
+                        ? basicMessage
+                        : Message.Create(string.Join(" ", call.Skip(1)), basicMessage.Attachments?.ToArray()));
 
                 if (!string.IsNullOrEmpty(result.Text))
                 {

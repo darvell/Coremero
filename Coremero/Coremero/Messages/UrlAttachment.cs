@@ -10,6 +10,7 @@ namespace Coremero.Messages
     {
         private HttpClient _httpClient = new HttpClient();
         private string _url;
+
         public UrlAttachment(string url)
         {
             _url = url;
@@ -22,10 +23,7 @@ namespace Coremero.Messages
 
         public Stream Contents
         {
-            get
-            {
-                return _httpClient.GetStreamAsync(_url).Result;
-            }
+            get { return _httpClient.GetStreamAsync(_url).Result; }
         }
     }
 }

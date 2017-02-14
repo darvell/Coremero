@@ -19,7 +19,8 @@ namespace Coremero.Plugin.Playground
             using (HttpClient client = new HttpClient())
             {
                 JObject payload = JObject.Parse(await client.GetStringAsync("https://api.chucknorris.io/jokes/random"));
-                return payload["value"].ToString().ReplaceString("Chuck Norris", target, StringComparison.OrdinalIgnoreCase);
+                return payload["value"].ToString()
+                    .ReplaceString("Chuck Norris", target, StringComparison.OrdinalIgnoreCase);
             }
         }
     }

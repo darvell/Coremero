@@ -50,12 +50,11 @@ namespace Coremero.Client.Discord
         }
 
         private global::Discord.IMessage _message; // Discord holds a lot of invocation context in here, great.
-         
+
         public DiscordInvocationContext(IClient client, global::Discord.IMessage message)
         {
             OriginClient = client;
             _message = message;
         }
-
     }
 }

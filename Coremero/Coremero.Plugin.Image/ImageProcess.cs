@@ -11,8 +11,8 @@ namespace Coremero.Plugin.Image
 {
     public class ImageProcess : IPlugin
     {
-
-        [Command("contrast","Contrast Value", Help = "Increases or decreases the contrast in the attached images. Values between -100 and 100.")]
+        [Command("contrast", Arguments = "Contrast Value",
+            Help = "Increases or decreases the contrast in the attached images. Values between -100 and 100.")]
         public IMessage Contrast(IInvocationContext context, IMessage message)
         {
             int val = int.Parse(message.Text.GetCommandArguments()[0]);
@@ -31,7 +31,8 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
-        [Command("saturation", "Saturation Value", Help = "Increases or decreases the saturation in the attached images. Values between -100 and 100.")]
+        [Command("saturation", Arguments = "Saturation Value",
+            Help = "Increases or decreases the saturation in the attached images. Values between -100 and 100.")]
         public IMessage Saturate(IInvocationContext context, IMessage message)
         {
             int val = int.Parse(message.Text.GetCommandArguments()[0]);
@@ -50,7 +51,8 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
-        [Command("brightness", "Brightness Value", Help = "Increases or decreases the brightness in the attached images. Values between -100 and 100.")]
+        [Command("brightness", Arguments = "Brightness Value",
+            Help = "Increases or decreases the brightness in the attached images. Values between -100 and 100.")]
         public IMessage Brightness(IInvocationContext context, IMessage message)
         {
             int val = int.Parse(message.Text.GetCommandArguments()[0]);
@@ -69,7 +71,8 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
-        [Command("pixelate", "Pixelate Value", Help = "Pixelates the image by a factor of [Pixelate Value]. Values between 0 and 16.")]
+        [Command("pixelate", Arguments = "Pixelate Value",
+            Help = "Pixelates the image by a factor of [Pixelate Value]. Values between 0 and 16.")]
         public IMessage Pixelate(IInvocationContext context, IMessage message)
         {
             int val = int.Parse(message.Text.GetCommandArguments()[0]);
@@ -88,7 +91,8 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
-        [Command("sharpen", "Sharpen Value", Help = "Sharpens the image by a factor of [Sharpen Value]. Values between 0 and 100.")]
+        [Command("sharpen", Arguments = "Sharpen Value",
+            Help = "Sharpens the image by a factor of [Sharpen Value]. Values between 0 and 100.")]
         public IMessage Sharpen(IInvocationContext context, IMessage message)
         {
             int val = int.Parse(message.Text.GetCommandArguments()[0]);
@@ -107,7 +111,8 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
-        [Command("hue", "Hue Degrees", Help = "Rotates the image huge by a factor of [Hue Degrees]. Values between -360 and 360.")]
+        [Command("hue", Arguments = "Hue Degrees",
+            Help = "Rotates the image huge by a factor of [Hue Degrees]. Values between -360 and 360.")]
         public IMessage Hue(IInvocationContext context, IMessage message)
         {
             int val = int.Parse(message.Text.GetCommandArguments()[0]);
@@ -151,6 +156,5 @@ namespace Coremero.Plugin.Image
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
-
     }
 }

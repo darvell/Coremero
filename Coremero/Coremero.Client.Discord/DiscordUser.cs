@@ -54,7 +54,7 @@ namespace Coremero.Client.Discord
             {
                 if (_user is IGuildUser)
                 {
-                    return ((IGuildUser)_user).Nickname ?? _user.Username;
+                    return ((IGuildUser) _user).Nickname ?? _user.Username;
                 }
                 return _user.Username;
             }
@@ -82,7 +82,8 @@ namespace Coremero.Client.Discord
 
                     if (guildUser.Guild.Id == 109063664560009216)
                     {
-                        if (guildUser.GuildPermissions.Administrator || guildUser.RoleIds.Any(x => x.Equals(109078556360863744)))
+                        if (guildUser.GuildPermissions.Administrator ||
+                            guildUser.RoleIds.Any(x => x.Equals(109078556360863744)))
                         {
                             return UserPermission.BotOwner;
                         }

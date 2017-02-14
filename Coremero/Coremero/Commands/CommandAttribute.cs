@@ -12,11 +12,12 @@ namespace Coremero.Commands
         /// Name of the command.
         /// </summary>
         public readonly string Name;
+
         /// <summary>
         /// Description for using the command.
         /// </summary>
         public string Help { get; set; }
-        
+
         /// <summary>
         /// Argument names delimited by a |.
         /// </summary>

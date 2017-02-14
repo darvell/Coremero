@@ -8,10 +8,9 @@ namespace Coremero.Client.Mock
     public class MockChannel : IChannel
     {
         private List<Tuple<IUser, IMessage>> _messages = new List<Tuple<IUser, IMessage>>();
-         
+
         public Task SendAsync(IMessage message)
         {
-
             return Task.FromResult(true);
         }
 

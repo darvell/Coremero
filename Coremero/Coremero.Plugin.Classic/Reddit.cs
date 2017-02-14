@@ -37,7 +37,6 @@ namespace Coremero.Plugin.Classic
             "The_Donald",
             "4chan",
             "AskTrumpSupporters"
-
         };
 
         [Command("hurt", Help = "Impersonate hurt.")]
@@ -73,22 +72,21 @@ namespace Coremero.Plugin.Classic
 
         #endregion
 
-
         #region Danl
+
         private List<string> _danlSubreddits = new List<string>()
         {
-                            "TheRedPill",
-                            "seduction",
-                            "CuckoldCommunity",
-                            "BikePorn",
-                            "electronic_cigarette",
-                            "snooker",
-                            "UFC",
-                            "Kratom",
-                            "bird",
-                            "government",
-                            "joerogan"
-
+            "TheRedPill",
+            "seduction",
+            "CuckoldCommunity",
+            "BikePorn",
+            "electronic_cigarette",
+            "snooker",
+            "UFC",
+            "Kratom",
+            "bird",
+            "government",
+            "joerogan"
         };
 
         [Command("danl", Help = "Impersonate danl.")]
@@ -100,6 +98,7 @@ namespace Coremero.Plugin.Classic
         #endregion Danl
 
         #region Drug
+
         private List<string> _drugSubreddits = new List<string>()
         {
             "drugs",
@@ -131,10 +130,10 @@ namespace Coremero.Plugin.Classic
 
         #endregion
 
-        [Command("reddit", "Subreddit Name", Help = "Get a random post title from a subreddit.")]
+        [Command("reddit", Arguments = "Subreddit Name", Help = "Get a random post title from a subreddit.")]
         public async Task<string> RandomReddit(string subreddits)
         {
-            return await GetRandomTitleFromSubreddit(string.Join("+",subreddits.GetCommandArguments()));
+            return await GetRandomTitleFromSubreddit(string.Join("+", subreddits.GetCommandArguments()));
         }
 
         private async Task<string> GetRandomTitleFromSubreddit(string subreddit)
@@ -164,7 +163,7 @@ namespace Coremero.Plugin.Classic
             }
         }
 
-        [Command("imireddit", "Subreddit Name", Help = "Imitates a subreddit.")]
+        [Command("imireddit", Arguments = "Subreddit Name", Help = "Imitates a subreddit.")]
         public async Task<string> MarkovReddit(string subreddit)
         {
             var model = new StringMarkov();
@@ -175,9 +174,6 @@ namespace Coremero.Plugin.Classic
                 Debug.WriteLine(x);
                 return x;
             }).GetRandom();
-
         }
     }
-
-
 }

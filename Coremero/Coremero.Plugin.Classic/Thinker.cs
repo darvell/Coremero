@@ -9,7 +9,7 @@ namespace Coremero.Plugin.Classic
 {
     public class Thinker : IPlugin
     {
-        [Command("think", "Thought", Help = "( .   __ . ) . o O ( [Thought] )")]
+        [Command("think", Arguments = "Thought", Help = "( .   __ . ) . o O ( [Thought] )")]
         public string Think(IInvocationContext context, IMessage message)
         {
             string output = $"( .   __ . ) . o O ( {message.Text.TrimCommand()} )";

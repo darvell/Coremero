@@ -15,6 +15,7 @@ namespace Coremero
     public class CorePlugin : IPlugin
     {
         private CommandRegistry _commandRegistry;
+
         public CorePlugin(CommandRegistry commandRegistry)
         {
             _commandRegistry = commandRegistry;
@@ -55,7 +56,8 @@ namespace Coremero
             return builder.ToString();
         }
 
-        [Command("tasklist", MinimumPermissionLevel = UserPermission.BotOwner, Help = "Reports task list if not threadpooling.")]
+        [Command("tasklist", MinimumPermissionLevel = UserPermission.BotOwner,
+            Help = "Reports task list if not threadpooling.")]
         public string Tasks(IInvocationContext context)
         {
             if (context.User?.Permissions != UserPermission.BotOwner)
@@ -89,7 +91,10 @@ namespace Coremero
         public string CommandList(IInvocationContext context, IMessage message)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var cmd in _commandRegistry.CommandAttributes.OrderBy(x => x.Name).Where(x => x.MinimumPermissionLevel <= context.User.Permissions))
+            foreach (
+                var cmd in
+                _commandRegistry.CommandAttributes.OrderBy(x => x.Name)
+                    .Where(x => x.MinimumPermissionLevel <= context.User.Permissions))
             {
                 string args = String.Empty;
                 if (!String.IsNullOrEmpty(cmd.Arguments))

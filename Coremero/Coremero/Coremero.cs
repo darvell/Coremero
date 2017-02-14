@@ -35,7 +35,11 @@ namespace Coremero
             // Log init.
             var loggingConfig = new LoggingConfiguration();
 
-            var consoleTarget = new ColoredConsoleTarget { Name = "console", Layout = @"[${date:format=HH\:mm\:ss}] ${message}" };
+            var consoleTarget = new ColoredConsoleTarget
+            {
+                Name = "console",
+                Layout = @"[${date:format=HH\:mm\:ss}] ${message}"
+            };
 
             var fileTarget = new FileTarget()
             {
@@ -60,7 +64,8 @@ namespace Coremero
             _container.ExpressionBuilt +=
                 (sender, args) => { Log.Trace($"Type {args.RegisteredServiceType} registered."); };
 
-            _container.Options.LifestyleSelectionBehavior = new SingletonLifestyleSelectionBehavior(); // Lazy hack to force all plugins to be singleton.
+            _container.Options.LifestyleSelectionBehavior = new SingletonLifestyleSelectionBehavior();
+                // Lazy hack to force all plugins to be singleton.
 
             // Register registries
             _container.RegisterSingleton<ClientRegistry>();
@@ -150,6 +155,5 @@ namespace Coremero
                 return Lifestyle.Singleton;
             }
         }
-
     }
 }

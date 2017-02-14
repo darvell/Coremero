@@ -14,6 +14,7 @@ namespace Coremero
         // Since writing our own dependency context is probably a bit far off, let's setup our own.
         private static DependencyContext Context = DependencyContext.Default;
         private Dictionary<AssemblyName, Assembly> _assemblyCache = new Dictionary<AssemblyName, Assembly>();
+
         public AssemblyLoader()
         {
             this.Resolving += AssemblyLoader_Resolving;
