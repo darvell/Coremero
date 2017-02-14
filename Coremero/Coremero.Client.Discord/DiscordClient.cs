@@ -62,12 +62,11 @@ namespace Coremero.Client.Discord
 
             await _discordClient.LoginAsync(TokenType.Bot, DISCORD_BOT_KEY);
             await _discordClient.ConnectAsync();
-            await _discordClient.WaitForGuildsAsync();
             IsConnected = true;
 
 #if DEBUG
-            var cncChannel =
-                _discordClient.GetGuild(DEBUG_GUILD)?.Channels.FirstOrDefault(x => x.Id == DEBUG_CNC_CHANNEL_ID);
+            await _discordClient.WaitForGuildsAsync();
+            var cncChannel = _discordClient.GetGuild(DEBUG_GUILD)?.Channels.FirstOrDefault(x => x.Id == DEBUG_CNC_CHANNEL_ID);
             if (cncChannel != null)
             {
                 var token = new CancellationToken();
