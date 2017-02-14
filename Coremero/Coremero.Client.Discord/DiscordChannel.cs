@@ -10,7 +10,7 @@ using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
-    public class DiscordChannel : IChannel
+    public class DiscordChannel : IBufferedChannel
     {
         private IMessageChannel _channel;
 
@@ -78,6 +78,26 @@ namespace Coremero.Client.Discord
                 }
                 return result;
             }
+        }
+
+
+        public List<IMessage> GetLatestMessages(int limit = 100)
+        {
+            return GetLatestMessagesAsync(limit).Result;
+        }
+
+        public async Task<List<IMessage>> GetLatestMessagesAsync(int limit = 100)
+        {
+            List<IMessage> result = new List<IMessage>();
+            var enumerator = _channel.GetMessagesAsync(limit);
+            await enumerator.ForEachAsync(messages =>
+            {
+                foreach (var message in messages)
+                {
+                    result.Add(new DiscordMessage(message));
+                }
+            });
+            return result;
         }
     }
 }
