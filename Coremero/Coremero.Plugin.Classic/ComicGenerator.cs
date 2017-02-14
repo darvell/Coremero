@@ -71,9 +71,8 @@ namespace Coremero.Plugin.Classic
 
                 using (HttpClient client = new HttpClient())
                 {
-                    var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+                    var content = new StringContent(JsonConvert.SerializeObject(payload, new JsonSerializerSettings() { ContractResolver = new LowercaseContractResolver() }), Encoding.UTF8, "application/json");
                     var result = await client.PostAsync($"http://localhost:5000/create", content);
-                    var content = new StringContent(JsonConvert.SerializeObject(payload, new JsonSerializerSettings() { ContractResolver = new LowercaseContractResolver()}), Encoding.UTF8, "application/json");
                     MemoryStream ms = new MemoryStream();
                     Stream s = await result.Content.ReadAsStreamAsync();
                     await s.CopyToAsync(ms);
