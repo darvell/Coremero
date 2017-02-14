@@ -47,7 +47,9 @@ namespace Coremero.Client.Discord
 
         public void Send(IMessage message)
         {
+            #pragma warning disable 4014
             SendAsync(message);
+            #pragma warning restore 4014
         }
 
         public string Name

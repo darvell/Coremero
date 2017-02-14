@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Rpc;
+#pragma warning disable 4014
 
 namespace Coremero.Client.Discord
 {

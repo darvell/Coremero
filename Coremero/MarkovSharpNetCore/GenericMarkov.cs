@@ -122,7 +122,7 @@ namespace MarkovSharpNetCore
                     previous = tokens[tokens.Length - j];
                     lastCol.Add(previous);
                 }
-                catch (IndexOutOfRangeException e)
+                catch (IndexOutOfRangeException)
                 {
                     previous = GetPrepadGram();
                     lastCol.Add(previous);

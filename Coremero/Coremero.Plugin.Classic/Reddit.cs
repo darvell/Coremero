@@ -166,8 +166,7 @@ namespace Coremero.Plugin.Classic
         [Command("imireddit", Arguments = "Subreddit Name", Help = "Imitates a subreddit.")]
         public async Task<string> MarkovReddit(string subreddit)
         {
-            var model = new StringMarkov();
-            model.EnsureUniqueWalk = true;
+            var model = new StringMarkov {EnsureUniqueWalk = true};
             model.Learn(await GetTitlesFromSubreddit(subreddit));
             return model.Walk(10).Select(x =>
             {

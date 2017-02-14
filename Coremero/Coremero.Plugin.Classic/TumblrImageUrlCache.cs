@@ -72,7 +72,7 @@ namespace Coremero.Plugin.Classic
                         if (newUrls.Count > 200)
                             break;
                     }
-                    catch (Exception e)
+                    catch
                     {
                         break;
                     }

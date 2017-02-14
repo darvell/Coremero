@@ -71,6 +71,7 @@ namespace Coremero.Client.Discord
             if (cncChannel != null)
             {
                 var token = new CancellationToken();
+#pragma warning disable 4014
                 Task.Run(async () =>
                 {
                     IMessageChannel cncMessageChannel = cncChannel as IMessageChannel;
@@ -81,6 +82,8 @@ namespace Coremero.Client.Discord
                         Thread.Sleep(TimeSpan.FromSeconds(25));
                     }
                 }, token);
+#pragma warning restore 4014
+
             }
 #endif
 
