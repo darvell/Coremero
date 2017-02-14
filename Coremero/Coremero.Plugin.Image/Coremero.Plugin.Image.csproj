@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha2-00052" />
+    <PackageReference Include="ImageSharp.Drawing" Version="1.0.0-alpha2-00058" />
     <PackageReference Include="ImageSharp.Formats.Gif" Version="1.0.0-alpha2-00052" />
     <PackageReference Include="ImageSharp.Formats.Jpeg" Version="1.0.0-alpha2-00052" />
     <PackageReference Include="ImageSharp.Formats.Png" Version="1.0.0-alpha2-00048" />

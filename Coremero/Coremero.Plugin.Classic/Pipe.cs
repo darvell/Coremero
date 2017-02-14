@@ -25,6 +25,7 @@ namespace Coremero.Plugin.Classic
             List<string> cmds = string.Join(" ", message.Text.GetCommandArguments()).Split('|').ToList();
             Message basicMessage = Message.Create(message.Text, message.Attachments?.ToArray());
             basicMessage.Text = string.Join(" ", cmds.First().Split(' ').Skip(1).ToList()).Trim();
+            bool appendNext = false;
             foreach (var cmd in cmds)
             {
                 List<string> call = cmd.Trim().Split(' ').ToList();
@@ -40,6 +41,10 @@ namespace Coremero.Plugin.Classic
                         basicMessage.Attachments?.ForEach(x => x.Contents?.Dispose());
                         basicMessage.Attachments = null;
                     }
+                    else if (call[0] == "append")
+                    {
+                        appendNext = true;
+                    }
                     continue;
                 }
 
@@ -54,12 +59,21 @@ namespace Coremero.Plugin.Classic
                 }
                 if (result.Attachments != null)
                 {
-                    if (basicMessage.Attachments?.Count > 0)
+                    if (appendNext)
                     {
-                        // Prevent leak since we're going out of scope
-                        basicMessage.Attachments.ForEach(x => x.Contents?.Dispose());
+                        basicMessage.Attachments?.AddRange(result.Attachments);
+                        appendNext = false;
                     }
-                    basicMessage.Attachments = result.Attachments;
+                    else
+                    {
+                        if (basicMessage.Attachments?.Count > 0)
+                        {
+                            // Prevent leak since we're going out of scope
+                            basicMessage.Attachments.ForEach(x => x.Contents?.Dispose());
+                        }
+                        basicMessage.Attachments = result.Attachments;
+                    }
+
                 }
             }
 
