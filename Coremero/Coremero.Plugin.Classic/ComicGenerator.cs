@@ -69,6 +69,8 @@ namespace Coremero.Plugin.Classic
                     });
                 }
 
+                payload.Messages.Reverse();
+
                 using (HttpClient client = new HttpClient())
                 {
                     var content = new StringContent(JsonConvert.SerializeObject(payload, new JsonSerializerSettings() { ContractResolver = new LowercaseContractResolver() }), Encoding.UTF8, "application/json");
