@@ -50,7 +50,7 @@ namespace Coremero.Plugin.Classic
                 messages = messages.Where(x => !x.Text.IsCommand() && !string.IsNullOrEmpty(x.Text)).ToList();
 
                 Random rnd = new Random();
-                int panels = rnd.Next(3, 6);
+                int panels = rnd.Next(2, 4);
 
                 ComicPayload payload = new ComicPayload() { Title = title };
 
