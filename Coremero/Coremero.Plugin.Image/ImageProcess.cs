@@ -1,17 +1,27 @@
 ﻿using System;
+using System.Buffers;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Messages;
 using Coremero.Utilities;
 using ImageSharp;
+using ImageSharp.Formats;
 using ImageSharp.Processing.Processors;
 
 namespace Coremero.Plugin.Image
 {
     public class ImageProcess : IPlugin
     {
+
+        public ImageProcess()
+        {
+            Configuration.Default.ParallelOptions.MaxDegreeOfParallelism = 4;
+        }
+
         [Command("contrast", Arguments = "Contrast Value",
             Help = "Increases or decreases the contrast in the attached images. Values between -100 and 100.")]
         public IMessage Contrast(IInvocationContext context, IMessage message)
@@ -26,7 +36,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.Contrast(val).Save(ms);
+                image.Contrast(val).Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -46,7 +56,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.Saturation(val).Save(ms);
+                image.Saturation(val).Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -66,7 +76,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.Brightness(val).Save(ms);
+                image.Brightness(val).Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -86,7 +96,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.Pixelate(val).Save(ms);
+                image.Pixelate(val).Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -106,7 +116,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.GaussianSharpen(val).Save(ms);
+                image.GaussianSharpen(val).Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -126,7 +136,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.Hue(val).Save(ms);
+                image.Hue(val).Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -139,7 +149,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.DetectEdges().Save(ms);
+                image.DetectEdges().Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -152,7 +162,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.Invert().Save(ms);
+                image.Invert().Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -165,7 +175,7 @@ namespace Coremero.Plugin.Image
 
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.Glow().Save(ms);
+                image.Glow().Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
@@ -176,6 +186,8 @@ namespace Coremero.Plugin.Image
         {
             if (message.Attachments?.Count >= 2)
             {
+                int blendAmount = 50;
+                int.TryParse(message.Text, out blendAmount);
                 MemoryStream ms = new MemoryStream();
 
                 using (ImageSharp.Image imageSource = new ImageSharp.Image(message.Attachments[0].Contents))
@@ -190,14 +202,22 @@ namespace Coremero.Plugin.Image
                     {
                         using (ImageSharp.Image imageTarget = new ImageSharp.Image(attachment.Contents))
                         {
-                            ms.Dispose();
-                            ms = new MemoryStream(); // Reinit the stream. This is also insane.
-                            imageSource.DrawImage(imageTarget.Resize(imageSource.Width, imageSource.Height), 50, default(Size), default(Point)).Save(ms);
+                            using (var resizedImage = imageTarget.Resize(imageSource.Width,
+                                    imageSource.Height))
+                            {
+                                ms.Dispose();
+                                ms = new MemoryStream(); // Reinit the stream. This is also insane.
+                                var blendedImage = imageSource.DrawImage(resizedImage, blendAmount, default(Size), default(Point));
+                                blendedImage.Save(ms);
+                                blendedImage.Dispose();
+                            }
                         }
                     }
                     ms.Seek(0, SeekOrigin.Begin);
                 }
 
+                // Sneak in to the ArrayPool.
+                
                 return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
             }
             return null;
