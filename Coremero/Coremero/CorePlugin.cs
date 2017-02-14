@@ -84,7 +84,6 @@ namespace Coremero
         public string ThrowException(IInvocationContext context, IMessage message)
         {
             throw new Exception("I broke for you.");
-            return "How?";
         }
 
         [Command("list", Help = "List all commands.")]
