@@ -35,7 +35,7 @@ namespace Coremero.Services
             IMessage message = eventArgs.Message;
 
             // Is it a command?
-            if (message.Text?.StartsWith(".") != true)
+            if (message.Text?.IsCommand() != true)
             {
                 return;
             }
