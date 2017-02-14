@@ -9,6 +9,7 @@ using Coremero.Commands;
 using Coremero.Messages;
 using Coremero.Utilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Coremero.Plugin.Classic
 {
@@ -25,19 +26,31 @@ namespace Coremero.Plugin.Classic
         public List<ComicMessage> Messages { get; set; } = new List<ComicMessage>();
     }
 
+    internal class LowercaseContractResolver : DefaultContractResolver
+    {
+        protected override string ResolvePropertyName(string propertyName)
+        {
+            return propertyName.ToLower();
+        }
+    }
+
     public class ComicGenerator : IPlugin
     {
         [Command("comic", Arguments = "Title", Help = "Creates a comic using the last random lines of chat.")]
         public async Task<IMessage> GenerateComic(IInvocationContext context, string title)
         {
+            if (string.IsNullOrEmpty(title))
+            {
+                title = "i forgot to add a title and im really dumb";
+            }
             if (context.Channel is IBufferedChannel)
             {
                 IBufferedChannel bufferedChannel = context.Channel as IBufferedChannel;
                 List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(30);
-                messages = messages.Where(x => !x.Text.IsCommand()).ToList();
+                messages = messages.Where(x => !x.Text.IsCommand() && !string.IsNullOrEmpty(x.Text)).ToList();
 
                 Random rnd = new Random();
-                int panels = rnd.Next(4, 8);
+                int panels = rnd.Next(3, 6);
 
                 ComicPayload payload = new ComicPayload() { Title = title };
 
@@ -60,6 +73,7 @@ namespace Coremero.Plugin.Classic
                 {
                     var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
                     var result = await client.PostAsync($"http://localhost:5000/create", content);
+                    var content = new StringContent(JsonConvert.SerializeObject(payload, new JsonSerializerSettings() { ContractResolver = new LowercaseContractResolver()}), Encoding.UTF8, "application/json");
                     MemoryStream ms = new MemoryStream();
                     Stream s = await result.Content.ReadAsStreamAsync();
                     await s.CopyToAsync(ms);
