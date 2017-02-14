@@ -182,7 +182,10 @@ namespace Coremero.Plugin.Image
             if (message.Attachments?.Count >= 2)
             {
                 int blendAmount = 50;
-                int.TryParse(message.Text, out blendAmount);
+                if (!string.IsNullOrEmpty(message.Text.TrimCommand()))
+                {
+                    int.TryParse(message.Text.TrimCommand(), out blendAmount);
+                }
                 MemoryStream ms = new MemoryStream();
 
                 using (ImageSharp.Image imageSource = new ImageSharp.Image(message.Attachments[0].Contents))
