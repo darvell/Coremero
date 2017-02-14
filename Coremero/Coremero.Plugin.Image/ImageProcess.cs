@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Messages;
@@ -173,18 +174,30 @@ namespace Coremero.Plugin.Image
         [Command("blend", Help = "Blends two attachments together with a color burn.")]
         public IMessage Blend(IMessage message)
         {
-            if (message.Attachments?.Count == 2)
+            if (message.Attachments?.Count >= 2)
             {
                 MemoryStream ms = new MemoryStream();
 
                 using (ImageSharp.Image imageSource = new ImageSharp.Image(message.Attachments[0].Contents))
                 {
-                    using (ImageSharp.Image imageTarget = new ImageSharp.Image(message.Attachments[1].Contents))
-                    {
-                        imageSource.DrawImage(imageTarget.Resize(imageSource.Width, imageSource.Height), 50, default(Size), default(Point)).Save(ms);
-                    }
+                    imageSource.Save(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
                 }
-                ms.Seek(0, SeekOrigin.Begin);
+
+                foreach (IAttachment attachment in message.Attachments.Skip(1))
+                {
+                    using (ImageSharp.Image imageSource = new ImageSharp.Image(ms))
+                    {
+                        using (ImageSharp.Image imageTarget = new ImageSharp.Image(attachment.Contents))
+                        {
+                            ms.Dispose();
+                            ms = new MemoryStream(); // Reinit the stream. This is also insane.
+                            imageSource.DrawImage(imageTarget.Resize(imageSource.Width, imageSource.Height), 50, default(Size), default(Point)).Save(ms);
+                        }
+                    }
+                    ms.Seek(0, SeekOrigin.Begin);
+                }
+
                 return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
             }
             return null;
