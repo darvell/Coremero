@@ -39,7 +39,7 @@ namespace Coremero
             return $"👏 {string.Join(" 👏 ", message.Text.ToUpper().GetCommandArguments())} 👏";
         }
 
-        [Command("gc", Help = "Dev only command. Forces a GC.")]
+        [Command("gc", MinimumPermissionLevel = UserPermission.BotOwner, Help = "Forces GC.")]
         public string RunGC(IInvocationContext context)
         {
             if (context.User?.Permissions != UserPermission.BotOwner)
@@ -55,7 +55,7 @@ namespace Coremero
             return builder.ToString();
         }
 
-        [Command("tasklist", Help = "Dev only command. Reports task status.")]
+        [Command("tasklist", MinimumPermissionLevel = UserPermission.BotOwner, Help = "Reports task list if not threadpooling.")]
         public string Tasks(IInvocationContext context)
         {
             if (context.User?.Permissions != UserPermission.BotOwner)
@@ -78,7 +78,7 @@ namespace Coremero
             return builder.ToString();
         }
 
-        [Command("exception", Help = "Dev only command, throws an exception.")]
+        [Command("exception", MinimumPermissionLevel = UserPermission.BotOwner, Help = "Throw an exception.")]
         public string ThrowException(IInvocationContext context, IMessage message)
         {
             throw new Exception("I broke for you.");
@@ -89,7 +89,7 @@ namespace Coremero
         public string CommandList(IInvocationContext context, IMessage message)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var cmd in _commandRegistry.CommandAttributes.OrderBy(x => x.Name))
+            foreach (var cmd in _commandRegistry.CommandAttributes.OrderBy(x => x.Name).Where(x => x.MinimumPermissionLevel <= context.User.Permissions))
             {
                 string args = String.Empty;
                 if (cmd.Arguments?.Count > 0)

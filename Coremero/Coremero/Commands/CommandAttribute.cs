@@ -23,6 +23,11 @@ namespace Coremero.Commands
         public List<String> Arguments { get; set; }
 
         /// <summary>
+        /// Mininum permission level required to execute the command.
+        /// </summary>
+        public UserPermission MinimumPermissionLevel { get; set; } = UserPermission.Normal;
+
+        /// <summary>
         /// True if the command works with external state (e.g. direct client manipulation) https://en.wikipedia.org/wiki/Side_effect_(computer_science)
         /// </summary>
         public bool HasSideEffects { get; set; }
@@ -32,9 +37,10 @@ namespace Coremero.Commands
             this.Name = name;
         }
 
-        public CommandAttribute(string name, params string[] arguments) : this(name)
+        public CommandAttribute(string name, string arguments) : this(name)
         {
-            this.Arguments = arguments?.ToList();
+            this.Arguments = arguments?.Split('|').Select(x => x.Trim()).ToList();
         }
+
     }
 }
