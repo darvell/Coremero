@@ -20,20 +20,20 @@ namespace Coremero
             _commandRegistry = commandRegistry;
         }
 
-        [Command("echo", "Input", Help = "Returns the exact same input.")]
+        [Command("echo", Help = "Returns the exact same input.")]
         public string Echo(IInvocationContext context, IMessage message)
         {
             return string.Join(" ", message.Text.GetCommandArguments());
         }
 
-        [Command("upper", "Input", Help = "Returns the exact same input but in uppercase.")]
+        [Command("upper", Help = "Returns the exact same input but in uppercase.")]
         public string Upper(IMessage message)
         {
             return message.Text.TrimCommand().ToUpper();
         }
 
 
-        [Command("woke", "Text", Help = "Return message in uppercase, split by spaces separated by 👏.")]
+        [Command("woke", Help = "Return message in uppercase, split by spaces separated by 👏.")]
         public string Woke(IMessage message)
         {
             return $"👏 {string.Join(" 👏 ", message.Text.ToUpper().GetCommandArguments())} 👏";
@@ -92,9 +92,9 @@ namespace Coremero
             foreach (var cmd in _commandRegistry.CommandAttributes.OrderBy(x => x.Name).Where(x => x.MinimumPermissionLevel <= context.User.Permissions))
             {
                 string args = String.Empty;
-                if (cmd.Arguments?.Count > 0)
+                if (!String.IsNullOrEmpty(cmd.Arguments))
                 {
-                    args = string.Join(" ", cmd.Arguments?.Select(x => $"[{x}]"));
+                    args = string.Join(" ", cmd.Arguments.Split('|').Select(x => $"[{x.Trim()}]"));
                 }
                 sb.AppendLine($"{"." + cmd.Name + " " + args}");
             }
@@ -106,7 +106,7 @@ namespace Coremero
             return sb.ToString();
         }
 
-        [Command("help", "Command", Help = "Get info on a command.")]
+        [Command("help", Arguments = "Command Name", Help = "Get info on a command.")]
         public string Help(string command)
         {
             return _commandRegistry.GetHelp(command);

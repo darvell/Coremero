@@ -18,9 +18,9 @@ namespace Coremero.Commands
         public string Help { get; set; }
         
         /// <summary>
-        /// A list of arguments.
+        /// Argument names delimited by a |.
         /// </summary>
-        public List<String> Arguments { get; set; }
+        public string Arguments { get; set; }
 
         /// <summary>
         /// Mininum permission level required to execute the command.
@@ -36,11 +36,5 @@ namespace Coremero.Commands
         {
             this.Name = name;
         }
-
-        public CommandAttribute(string name, string arguments) : this(name)
-        {
-            this.Arguments = arguments?.Split('|').Select(x => x.Trim()).ToList();
-        }
-
     }
 }
