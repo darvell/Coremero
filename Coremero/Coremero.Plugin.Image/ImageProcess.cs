@@ -170,7 +170,7 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
-        [Command("burn", Help = "Blends two attachments together with a color burn.")]
+        [Command("blend", Help = "Blends two attachments together with a color burn.")]
         public IMessage Blend(IMessage message)
         {
             if (message.Attachments?.Count == 2)
@@ -181,7 +181,7 @@ namespace Coremero.Plugin.Image
                 {
                     using (ImageSharp.Image imageTarget = new ImageSharp.Image(message.Attachments[1].Contents))
                     {
-                        imageSource.DrawImage(imageTarget, 50, default(Size), default(Point)).Save(ms);
+                        imageSource.DrawImage(imageTarget.Resize(imageSource.Width, imageSource.Height), 50, default(Size), default(Point)).Save(ms);
                     }
                 }
                 ms.Seek(0, SeekOrigin.Begin);

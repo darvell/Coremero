@@ -29,15 +29,15 @@ namespace Coremero.Client.Discord
                     {
                         await _channel.SendFileAsync(attachment.Contents, attachment.Name,
                             message.Attachments?.Count == 1 ? message.Text : null);
-                        attachment.Contents?.Dispose();
+                        break;
                     }
                     catch (Exception e)
                     {
-                        attachment.Contents?.Dispose();
                         Log.Exception(e, "Discord file send fail");
                         return;
                     }
                 }
+                message.Attachments.ForEach(x => x.Contents?.Dispose());
             }
             else
             {
