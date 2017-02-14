@@ -11,7 +11,7 @@ using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
-    public class DiscordMessage : IDeletableMessage, IReactableMessage
+    public class DiscordMessage : IDeletableMessage, IReactableMessage, IBufferedMessage
     {
         private global::Discord.IMessage _message;
 
@@ -39,6 +39,12 @@ namespace Coremero.Client.Discord
                 return _attachments;
             }
         }
+
+        public DateTime Timestamp
+        {
+            get { return _message.Timestamp.DateTime; }
+        }
+
 
         public async Task React(string emoji)
         {
@@ -69,6 +75,11 @@ namespace Coremero.Client.Discord
         public async Task DeleteAsync()
         {
             await _message.DeleteAsync();
+        }
+
+        public IUser User
+        {
+            get { return new DiscordUser(_message.Author); }
         }
     }
 }

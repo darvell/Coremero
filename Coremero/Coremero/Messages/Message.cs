@@ -9,6 +9,7 @@ namespace Coremero.Messages
     {
         public string Text { get; set; }
         public List<IAttachment> Attachments { get; set; }
+        public DateTime Timestamp { get; private set; }
 
         public static Message Create(string text, params IAttachment[] attachments)
         {
@@ -17,6 +18,7 @@ namespace Coremero.Messages
                 Text = text,
                 Attachments = attachments?.ToList()
             };
+            message.Timestamp = DateTime.Now;
             return message;
         }
 
@@ -24,5 +26,6 @@ namespace Coremero.Messages
         {
             return Message.Create(text, null);
         }
+
     }
 }

@@ -110,7 +110,7 @@ namespace Coremero.Utilities
 
         public static string TrimCommand(this string input)
         {
-            if (input.StartsWith("."))
+            if (input.IsCommand())
             {
                 if (input.Contains(' '))
                 {
@@ -119,6 +119,15 @@ namespace Coremero.Utilities
                 return string.Empty;
             }
             return input;
+        }
+
+        public static bool IsCommand(this string input)
+        {
+            if (input?.StartsWith(".") == true && input.Length >= 2)
+            {
+                return Char.IsLetter(input[1]);
+            }
+            return false;
         }
 
         public static bool CaseInsensitiveContains(this string input, string toCheck)

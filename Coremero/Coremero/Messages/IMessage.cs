@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Coremero
 {
@@ -13,5 +14,7 @@ namespace Coremero
         /// A collection of all attachments in the message. List order is equal to attachment order.
         /// </summary>
         List<IAttachment> Attachments { get; }
+
+        DateTime Timestamp { get; }
     }
 }

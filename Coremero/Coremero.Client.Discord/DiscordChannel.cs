@@ -81,14 +81,14 @@ namespace Coremero.Client.Discord
         }
 
 
-        public List<IMessage> GetLatestMessages(int limit = 100)
+        public List<IBufferedMessage> GetLatestMessages(int limit = 100)
         {
             return GetLatestMessagesAsync(limit).Result;
         }
 
-        public async Task<List<IMessage>> GetLatestMessagesAsync(int limit = 100)
+        public async Task<List<IBufferedMessage>> GetLatestMessagesAsync(int limit = 100)
         {
-            List<IMessage> result = new List<IMessage>();
+            List<IBufferedMessage> result = new List<IBufferedMessage>();
             var enumerator = _channel.GetMessagesAsync(limit);
             await enumerator.ForEachAsync(messages =>
             {
