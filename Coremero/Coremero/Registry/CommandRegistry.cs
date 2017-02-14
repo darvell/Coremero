@@ -130,6 +130,12 @@ namespace Coremero.Registry
                 {
                     await (Task) result;
                     result = result.GetType().GetRuntimeProperty("Result")?.GetValue(result);
+
+                    // The downside of using reflection to get the result is that we have to check this way if it was a void task.
+                    if (result?.GetType().Name.Contains("VoidTaskResult") == true)
+                    {
+                        result = null;
+                    }
                 }
 
                 if (result == null)

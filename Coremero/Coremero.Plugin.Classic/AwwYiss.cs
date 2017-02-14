@@ -14,7 +14,7 @@ namespace Coremero.Plugin.Classic
     public class AwwYiss : IPlugin
     {
 
-        [Command("awwyiss")]
+        [Command("awwyiss", Arguments = "Text", Help = "Generates a comic with awwyisser.com using [Text].")]
         public async Task<IMessage> AwwYissGenerator(string message)
         {
             using (HttpClient client = new HttpClient())

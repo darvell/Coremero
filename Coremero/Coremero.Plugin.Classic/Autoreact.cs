@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Coremero.Client.Discord;
+using Coremero.Messages;
 using Coremero.Services;
 
 namespace Coremero.Plugin.Classic
@@ -25,12 +26,12 @@ namespace Coremero.Plugin.Classic
 
         private async void MessageBusOnReceived(object sender, MessageReceivedEventArgs e)
         {
-            DiscordMessage message = e.Message as DiscordMessage;
+            IReactableMessage message = e.Message as IReactableMessage;
 
             if (message == null)
                 return;
 
-            if (message.Text.Split(' ').Any(x => x.Equals("anime")))
+            if (message.Text.Split(' ').Any(x => x.Equals("anime", StringComparison.OrdinalIgnoreCase)))
             {
                 foreach (var reactId in _animeReactionIds)
                 {

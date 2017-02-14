@@ -160,7 +160,7 @@ namespace Coremero.Plugin.Classic
 
         #endregion
 
-        [Command("rip", "WHO DIE", Help = "Creates a gravestone for [WHO DIE].")]
+        [Command("rip", Arguments = "WHO DIE", Help = "Creates a gravestone for [WHO DIE].")]
         public string RestInPeace(IInvocationContext context, string text)
         {
             // This is insane and clearly for the old bot.
@@ -174,7 +174,7 @@ namespace Coremero.Plugin.Classic
             return output;
         }
 
-        [Command("bread", "Carb Eater", Help = "Creates a bread for [Carb Eater].")]
+        [Command("bread", Arguments = "Carb Eater", Help = "Creates a bread for [Carb Eater].")]
         public string Bread(IInvocationContext context, string text)
         {
             // TODO: API cleanup.

@@ -30,7 +30,7 @@ namespace Coremero.Plugin.Classic
             return "゜・。。・゜゜・。。・゜☆゜・。。・゜ im too bullshit feeligns  。・゜゜・。。・゜☆゜・。。・゜゜・。。・゜";
         }
 
-        [Command("tone", Help = "Not for you.")]
+        [Command("tone", MinimumPermissionLevel = UserPermission.Admin, Help = "Not for you.")]
         public async Task Tone(IInvocationContext context)
         {
             if (context.User.Mention.Contains("hardclumping#2389"))
@@ -43,7 +43,7 @@ namespace Coremero.Plugin.Classic
             }
         }
 
-        [Command("depths", "Text", Help = ".Translate [Text] into real, authentic Norwegian.")]
+        [Command("depths", Arguments = "Text", Help = ".Translate [Text] into real, authentic Norwegian.")]
         public string Depths(string text)
         {
             return text.Replace('o', 'ø');
