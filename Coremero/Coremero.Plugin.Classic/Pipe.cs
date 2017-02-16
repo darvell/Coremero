@@ -48,6 +48,11 @@ namespace Coremero.Plugin.Classic
                     continue;
                 }
 
+                if (_commandRegistry.IsCommandComplexOrNull(call.First()))
+                {
+                    continue;
+                }
+
                 IMessage result = await _commandRegistry.ExecuteCommandAsync(call.First(), context,
                     call.Count == 1
                         ? basicMessage

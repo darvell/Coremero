@@ -64,11 +64,11 @@ namespace Coremero.Services
                 {
                     typingChannel?.SetTyping(true);
                     IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
-                    typingChannel?.SetTyping(false);
                     if (result != null)
                     {
                         _messageBus.RaiseOutgoing(context.Raiser, result);
                     }
+                    typingChannel?.SetTyping(false);
                 }
                 catch (Exception e)
                 {

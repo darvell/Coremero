@@ -167,7 +167,7 @@ namespace Coremero.Registry
         public bool IsCommandComplexOrNull(string commandName)
         {
             var cmd = GetCommand(commandName);
-            return !(cmd?.HasSideEffects ?? true);
+            return cmd?.HasSideEffects ?? true;
         }
 
         public bool Exists(string commandName)
