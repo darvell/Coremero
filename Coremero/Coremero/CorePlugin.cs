@@ -128,6 +128,15 @@ namespace Coremero
             return "Bye";
         }
 
+        [Command("setstatus", Arguments = "Status", MinimumPermissionLevel = UserPermission.BotOwner)]
+        public void SetClientStatus(IInvocationContext context, string status)
+        {
+            if (context.OriginClient is IClientUserStatus)
+            {
+                ((IClientUserStatus) context.OriginClient).UserStatus = status;
+            }
+        }
+
         public void Dispose()
         {
             // ignore

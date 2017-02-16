@@ -137,7 +137,7 @@ namespace Coremero.Client.Discord
             get { return _discordClient.Guilds.Select(x => new DiscordServer(x)); }
         }
 
-        public string Status
+        public string UserStatus
         {
             get
             {
