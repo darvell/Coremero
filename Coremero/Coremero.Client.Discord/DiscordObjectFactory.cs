@@ -16,7 +16,7 @@ namespace Coremero.Client.Discord
             if (result == null)
             {
                 // Resort to reflection. :(
-                _cache[source.Id] = (TTarget) Activator.CreateInstance(typeof(TTarget), new[] {source});
+                _cache[source.Id] = (TTarget) Activator.CreateInstance(typeof(TTarget), source);
             }
             return result;
         }
