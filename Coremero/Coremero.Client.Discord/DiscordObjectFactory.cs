@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using Discord;
@@ -7,7 +8,7 @@ namespace Coremero.Client.Discord
 {
     public class DiscordObjectFactory<TSource, TTarget> where TSource : ISnowflakeEntity
     {
-        private Dictionary<ulong, TTarget> _cache = new Dictionary<ulong, TTarget>();
+        private ConcurrentDictionary<ulong, TTarget> _cache = new ConcurrentDictionary<ulong, TTarget>();
 
         public TTarget Get(TSource source)
         {
@@ -16,7 +17,8 @@ namespace Coremero.Client.Discord
             if (result == null)
             {
                 // Resort to reflection. :(
-                _cache[source.Id] = (TTarget) Activator.CreateInstance(typeof(TTarget), source);
+                _cache.TryAdd(source.Id, (TTarget) Activator.CreateInstance(typeof(TTarget), source));
+                return Get(source);
             }
             return result;
         }
