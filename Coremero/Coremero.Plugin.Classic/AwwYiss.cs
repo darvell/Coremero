@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Messages;
+using Coremero.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -26,10 +27,8 @@ namespace Coremero.Plugin.Classic
                 var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
                 var result = await client.PostAsync("http://awyisser.com/api/generator", content);
                 JObject payload = JObject.Parse(await result.Content.ReadAsStringAsync());
-                MemoryStream ms = new MemoryStream();
-                await (await client.GetStreamAsync(payload["link"].ToString())).CopyToAsync(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                return Message.Create(null, new StreamAttachment(ms, "awwyiss.png"));
+                MemoryStream imageStream = await client.GetStreamAndBufferToMemory(payload["link"].ToString());
+                return Message.Create(null, new StreamAttachment(imageStream, "awwyiss.png"));
             }
         }
     }
