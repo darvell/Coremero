@@ -55,15 +55,16 @@ namespace Coremero.Services
                 return;
             }
 
-
+            IChannelTypingIndicator typingChannel = context?.Channel as IChannelTypingIndicator;
             // Ensure we do not back up the rest of the command invocation queue.
             // TODO: Per-server task pools.
             Task.Run(async () =>
             {
                 try
                 {
-                    Log.Trace($"CMD INVOCATION {command}");
+                    typingChannel?.SetTyping(true);
                     IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
+                    typingChannel?.SetTyping(false);
                     if (result != null)
                     {
                         _messageBus.RaiseOutgoing(context.Raiser, result);
@@ -71,6 +72,7 @@ namespace Coremero.Services
                 }
                 catch (Exception e)
                 {
+                    typingChannel?.SetTyping(false);
                     Log.Trace($"{command} FAIL: {e}");
 
                     if (message is IReactableMessage)

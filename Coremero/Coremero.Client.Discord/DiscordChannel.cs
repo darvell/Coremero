@@ -10,7 +10,7 @@ using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
-    public class DiscordChannel : IBufferedChannel
+    public class DiscordChannel : IBufferedChannel, IChannelTypingIndicator
     {
         private IMessageChannel _channel;
 
@@ -80,6 +80,27 @@ namespace Coremero.Client.Discord
             }
         }
 
+        private IDisposable _typingState = null;
+        public bool IsTyping
+        {
+            get { return _typingState != null; }
+        }
+
+        public void SetTyping(bool isTyping)
+        {
+            if (isTyping)
+            {
+                _channel.EnterTypingState();
+            }
+            else
+            {
+                if (_typingState != null)
+                {
+                    _typingState.Dispose();
+                    _typingState = null;
+                }
+            }
+        }
 
         public List<IBufferedMessage> GetLatestMessages(int limit = 100)
         {
@@ -99,5 +120,6 @@ namespace Coremero.Client.Discord
             });
             return result;
         }
+
     }
 }
