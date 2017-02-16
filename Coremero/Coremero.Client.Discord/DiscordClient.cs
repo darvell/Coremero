@@ -12,7 +12,7 @@ using Discord.WebSocket;
 
 namespace Coremero.Client.Discord
 {
-    public class DiscordClient : IClient
+    public class DiscordClient : IClient, IClientUserStatus
     {
         #region IClient Properties
 
@@ -135,6 +135,20 @@ namespace Coremero.Client.Discord
         public IEnumerable<IServer> Servers
         {
             get { return _discordClient.Guilds.Select(x => new DiscordServer(x)); }
+        }
+
+        public string Status
+        {
+            get
+            {
+                return _discordClient.CurrentUser?.Game?.Name;
+            }
+            set
+            {
+#pragma warning disable 4014
+                _discordClient?.SetGameAsync(value);
+#pragma warning restore 4014
+            }
         }
     }
 }
