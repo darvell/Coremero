@@ -73,7 +73,7 @@ namespace Coremero.Client.Discord
                 {
                     foreach (var user in enumerator.Current)
                     {
-                        result.Add(new DiscordUser(user));
+                        result.Add(DiscordFactory.UserFactory.Get(user));
                     }
                 }
                 return result;

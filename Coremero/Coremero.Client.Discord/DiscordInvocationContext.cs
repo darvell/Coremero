@@ -29,7 +29,7 @@ namespace Coremero.Client.Discord
             {
                 if (_user == null)
                 {
-                    _user = new DiscordUser(_message.Author);
+                    _user = DiscordFactory.UserFactory.Get(_message.Author);
                 }
                 return _user;
             }
@@ -43,7 +43,7 @@ namespace Coremero.Client.Discord
             {
                 if (_channel == null)
                 {
-                    _channel = new DiscordChannel((ISocketMessageChannel) _message.Channel);
+                    _channel = DiscordFactory.ChannelFactory.Get((ISocketMessageChannel) _message.Channel);
                 }
                 return _channel;
             }

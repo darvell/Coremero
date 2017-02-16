@@ -79,7 +79,7 @@ namespace Coremero.Client.Discord
 
         public IUser User
         {
-            get { return new DiscordUser(_message.Author); }
+            get { return DiscordFactory.UserFactory.Get(_message.Author); }
         }
     }
 }

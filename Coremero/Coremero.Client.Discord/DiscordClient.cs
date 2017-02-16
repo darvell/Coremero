@@ -134,7 +134,7 @@ namespace Coremero.Client.Discord
 
         public IEnumerable<IServer> Servers
         {
-            get { return _discordClient.Guilds.Select(x => new DiscordServer(x)); }
+            get { return _discordClient.Guilds.Select(x => DiscordFactory.ServerFactory.Get(x)); }
         }
 
         public string UserStatus

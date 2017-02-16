@@ -22,7 +22,7 @@ namespace Coremero.Client.Discord
 
         public IEnumerable<IChannel> Channels
         {
-            get { return _guild.GetTextChannelsAsync().Result.Select(x => new DiscordChannel(x)); }
+            get { return _guild.GetTextChannelsAsync().Result.Select(x => DiscordFactory.ChannelFactory.Get(x)); }
         }
     }
 }
