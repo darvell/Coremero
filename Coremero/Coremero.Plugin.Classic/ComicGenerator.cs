@@ -22,7 +22,7 @@ namespace Coremero.Plugin.Classic
 
     internal class ComicPayload
     {
-        public string Title { get; set; } = "a bad robot comic";
+        public string Title { get; set; }
         public List<ComicMessage> Messages { get; set; } = new List<ComicMessage>();
     }
 
@@ -41,7 +41,8 @@ namespace Coremero.Plugin.Classic
         {
             if (string.IsNullOrEmpty(title))
             {
-                title = "i forgot to add a title and im really dumb";
+                // Force title to null to ensure the payload goes through fine.
+                title = null;
             }
             if (context.Channel is IBufferedChannel)
             {
