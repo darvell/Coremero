@@ -75,11 +75,8 @@ namespace Coremero.Plugin.Classic
                 {
                     var content = new StringContent(JsonConvert.SerializeObject(payload, new JsonSerializerSettings() { ContractResolver = new LowercaseContractResolver() }), Encoding.UTF8, "application/json");
                     var result = await client.PostAsync($"http://localhost:5000/create", content);
-                    MemoryStream ms = new MemoryStream();
-                    Stream s = await result.Content.ReadAsStreamAsync();
-                    await s.CopyToAsync(ms);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    return Message.Create(null, new StreamAttachment(ms, "funny comic haha.jpg"));
+                    MemoryStream imageStream = await (await result.Content.ReadAsStreamAsync()).CopyToMemoryStreamAsync();
+                    return Message.Create(null, new StreamAttachment(imageStream, $"{DateTime.Now} {context.Channel?.Name} Comic.jpg"));
                 }
 
             }
