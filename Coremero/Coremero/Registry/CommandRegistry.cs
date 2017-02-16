@@ -122,6 +122,12 @@ namespace Coremero.Registry
                 return null;
             }
 
+            // Validate context allows execution.
+            if (context?.User?.Permissions < selectedCommand.MinimumPermissionLevel)
+            {
+                return null;
+            }
+
             return await Task.Run(async () =>
             {
                 var result = _commandMap[selectedCommand](context, message);
