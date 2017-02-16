@@ -24,8 +24,8 @@ namespace Coremero.Client.Discord
 
     public static class DiscordFactory
     {
-            public static readonly DiscordObjectFactory<IGuild, IServer> ServerFactory = new DiscordObjectFactory<IGuild, IServer>();
-            public static readonly DiscordObjectFactory<IMessageChannel, IChannel> ChannelFactory = new DiscordObjectFactory<IMessageChannel, IChannel>();
-            public static readonly DiscordObjectFactory<global::Discord.IUser, IUser> UserFactory = new DiscordObjectFactory<global::Discord.IUser, IUser>();
+            public static readonly DiscordObjectFactory<IGuild, DiscordServer> ServerFactory = new DiscordObjectFactory<IGuild, DiscordServer>();
+            public static readonly DiscordObjectFactory<IMessageChannel, DiscordChannel> ChannelFactory = new DiscordObjectFactory<IMessageChannel, DiscordChannel>();
+            public static readonly DiscordObjectFactory<global::Discord.IUser, DiscordUser> UserFactory = new DiscordObjectFactory<global::Discord.IUser, DiscordUser>();
     }
 }
