@@ -90,7 +90,7 @@ namespace Coremero.Client.Discord
         {
             if (isTyping)
             {
-                _channel.EnterTypingState();
+                _typingState = _channel.EnterTypingState();
             }
             else
             {
