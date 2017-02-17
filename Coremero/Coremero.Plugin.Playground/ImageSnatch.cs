@@ -15,6 +15,11 @@ namespace Coremero.Plugin.Playground
         [Command("geturl")]
         public async Task<IMessage> GetUrl(string url)
         {
+            if (!url.StartsWith("http"))
+            {
+                throw new ArgumentException("Not a HTTP/S URL. You trying to be sneaky?");
+            }
+
             using (HttpClient client = new HttpClient())
             {
                 var result = await client.GetAsync(url);
