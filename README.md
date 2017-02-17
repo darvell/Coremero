@@ -20,7 +20,7 @@ https://www.myget.org/F/coremero/api/v3/index.json
 
 ## Basic how-to on making a plugin
 
-* Create a .NET Standard <=1.6 DLL.
+* Create a .NET Standard >=1.6 DLL.
 * Reference the Coremero nuget package from the MyGet feed above.
 * In your project create a standard class.
 * Make this class implement the ```IPlugin``` interface. This interface serves only to tag.
