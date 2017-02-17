@@ -10,7 +10,7 @@ using Coremero.Utilities;
 
 namespace Coremero.Plugin.Playground
 {
-    public class ImageSnatch
+    public class ImageSnatch : IPlugin
     {
         [Command("geturl")]
         public async Task<IMessage> GetUrl(string url)
