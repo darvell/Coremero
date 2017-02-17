@@ -53,10 +53,20 @@ namespace Coremero.Plugin.Classic
                     continue;
                 }
 
-                IMessage result = await _commandRegistry.ExecuteCommandAsync(call.First(), context,
-                    call.Count == 1
-                        ? basicMessage
-                        : Message.Create(string.Join(" ", call.Skip(1)), basicMessage.Attachments?.ToArray()));
+                IMessage result;
+                try
+                {
+                    result = await _commandRegistry.ExecuteCommandAsync(call.First(), context,
+                        call.Count == 1
+                            ? basicMessage
+                            : Message.Create(string.Join(" ", call.Skip(1)), basicMessage.Attachments?.ToArray()));
+                }
+                catch (Exception e)
+                {
+                    // Quickly dispose what we can.
+                    basicMessage.Attachments?.ForEach(x => x.Contents?.Dispose());
+                    throw(e);
+                }
 
                 if (!string.IsNullOrEmpty(result.Text))
                 {
