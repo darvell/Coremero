@@ -43,6 +43,10 @@ namespace Coremero.Client.Discord
             {
                 await _channel.SendMessageAsync(message.Text);
             }
+            if(IsTyping)
+            {
+                SetTyping(false);
+            }
         }
 
         public void Send(IMessage message)
