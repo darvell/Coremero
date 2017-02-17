@@ -15,7 +15,7 @@ namespace Coremero.Plugin.Playground
         [Command("geturl")]
         public async Task<IMessage> GetUrl(string url)
         {
-            if (!url.StartsWith("http"))
+            if (!url.StartsWith("http") && !url.Contains("127.0.0.1") && !url.Contains("//localhost"))
             {
                 throw new ArgumentException("Not a HTTP/S URL. You trying to be sneaky?");
             }
@@ -26,7 +26,7 @@ namespace Coremero.Plugin.Playground
                 if (result.IsSuccessStatusCode && result.Content.Headers.ContentLength < 6000000)
                 {
                     return Message.Create(null,
-                        new StreamAttachment(await (await result.Content.ReadAsStreamAsync()).CopyToMemoryStreamAsync(), Path.GetFileName(url)));
+                        new StreamAttachment(await (await result.Content.ReadAsStreamAsync()).CopyToMemoryStreamAsync(), result.Content.Headers.ContentDisposition.FileName));
                 }
             }
 
