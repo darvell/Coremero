@@ -19,6 +19,10 @@ namespace Coremero.Plugin.Classic
         {
             using (HttpClient client = new HttpClient())
             {
+                if (message.Length > 44)
+                {
+                    message = message.Substring(0, 43);
+                }
                 var request = new
                 {
                     phrase = message
