@@ -17,3 +17,26 @@ You can probably fork this and make your own silly joke commands if you're just 
 ```
 https://www.myget.org/F/coremero/api/v3/index.json
 ```
+
+## Basic how-to on making a plugin
+
+* Create a .NET Standard <=1.6 DLL.
+* Reference the Coremero nuget package from the MyGet feed above.
+* In your project create a standard class.
+* Make this class implement the ```IPlugin``` interface. This interface serves only to tag.
+* Create a method that returns either any object that implements ToString() or an IMessage (use Coremero.Messages.Message if building a very custom response).
+* Annotate this method with the ```Coremero.Command``` attribute and feed it the command name.
+* Your end result should look something like this:
+
+```
+public class TestPlugin : IPlugin
+{
+    [Command("hello")]
+    public string SayHello()
+    {
+       return "hello!";
+    }
+}
+```
+
+* Check the existing plugins on how to get invocation contexts, message objects, et al.
