@@ -45,7 +45,7 @@ namespace Coremero.Client.Discord
             }
             if(IsTyping)
             {
-                _typingState.Dispose();
+                SetTyping(false);
             }
         }
 
