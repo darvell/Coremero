@@ -1,3 +1,4 @@
+![buildstatus](https://ci.appveyor.com/api/projects/status/github/darvell/Coremero?branch=master&svg=true)
 ![logo](https://raw.githubusercontent.com/darvell/coremero/master/coremero.png)
 
 # Coremero
@@ -10,3 +11,9 @@ You can probably fork this and make your own silly joke commands if you're just 
 
 * Discord
 * IRC (soon?)
+
+## MyGet package feed
+
+```
+https://www.myget.org/F/coremero/api/v3/index.json
+```
