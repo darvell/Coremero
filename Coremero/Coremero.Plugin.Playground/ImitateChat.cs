@@ -9,7 +9,7 @@ using MarkovSharpNetCore.TokenisationStrategies;
 
 namespace Coremero.Plugin.Playground
 {
-    public class ImitateChat
+    public class ImitateChat : IPlugin
     {
         [Command("imichat")]
         public async Task<string> ImiChat(IInvocationContext context)
