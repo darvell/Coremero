@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
+    <ProjectReference Include="..\MarkovSharpNetCore\MarkovSharpNetCore.csproj" />
   </ItemGroup>
 
 </Project>

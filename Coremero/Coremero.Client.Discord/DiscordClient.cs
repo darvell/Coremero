@@ -26,6 +26,11 @@ namespace Coremero.Client.Discord
             get { return "Discord client based off Discord.NET 1.x"; }
         }
 
+        public string Username
+        {
+            get { return _discordClient?.CurrentUser?.Username; }
+        }
+
         public ClientFeature Features
         {
             get

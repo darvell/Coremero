@@ -17,6 +17,11 @@ namespace Coremero.Client
         string Description { get; }
 
         /// <summary>
+        /// The username of the client.
+        /// </summary>
+        string Username { get; }
+
+        /// <summary>
         /// What features the client supports.
         /// </summary>
         ClientFeature Features { get; }
