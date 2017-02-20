@@ -164,6 +164,10 @@ namespace Coremero.Plugin.Classic
         [Command("rip", Arguments = "WHO DIE", Help = "Creates a gravestone for [WHO DIE].")]
         public string RestInPeace(IInvocationContext context, string text)
         {
+            if (String.IsNullOrEmpty(text))
+            {
+                text = context.Channel?.Users.GetRandom().Name;
+            }
             // This is insane and clearly for the old bot.
             // TODO: API cleanup.
             string output = string.Join("\n", FormatTextToHeadstone(text.Split('\n').ToList()));
