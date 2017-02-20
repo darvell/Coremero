@@ -19,7 +19,7 @@ namespace Coremero.Plugin.Playground
             {
                 StringMarkov markov = new StringMarkov(1);
                 List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync();
-                markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !x.Text.IsCommand()).Select(x => x.Text));
+                markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
                 return markov.Walk().First();
             }
             throw new Exception("Not buffered channel.");
