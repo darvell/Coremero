@@ -167,7 +167,6 @@ namespace Coremero.Plugin.Image
         public IMessage Glow(IMessage message)
         {
             MemoryStream ms = new MemoryStream();
-
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
                 image.Glow().Save(ms).Dispose();
@@ -175,6 +174,31 @@ namespace Coremero.Plugin.Image
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
+
+        [Command("entropycrop", Help = "Crops to the most entropy. I don't know.")]
+        public IMessage EntropyCrop(IMessage message)
+        {
+            MemoryStream ms = new MemoryStream();
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
+            {
+                image.EntropyCrop().Save(ms).Dispose();
+            }
+            ms.Seek(0, SeekOrigin.Begin);
+            return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
+        }
+
+        [Command("oil", Help = "Simulates an oil painting.")]
+        public IMessage OilPainting(IMessage message)
+        {
+            MemoryStream ms = new MemoryStream();
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
+            {
+                image.OilPaint().Save(ms).Dispose();
+            }
+            ms.Seek(0, SeekOrigin.Begin);
+            return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
+        }
+
 
         [Command("blend", Help = "Blends two attachments together with a color burn.")]
         public IMessage Blend(IMessage message)
@@ -211,14 +235,13 @@ namespace Coremero.Plugin.Image
                             }
                         }
                     }
+                    attachment.Contents?.Dispose();
                     ms.Seek(0, SeekOrigin.Begin);
                 }
-
-                // Sneak in to the ArrayPool.
-                
                 return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
             }
             return null;
         }
+
     }
 }
