@@ -138,18 +138,7 @@ namespace Coremero.Plugin.Classic
 
         private async Task<string> GetRandomTitleFromSubreddit(string subreddit)
         {
-            using (HttpClient client = new HttpClient())
-            {
-                string json = await client.GetStringAsync($"https://reddit.com/r/{subreddit}/random.json");
-                var token = JToken.Parse(json);
-                if (token.Type == JTokenType.Array)
-                {
-                    return token[0]["data"]["children"][0]["data"]["title"].ToString();
-                }
-                // Doesn't support random. Boo.
-                var posts = token["data"]["children"].ToObject<List<dynamic>>();
-                return posts.GetRandom()["data"]["title"];
-            }
+            return (await GetTitlesFromSubreddit(subreddit)).GetRandom();
         }
 
         private async Task<List<string>> GetTitlesFromSubreddit(string subreddit)
@@ -158,8 +147,8 @@ namespace Coremero.Plugin.Classic
             {
                 string json = await client.GetStringAsync($"https://reddit.com/r/{subreddit}.json");
                 var token = JToken.Parse(json);
-                var posts = token["data"]["children"].ToObject<List<dynamic>>();
-                return posts.Select(x => x["data"]["title"].ToString()).Cast<string>().ToList();
+                var posts = token["data"]["children"].AsJEnumerable();
+                return posts.Select(x => x["data"]["title"].ToString()).ToList();
             }
         }
 
