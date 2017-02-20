@@ -187,6 +187,32 @@ namespace Coremero.Plugin.Image
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
         }
 
+        [Command("sepia")]
+        public IMessage Sepia(IMessage message)
+        {
+            MemoryStream ms = new MemoryStream();
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
+            {
+                image.Sepia().Save(ms).Dispose();
+            }
+            ms.Seek(0, SeekOrigin.Begin);
+            return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
+        }
+
+        [Command("vignette")]
+        public IMessage Vignette(IMessage message)
+        {
+            MemoryStream ms = new MemoryStream();
+            using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
+            {
+                image.Vignette().Save(ms).Dispose();
+            }
+            ms.Seek(0, SeekOrigin.Begin);
+            return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
+        }
+
+
+
         [Command("oil", Help = "Simulates an oil painting.")]
         public IMessage OilPainting(IMessage message)
         {
