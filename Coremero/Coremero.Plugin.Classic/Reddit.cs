@@ -167,7 +167,10 @@ namespace Coremero.Plugin.Classic
         public async Task<string> MarkovReddit(string subreddit)
         {
             var model = new StringMarkov(1) {EnsureUniqueWalk = true};
-            model.Learn(await GetTitlesFromSubreddit(subreddit));
+            foreach (string sub in subreddit.Split(','))
+            {
+                model.Learn(await GetTitlesFromSubreddit(sub));
+            }
             return model.Walk(10).Select(x =>
             {
                 Debug.WriteLine(x);
