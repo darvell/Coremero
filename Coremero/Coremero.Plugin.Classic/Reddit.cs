@@ -166,16 +166,17 @@ namespace Coremero.Plugin.Classic
         [Command("imireddit", Arguments = "Subreddit Name", Help = "Imitates a subreddit.")]
         public async Task<string> MarkovReddit(string subreddit)
         {
-            var model = new StringMarkov(1) {EnsureUniqueWalk = true};
+            int walkSize = 1;
+            if (subreddit.Split(' ').Length > 2)
+            {
+                walkSize = 2;
+            }
+            var model = new StringMarkov(walkSize) {EnsureUniqueWalk = true};
             foreach (string sub in subreddit.Split(' '))
             {
                 model.Learn(await GetTitlesFromSubreddit(sub));
             }
-            return model.Walk(10).Select(x =>
-            {
-                Debug.WriteLine(x);
-                return x;
-            }).GetRandom();
+            return model.Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
         }
     }
 }
