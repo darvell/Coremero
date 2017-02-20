@@ -17,10 +17,10 @@ namespace Coremero.Plugin.Playground
             IBufferedChannel bufferedChannel = context.Channel as IBufferedChannel;
             if (bufferedChannel != null)
             {
-                StringMarkov markov = new StringMarkov(1);
+                StringMarkov markov = new StringMarkov(1) { EnsureUniqueWalk = true };
                 List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync();
                 markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
-                return markov.Walk().First();
+                return markov.Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
             }
             throw new Exception("Not buffered channel.");
         }
