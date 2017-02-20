@@ -140,7 +140,7 @@ namespace Coremero.Plugin.Classic
         {
             using (HttpClient client = new HttpClient())
             {
-                string json = await client.GetStringAsync($"http://reddit.com/r/{subreddit}/random.json");
+                string json = await client.GetStringAsync($"https://reddit.com/r/{subreddit}/random.json");
                 var token = JToken.Parse(json);
                 if (token.Type == JTokenType.Array)
                 {
@@ -156,7 +156,7 @@ namespace Coremero.Plugin.Classic
         {
             using (HttpClient client = new HttpClient())
             {
-                string json = await client.GetStringAsync($"http://reddit.com/r/{subreddit}.json");
+                string json = await client.GetStringAsync($"https://reddit.com/r/{subreddit}.json");
                 var token = JToken.Parse(json);
                 var posts = token["data"]["children"].ToObject<List<dynamic>>();
                 return posts.Select(x => x["data"]["title"].ToString()).Cast<string>().ToList();
