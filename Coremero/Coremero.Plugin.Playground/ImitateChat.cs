@@ -18,7 +18,7 @@ namespace Coremero.Plugin.Playground
             if (bufferedChannel != null)
             {
                 StringMarkov markov = new StringMarkov(1) { EnsureUniqueWalk = true };
-                List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync();
+                List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(300);
                 markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
                 return markov.Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
             }
