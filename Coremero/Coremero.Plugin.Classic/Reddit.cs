@@ -156,7 +156,7 @@ namespace Coremero.Plugin.Classic
         public async Task<string> MarkovReddit(string subreddit)
         {
             int walkSize = 1;
-            if (subreddit.Split(' ').Length > 2)
+            if (subreddit.Split(' ').Length > 5)
             {
                 walkSize = 2;
             }
@@ -165,7 +165,7 @@ namespace Coremero.Plugin.Classic
             {
                 model.Learn(await GetTitlesFromSubreddit(sub));
             }
-            return model.Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
+            return model.Walk(15).Skip(5).OrderByDescending(x => x.Length).Take(5).GetRandom();
         }
     }
 }
