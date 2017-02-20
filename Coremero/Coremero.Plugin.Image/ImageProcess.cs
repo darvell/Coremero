@@ -181,7 +181,7 @@ namespace Coremero.Plugin.Image
             MemoryStream ms = new MemoryStream();
             using (ImageSharp.Image image = new ImageSharp.Image(message.Attachments[0].Contents))
             {
-                image.EntropyCrop().Save(ms).Dispose();
+                image.EntropyCrop(1.0f).Save(ms).Dispose();
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
