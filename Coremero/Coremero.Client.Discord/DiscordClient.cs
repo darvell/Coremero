@@ -55,7 +55,10 @@ namespace Coremero.Client.Discord
         {
             _messageBus = messageBus;
             DISCORD_BOT_KEY = credentialStorage.GetKey("discord", null);
-            _discordClient = new DiscordSocketClient();
+            _discordClient = new DiscordSocketClient(new DiscordSocketConfig()
+            {
+                MessageCacheSize = 50
+            });
         }
 
         public async Task Connect()

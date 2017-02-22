@@ -9,7 +9,7 @@
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="1.0.0-rc-00592" />
+    <PackageReference Include="Discord.Net" Version="1.0.0-rc-00599" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
