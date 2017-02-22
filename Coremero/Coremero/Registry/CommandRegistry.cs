@@ -77,6 +77,24 @@ namespace Coremero.Registry
                             {
                                 paramList.Add(message.Text.TrimCommand());
                             }
+                            else if (param.ParameterType == typeof(int))
+                            {
+                                int value = int.MinValue;
+                                int.TryParse(message.Text.TrimCommand(), out value);
+                                paramList.Add(value);
+                            }
+                            else if (param.ParameterType == typeof(int?))
+                            {
+                                int value;
+                                if(int.TryParse(message.Text.TrimCommand(), out value))
+                                {
+                                    paramList.Add(value);                                    
+                                }
+                                else
+                                {
+                                    paramList.Add(null);
+                                }
+                            }
                         }
                         return methodInfo.Invoke(plugin, paramList.Count == 0 ? null : paramList.ToArray());
                     };
