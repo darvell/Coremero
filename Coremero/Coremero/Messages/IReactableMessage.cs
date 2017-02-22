@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Coremero.Messages;
 
-namespace Coremero.Attachments
+namespace Coremero.Messages
 {
     public interface IReactableMessage : IMessage
     {

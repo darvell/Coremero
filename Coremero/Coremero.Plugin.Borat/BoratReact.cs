@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coremero.Client.Discord;
 using Coremero.Messages;
 using Coremero.Services;
 using Coremero.Utilities;
@@ -28,9 +27,9 @@ namespace Coremero.Plugin.Borat
 
         private async void MessageBus_Received(object sender, MessageReceivedEventArgs e)
         {
-            if (e.Message is DiscordMessage && _boratPhrases.Any(x => e.Message.Text.CaseInsensitiveContains(x)))
+            if (e.Message is IReactableMessage && _boratPhrases.Any(x => e.Message.Text.CaseInsensitiveContains(x)))
             {
-                await ((DiscordMessage) e.Message).React("<:borat:244253799030587402>");
+                await ((IReactableMessage) e.Message).React("<:borat:244253799030587402>");
                 if (_rnd.Next(0, 100) < 5)
                 {
                     await e.Context.Raiser.SendAsync(Message.Create($"{e.Context.User.Mention} Dude is that Borat?"));
