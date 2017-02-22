@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Coremero.Messages
+namespace Coremero
 {
     public class FileAttachment : IAttachment
     {
