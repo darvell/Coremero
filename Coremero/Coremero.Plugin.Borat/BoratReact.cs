@@ -27,9 +27,10 @@ namespace Coremero.Plugin.Borat
 
         private async void MessageBus_Received(object sender, MessageReceivedEventArgs e)
         {
-            if (e.Message is IReactableMessage && _boratPhrases.Any(x => e.Message.Text.CaseInsensitiveContains(x)))
+            IReactableMessage reactableMessage = e.Message as IReactableMessage;
+            if (reactableMessage != null && _boratPhrases.Any(x => reactableMessage.Text.CaseInsensitiveContains(x)))
             {
-                await ((IReactableMessage) e.Message).React("<:borat:244253799030587402>");
+                await reactableMessage.React("<:borat:244253799030587402>");
                 if (_rnd.Next(0, 100) < 5)
                 {
                     await e.Context.Raiser.SendAsync(Message.Create($"{e.Context.User.Mention} Dude is that Borat?"));
