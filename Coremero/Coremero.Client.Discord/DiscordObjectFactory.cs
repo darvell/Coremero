@@ -24,10 +24,11 @@ namespace Coremero.Client.Discord
         }
     }
 
+    // TODO: Move to DI.
     public static class DiscordFactory
     {
-            public static readonly DiscordObjectFactory<IGuild, DiscordServer> ServerFactory = new DiscordObjectFactory<IGuild, DiscordServer>();
-            public static readonly DiscordObjectFactory<IMessageChannel, DiscordChannel> ChannelFactory = new DiscordObjectFactory<IMessageChannel, DiscordChannel>();
-            public static readonly DiscordObjectFactory<global::Discord.IUser, DiscordUser> UserFactory = new DiscordObjectFactory<global::Discord.IUser, DiscordUser>();
+        public static readonly DiscordObjectFactory<IGuild, DiscordServer> ServerFactory = new DiscordObjectFactory<IGuild, DiscordServer>();
+        public static readonly DiscordObjectFactory<IMessageChannel, DiscordChannel> ChannelFactory = new DiscordObjectFactory<IMessageChannel, DiscordChannel>();
+        public static readonly DiscordObjectFactory<global::Discord.IUser, DiscordUser> UserFactory = new DiscordObjectFactory<global::Discord.IUser, DiscordUser>();
     }
 }

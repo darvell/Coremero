@@ -45,9 +45,10 @@ namespace Coremero.Client.Discord
             {
                 await _channel.SendMessageAsync(message.Text);
             }
+
             if(IsTyping)
             {
-                SetTyping(false);
+                IsTyping = false;
             }
         }
 
@@ -87,23 +88,21 @@ namespace Coremero.Client.Discord
         }
 
         private IDisposable _typingState = null;
-        public bool IsTyping
-        {
-            get { return _typingState != null; }
-        }
+        public bool IsTyping { get; private set; }
 
-        public void SetTyping(bool isTyping)
+        public async void SetTyping(bool isTyping)
         {
             if (isTyping)
             {
-                _typingState = _channel.EnterTypingState();
+                await _channel.TriggerTypingAsync();
+                IsTyping = true;
             }
             else
             {
-                if (_typingState != null)
+                // Force a fake type request in.
+                using (_channel.EnterTypingState())
                 {
-                    _typingState.Dispose();
-                    _typingState = null;
+                    IsTyping = false;
                 }
             }
         }
