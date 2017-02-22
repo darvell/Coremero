@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Coremero.Context;
+using Coremero.Messages;
 
 namespace Coremero
 {
-    public class MessageReceivedEventArgs : EventArgs
+    public class MessageReceivedEventArgs : System.EventArgs
     {
         public IInvocationContext Context { get; private set; }
         public IMessage Message { get; private set; }

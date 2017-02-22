@@ -5,10 +5,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Coremero;
+using Coremero.Context;
 using Coremero.Services;
 using Coremero.Storage;
 using Discord;
 using Discord.WebSocket;
+using IMessage = Coremero.Messages.IMessage;
 
 namespace Coremero.Client.Discord
 {

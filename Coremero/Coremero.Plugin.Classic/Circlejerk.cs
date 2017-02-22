@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Coremero.Client.Discord;
 using Coremero.Commands;
+using Coremero.Context;
 using Coremero.Messages;
 using Coremero.Utilities;
 

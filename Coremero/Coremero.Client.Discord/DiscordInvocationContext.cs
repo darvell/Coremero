@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Coremero.Context;
 using Discord.WebSocket;
 
 namespace Coremero.Client.Discord

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Coremero.Attachments;
 using Coremero.Commands;
 using Coremero.Messages;
 using Coremero.Utilities;

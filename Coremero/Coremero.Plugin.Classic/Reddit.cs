@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Coremero.Commands;
+using Coremero.Context;
+using Coremero.Messages;
 using Coremero.Utilities;
 using Newtonsoft.Json.Linq;
 using MarkovSharpNetCore.TokenisationStrategies;

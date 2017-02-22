@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Coremero.Attachments;
 
-namespace Coremero
+namespace Coremero.Messages
 {
     public interface IMessage
     {

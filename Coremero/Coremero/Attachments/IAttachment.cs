@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Coremero
+namespace Coremero.Attachments
 {
     public interface IAttachment
     {

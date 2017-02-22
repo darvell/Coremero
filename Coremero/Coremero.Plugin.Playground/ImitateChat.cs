@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Coremero.Commands;
+using Coremero.Context;
+using Coremero.Messages;
 using Coremero.Utilities;
 using MarkovSharpNetCore.TokenisationStrategies;
 

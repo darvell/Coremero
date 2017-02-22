@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Rpc;
+using IAttachment = Coremero.Attachments.IAttachment;
+using IMessage = Coremero.Messages.IMessage;
+
 #pragma warning disable 4014
 
 namespace Coremero.Client.Discord

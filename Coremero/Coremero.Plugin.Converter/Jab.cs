@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using Coremero.Client;
 using Coremero.Commands;
+using Coremero.Context;
+using Coremero.Messages;
 using Coremero.Utilities;
 
 namespace Coremero.Plugin.Converter

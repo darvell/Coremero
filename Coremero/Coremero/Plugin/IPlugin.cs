@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Coremero
+﻿namespace Coremero.Plugin
 {
     public interface IPlugin
     {

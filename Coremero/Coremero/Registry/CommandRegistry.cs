@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Coremero.Commands;
+using Coremero.Context;
 using Coremero.Messages;
+using Coremero.Plugin;
 using Coremero.Utilities;
 
 namespace Coremero.Registry

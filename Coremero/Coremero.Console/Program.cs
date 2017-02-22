@@ -13,7 +13,6 @@ class Program
             exitEvent.Set();
         };
 
-        Coremero.Coremero.Initialize();
         exitEvent.WaitOne();
     }
 }

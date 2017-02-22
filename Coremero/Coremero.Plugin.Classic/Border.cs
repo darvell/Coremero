@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Coremero.Client;
 using Coremero.Commands;
+using Coremero.Context;
 using Coremero.Utilities;
 
 namespace Coremero.Plugin.Classic

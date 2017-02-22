@@ -1,6 +1,6 @@
 ﻿using Coremero.Client;
 
-namespace Coremero
+namespace Coremero.Context
 {
     public interface IInvocationContext
     {

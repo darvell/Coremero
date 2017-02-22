@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Coremero.Attachments;
 using Coremero.Messages;
 using Discord;
 using Discord.Rest;
 using Discord.Rpc;
 using Discord.WebSocket;
+using IAttachment = Coremero.Attachments.IAttachment;
 
 namespace Coremero.Client.Discord
 {

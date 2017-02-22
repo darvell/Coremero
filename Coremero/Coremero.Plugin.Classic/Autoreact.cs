@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Coremero.Attachments;
 using Coremero.Client.Discord;
 using Coremero.Messages;
 using Coremero.Services;

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Coremero.Messages;
 using Discord;
 using Discord.WebSocket;
+using IAttachment = Coremero.Attachments.IAttachment;
+using IMessage = Coremero.Messages.IMessage;
 
 namespace Coremero.Client.Discord
 {
