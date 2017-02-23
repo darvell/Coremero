@@ -47,15 +47,16 @@ namespace Coremero.Plugin.Playground
                 {
                     StringMarkov markov = new StringMarkov() { EnsureUniqueWalk = true };
                     DateTimeOffset offset = DateTimeOffset.UtcNow;
-                    while (markov.Model.Keys.Count < 300)
+                    while (markov.Model.Keys.Count < 5000)
                     {
                         List<IBufferedMessage> messages = await bufferedChannel.GetMessagesAsync(offset, SearchDirection.Before);
-                        var newOffset = new DateTimeOffset(messages.First().Timestamp);
+                        var newOffset = new DateTimeOffset(messages.Last().Timestamp);
                         if (newOffset == offset)
                         {
                             break;
                         }
                         markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
+                        offset = newOffset;
                     }
                     _models[bufferedChannel.Name] = markov;
                 }
