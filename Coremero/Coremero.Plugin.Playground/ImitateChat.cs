@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
+using Coremero.Services;
 using Coremero.Utilities;
 using MarkovSharpNetCore.TokenisationStrategies;
 
@@ -13,36 +14,52 @@ namespace Coremero.Plugin.Playground
 {
     public class ImitateChat : IPlugin
     {
+        readonly Dictionary<string, StringMarkov> _models = new Dictionary<string, StringMarkov>();
+
+        public ImitateChat(IMessageBus messageBus)
+        {
+            messageBus.Received += MessageBus_Received;
+        }
+
+        private void MessageBus_Received(object sender, MessageReceivedEventArgs e)
+        {
+            IChannel channel = e.Context?.Channel;
+            if (channel != null)
+            {
+                if (e.Context.User?.Name != e.Context.OriginClient.Username &&
+                    !string.IsNullOrEmpty(e.Message.Text?.Trim()) && !e.Message.Text.IsCommand())
+                {
+                    if (_models.ContainsKey(e.Context.Channel.Name))
+                    {
+                        _models[channel.Name].Learn(e.Message.Text);
+                    }
+                }
+            }
+        }
+
         [Command("imichat")]
         public async Task<string> ImiChat(IInvocationContext context)
         {
             IBufferedChannel bufferedChannel = context.Channel as IBufferedChannel;
             if (bufferedChannel != null)
             {
-                StringMarkov markov = new StringMarkov(2) { EnsureUniqueWalk = true };
-                List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(300);
-                markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
-                return markov.Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
-            }
-            throw new Exception("Not buffered channel.");
-        }
-
-        [Command("imichatday", MinimumPermissionLevel = UserPermission.BotOwner)]
-        public async Task<string> ImiChatDay(IInvocationContext context)
-        {
-            IBufferedChannel bufferedChannel = context.Channel as IBufferedChannel;
-            if (bufferedChannel != null)
-            {
-                StringMarkov markov = new StringMarkov(2) { EnsureUniqueWalk = true };
-                DateTimeOffset searchStart = DateTimeOffset.UtcNow;
-                DateTimeOffset offset = DateTimeOffset.UtcNow;
-                while (offset.Day == searchStart.Day)
+                if (!_models.ContainsKey(bufferedChannel.Name))
                 {
-                    List<IBufferedMessage> messages = await bufferedChannel.GetMessagesAsync(offset, SearchDirection.Before);
-                    offset = new DateTimeOffset(messages.Last().Timestamp);
-                    markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
+                    StringMarkov markov = new StringMarkov() { EnsureUniqueWalk = true };
+                    DateTimeOffset offset = DateTimeOffset.UtcNow;
+                    while (markov.Model.Keys.Count < 300)
+                    {
+                        List<IBufferedMessage> messages = await bufferedChannel.GetMessagesAsync(offset, SearchDirection.Before);
+                        var newOffset = new DateTimeOffset(messages.First().Timestamp);
+                        if (newOffset == offset)
+                        {
+                            break;
+                        }
+                        markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
+                    }
                 }
-                return markov.Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
+
+                return _models[context.Channel.Name].Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
             }
             throw new Exception("Not buffered channel.");
         }
