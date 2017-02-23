@@ -23,16 +23,29 @@ namespace Coremero.Plugin.Playground
 
         private void MessageBus_Received(object sender, MessageReceivedEventArgs e)
         {
+            if (string.IsNullOrEmpty(e.Message.Text?.Trim()) || e.Message.Text.IsCommand())
+            {
+                return;
+            }
+
             IChannel channel = e.Context?.Channel;
+            IEntity entity = e.Context?.User as IEntity;
             if (channel != null)
             {
-                if (e.Context.User?.Name != e.Context.OriginClient.Username &&
-                    !string.IsNullOrEmpty(e.Message.Text?.Trim()) && !e.Message.Text.IsCommand())
+                if (e.Context.User?.Name != e.Context.OriginClient.Username)
                 {
                     if (_models.ContainsKey(e.Context.Channel.Name))
                     {
                         _models[channel.Name].Learn(e.Message.Text);
                     }
+                }
+            }
+
+            if (entity != null)
+            {
+                if (_userModels.ContainsKey(entity.ID))
+                {
+                    _userModels[entity.ID].Learn(e.Message.Text);
                 }
             }
         }
@@ -57,22 +70,12 @@ namespace Coremero.Plugin.Playground
             throw new Exception("Not buffered channel.");
         }
 
-        [Command("imiuser")]
-        public string ImiUser(IInvocationContext context, string user)
-        {
-            IEntity entity = context.User as IEntity;
-            if (entity != null)
-            {
-                return _userModels[entity.ID].Walk().First();
-            }
-            throw new Exception("Not an entity.");
-        }
-
         Dictionary<ulong, StringMarkov> _userModels = new Dictionary<ulong, StringMarkov>();
 
-        [Command("fillusermarkovs")]
+        [Command("fillusermarkovs", MinimumPermissionLevel = UserPermission.BotOwner)]
         public async Task<string> FillUserMarkovs(IInvocationContext context)
         {
+            int linesLearned = 0;
             string botName = context.OriginClient.Username;
             foreach (var server in context.OriginClient.Servers)
             {
@@ -94,16 +97,26 @@ namespace Coremero.Plugin.Playground
                                 {
                                     _userModels[entity.ID] = new StringMarkov();
                                 }
-
                                 _userModels[entity.ID].Learn(message.Text);
+                                linesLearned += 1;
                             }
                         }
                     }
                 }
             }
 
-            return $"Identified {_userModels.Count} users.";
+            return $"Identified {_userModels.Count} users. Learned {linesLearned} lines.";
         }
 
+        [Command("imiself")]
+        public string ImiSelf(IInvocationContext context)
+        {
+            IEntity entity = context.User as IEntity;
+            if (entity != null)
+            {
+                return _userModels[entity.ID].Walk().First();
+            }
+            throw new Exception("Not an entity.");
+        }
     }
 }
