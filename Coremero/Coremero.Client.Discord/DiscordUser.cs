@@ -12,7 +12,7 @@ using IMessage = Coremero.Messages.IMessage;
 
 namespace Coremero.Client.Discord
 {
-    public class DiscordUser : IUser
+    public class DiscordUser : IUser, IEntity
     {
         private global::Discord.IUser _user;
 
@@ -99,6 +99,11 @@ namespace Coremero.Client.Discord
                 }
                 return UserPermission.Normal;
             }
+        }
+
+        public ulong ID
+        {
+            get { return _user.Id; }
         }
     }
 }

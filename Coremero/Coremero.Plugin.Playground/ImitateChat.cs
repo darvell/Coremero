@@ -57,6 +57,53 @@ namespace Coremero.Plugin.Playground
             throw new Exception("Not buffered channel.");
         }
 
+        [Command("imiuser")]
+        public string ImiUser(IInvocationContext context, string user)
+        {
+            IEntity entity = context.User as IEntity;
+            if (entity != null)
+            {
+                return _userModels[entity.ID].Walk().First();
+            }
+            throw new Exception("Not an entity.");
+        }
+
+        Dictionary<ulong, StringMarkov> _userModels = new Dictionary<ulong, StringMarkov>();
+
+        [Command("fillusermarkovs")]
+        public async Task<string> FillUserMarkovs(IInvocationContext context)
+        {
+            string botName = context.OriginClient.Username;
+            foreach (var server in context.OriginClient.Servers)
+            {
+                foreach (IChannel channel in server.Channels)
+                {
+                    IBufferedChannel bufferedChannel = channel as IBufferedChannel;
+                    if (bufferedChannel != null)
+                    {
+                        foreach (IBufferedMessage message in await bufferedChannel.GetLatestMessagesAsync(10000))
+                        {
+                            if (message.User.Name == botName || string.IsNullOrEmpty(message.Text.Trim()) || message.Text.IsCommand())
+                            {
+                                continue;
+                            }
+                            IEntity entity = message.User as IEntity;
+                            if (entity != null)
+                            {
+                                if (!_userModels.ContainsKey(entity.ID))
+                                {
+                                    _userModels[entity.ID] = new StringMarkov();
+                                }
+
+                                _userModels[entity.ID].Learn(message.Text);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return $"Identified {_userModels.Count} users.";
+        }
 
     }
 }
