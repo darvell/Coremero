@@ -14,7 +14,7 @@ namespace Coremero.Client.Discord
         public static ulong ToSnowflake(this DateTimeOffset dateTime)
         {
             ulong unixStamp = (ulong) dateTime.ToUnixTimeMilliseconds();
-            return (unixStamp - 1420070400000) << 22;
+            return (unixStamp - 1420070400000L) << 22;
         }
     }
 }
