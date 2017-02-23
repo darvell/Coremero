@@ -129,7 +129,7 @@ namespace Coremero.Client.Discord
         public async Task<List<IBufferedMessage>> GetMessagesAsync(DateTimeOffset time, SearchDirection direction = SearchDirection.Around, int limit = 100)
         {
             List<IBufferedMessage> result = new List<IBufferedMessage>();
-            Direction discordDirection = Direction.Around;
+            Direction discordDirection;
             switch (direction)
             {
                 case SearchDirection.Before:
@@ -137,6 +137,9 @@ namespace Coremero.Client.Discord
                     break;
                 case SearchDirection.After:
                     discordDirection = Direction.After;
+                    break;
+                default:
+                    discordDirection = Direction.Around;
                     break;
             }
 
