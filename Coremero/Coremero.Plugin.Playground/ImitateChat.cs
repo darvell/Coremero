@@ -26,5 +26,27 @@ namespace Coremero.Plugin.Playground
             }
             throw new Exception("Not buffered channel.");
         }
+
+        [Command("imichatday", MinimumPermissionLevel = UserPermission.BotOwner)]
+        public async Task<string> ImiChatDay(IInvocationContext context)
+        {
+            IBufferedChannel bufferedChannel = context.Channel as IBufferedChannel;
+            if (bufferedChannel != null)
+            {
+                StringMarkov markov = new StringMarkov(2) { EnsureUniqueWalk = true };
+                DateTimeOffset searchStart = DateTimeOffset.UtcNow;
+                DateTimeOffset offset = DateTimeOffset.UtcNow;
+                while (offset.Day == searchStart.Day)
+                {
+                    List<IBufferedMessage> messages = await bufferedChannel.GetMessagesAsync(offset, SearchDirection.Before);
+                    offset = new DateTimeOffset(messages.Last().Timestamp);
+                    markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
+                }
+                return markov.Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
+            }
+            throw new Exception("Not buffered channel.");
+        }
+
+
     }
 }
