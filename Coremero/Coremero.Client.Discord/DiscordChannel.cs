@@ -126,5 +126,29 @@ namespace Coremero.Client.Discord
             return result;
         }
 
+        public async Task<List<IBufferedMessage>> GetMessagesAsync(DateTimeOffset time, SearchDirection direction = SearchDirection.Around, int limit = 100)
+        {
+            List<IBufferedMessage> result = new List<IBufferedMessage>();
+            Direction discordDirection = Direction.Around;
+            switch (direction)
+            {
+                case SearchDirection.Before:
+                    discordDirection = Direction.Before;
+                    break;
+                case SearchDirection.After:
+                    discordDirection = Direction.After;
+                    break;
+            }
+
+            var enumerator = _channel.GetMessagesAsync(time.ToSnowflake(), discordDirection, limit);
+            await enumerator.ForEachAsync(messages =>
+            {
+                foreach (var message in messages)
+                {
+                    result.Add(new DiscordMessage(message));
+                }
+            });
+            return result;
+        }
     }
 }

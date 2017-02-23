@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Coremero.Messages;
 
@@ -8,5 +9,6 @@ namespace Coremero
     {
         List<IBufferedMessage> GetLatestMessages(int limit = 100);
         Task<List<IBufferedMessage>> GetLatestMessagesAsync(int limit = 100);
+        Task<List<IBufferedMessage>> GetMessagesAsync(DateTimeOffset time, SearchDirection direction, int limit = 100);
     }
 }
