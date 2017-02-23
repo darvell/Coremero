@@ -57,6 +57,7 @@ namespace Coremero.Plugin.Playground
                         }
                         markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
                     }
+                    _models[bufferedChannel.Name] = markov;
                 }
 
                 return _models[context.Channel.Name].Walk(10).OrderByDescending(x => x.Length).Take(5).GetRandom();
