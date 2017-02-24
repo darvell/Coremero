@@ -89,11 +89,11 @@ namespace Coremero.Plugin.Playground
                 Parallel.ForEach(server.Channels, channel =>
                 {
                     IBufferedChannel bufferedChannel = channel as IBufferedChannel;
-                    if (bufferedChannel != null)
+                    if (bufferedChannel != null && !bufferedChannel.Name.Contains("homero-dev"))
                     {
                         try
                         {
-                            foreach (IBufferedMessage message in bufferedChannel.GetLatestMessagesAsync(10000).Result)
+                            foreach (IBufferedMessage message in bufferedChannel.GetLatestMessagesAsync(12000).Result)
                             {
                                 if (message.User.Name == botName || string.IsNullOrEmpty(message.Text.Trim()) ||
                                     message.Text.IsCommand())
