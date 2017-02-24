@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,6 +48,12 @@ namespace Coremero.Plugin.Playground
                 {
                     _userModels[entity.ID].Learn(e.Message.Text);
                 }
+                else
+                {
+                    StringMarkov markov = new StringMarkov();
+                    _userModels.TryAdd(entity.ID, markov);
+                    markov.Learn(e.Message.Text);
+                }
             }
         }
 
@@ -70,7 +77,7 @@ namespace Coremero.Plugin.Playground
             throw new Exception("Not buffered channel.");
         }
 
-        Dictionary<ulong, StringMarkov> _userModels = new Dictionary<ulong, StringMarkov>();
+        ConcurrentDictionary<ulong, StringMarkov> _userModels = new ConcurrentDictionary<ulong, StringMarkov>();
 
         [Command("fillusermarkovs", MinimumPermissionLevel = UserPermission.BotOwner)]
         public async Task<string> FillUserMarkovs(IInvocationContext context)
@@ -79,30 +86,40 @@ namespace Coremero.Plugin.Playground
             string botName = context.OriginClient.Username;
             foreach (var server in context.OriginClient.Servers)
             {
-                foreach (IChannel channel in server.Channels)
+                Parallel.ForEach(server.Channels, async channel =>
                 {
                     IBufferedChannel bufferedChannel = channel as IBufferedChannel;
                     if (bufferedChannel != null)
                     {
-                        foreach (IBufferedMessage message in await bufferedChannel.GetLatestMessagesAsync(10000))
+                        try
                         {
-                            if (message.User.Name == botName || string.IsNullOrEmpty(message.Text.Trim()) || message.Text.IsCommand())
+                            foreach (IBufferedMessage message in await bufferedChannel.GetLatestMessagesAsync(10000))
                             {
-                                continue;
-                            }
-                            IEntity entity = message.User as IEntity;
-                            if (entity != null)
-                            {
-                                if (!_userModels.ContainsKey(entity.ID))
+                                if (message.User.Name == botName || string.IsNullOrEmpty(message.Text.Trim()) ||
+                                    message.Text.IsCommand())
                                 {
-                                    _userModels[entity.ID] = new StringMarkov();
+                                    continue;
                                 }
-                                _userModels[entity.ID].Learn(message.Text);
-                                linesLearned += 1;
+                                IEntity entity = message.User as IEntity;
+                                if (entity != null)
+                                {
+                                    if (!_userModels.ContainsKey(entity.ID))
+                                    {
+                                        _userModels.TryAdd(entity.ID, new StringMarkov());
+                                    }
+                                    StringMarkov markov;
+                                    _userModels.TryGetValue(entity.ID, out markov);
+                                    markov?.Learn(message.Text);
+                                    linesLearned += 1;
+                                }
                             }
                         }
+                        catch
+                        {
+                            Log.Warn($"Could not read {bufferedChannel.Name}");
+                        }
                     }
-                }
+                });
             }
 
             return $"Identified {_userModels.Count} users. Learned {linesLearned} lines.";
