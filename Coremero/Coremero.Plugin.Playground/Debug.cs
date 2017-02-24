@@ -20,7 +20,7 @@ namespace Coremero.Plugin.Playground
                 _minutesAlive += 1;
                 if (_client != null)
                 {
-                    _client.UserStatus = $"U: {_minutesAlive}m | A: {GC.GetTotalMemory(false) / 1024.0}MB ";
+                    _client.UserStatus = $"U: {_minutesAlive}m | A: {(GC.GetTotalMemory(false) / 1000.0) / 1024.0:##.##}MB ";
                 }
             }, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
         }
