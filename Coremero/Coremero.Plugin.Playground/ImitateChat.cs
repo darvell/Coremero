@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Coremero.Client;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
@@ -93,7 +94,7 @@ namespace Coremero.Plugin.Playground
                     {
                         try
                         {
-                            foreach (IBufferedMessage message in bufferedChannel.GetLatestMessagesAsync(12000).Result)
+                            foreach (IBufferedMessage message in bufferedChannel.GetLatestMessagesAsync(15000).Result)
                             {
                                 if (message.User.Name == botName || string.IsNullOrEmpty(message.Text.Trim()) ||
                                     message.Text.IsCommand())
@@ -123,6 +124,35 @@ namespace Coremero.Plugin.Playground
             }
 
             return $"Identified {_userModels.Count} users. Learned {linesLearned} lines.";
+        }
+
+        [Command("realchat")]
+        public string RealChat(IInvocationContext context)
+        {
+            List<IUser> users = context.Channel.Users?.GetRandom(5).ToList();
+            Random rnd = new Random();
+            StringBuilder sb = new StringBuilder();
+            if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
+            {
+                sb.AppendLine("```");
+            }
+
+            int lines = rnd.Next(2, 6);
+            for (int i = 0; i < lines; i++)
+            {
+                IUser randomUser = users.GetRandom();
+                IEntity entity = randomUser as IEntity;
+                if (entity != null && _userModels.ContainsKey(entity.ID))
+                {
+                    sb.Append($"{randomUser.Name}: {_userModels[entity.ID].Walk().First()}");
+                }
+            }
+
+            if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
+            {
+                sb.AppendLine("```");
+            }
+            return sb.ToString();
         }
 
         [Command("imiself")]
