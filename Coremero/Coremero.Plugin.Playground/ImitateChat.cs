@@ -94,26 +94,26 @@ namespace Coremero.Plugin.Playground
                     {
                         try
                         {
-                            foreach (IBufferedMessage message in bufferedChannel.GetLatestMessagesAsync(15000).Result)
+                            Parallel.ForEach(bufferedChannel.GetLatestMessagesAsync(15000).Result, (message =>
                             {
                                 if (message.User.Name == botName || string.IsNullOrEmpty(message.Text.Trim()) ||
                                     message.Text.IsCommand())
                                 {
-                                    continue;
+                                    return;
                                 }
                                 IEntity entity = message.User as IEntity;
                                 if (entity != null)
                                 {
                                     if (!_userModels.ContainsKey(entity.ID))
                                     {
-                                        _userModels.TryAdd(entity.ID, new StringMarkov());
+                                        _userModels.TryAdd(entity.ID, new StringMarkov() { EnsureUniqueWalk = true });
                                     }
                                     StringMarkov markov;
                                     _userModels.TryGetValue(entity.ID, out markov);
                                     markov?.Learn(message.Text);
                                     linesLearned += 1;
                                 }
-                            }
+                            }));
                         }
                         catch
                         {
@@ -129,7 +129,7 @@ namespace Coremero.Plugin.Playground
         [Command("realchat")]
         public string RealChat(IInvocationContext context)
         {
-            List<IUser> users = context.Channel.Users?.GetRandom(5).ToList();
+            List<IUser> users = context.Channel.Users?.GetRandom(8).ToList();
             Random rnd = new Random();
             StringBuilder sb = new StringBuilder();
             if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
@@ -137,7 +137,7 @@ namespace Coremero.Plugin.Playground
                 sb.AppendLine("```");
             }
 
-            int lines = rnd.Next(2, 6);
+            int lines = rnd.Next(4, 9);
             for (int i = 0; i < lines; i++)
             {
                 IUser randomUser = users.GetRandom();
