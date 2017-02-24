@@ -144,7 +144,7 @@ namespace Coremero.Plugin.Playground
                 IEntity entity = randomUser as IEntity;
                 if (entity != null && _userModels.ContainsKey(entity.ID))
                 {
-                    sb.Append($"{randomUser.Name}: {_userModels[entity.ID].Walk().First()}");
+                    sb.AppendLine($"{randomUser.Name}: {_userModels[entity.ID].Walk().First()}");
                 }
             }
 
