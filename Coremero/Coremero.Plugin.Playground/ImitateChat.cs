@@ -86,14 +86,14 @@ namespace Coremero.Plugin.Playground
             string botName = context.OriginClient.Username;
             foreach (var server in context.OriginClient.Servers)
             {
-                Parallel.ForEach(server.Channels, async channel =>
+                Parallel.ForEach(server.Channels, channel =>
                 {
                     IBufferedChannel bufferedChannel = channel as IBufferedChannel;
                     if (bufferedChannel != null)
                     {
                         try
                         {
-                            foreach (IBufferedMessage message in await bufferedChannel.GetLatestMessagesAsync(10000))
+                            foreach (IBufferedMessage message in bufferedChannel.GetLatestMessagesAsync(10000).Result)
                             {
                                 if (message.User.Name == botName || string.IsNullOrEmpty(message.Text.Trim()) ||
                                     message.Text.IsCommand())
