@@ -7,23 +7,26 @@ using Coremero.Client;
 
 namespace Coremero.Plugin.Playground
 {
-    public class Debug : IPlugin
+    public class Debug : IPlugin, IDisposable
     {
         private readonly IClientUserStatus _client;
-        private long _minutesAlive = 0;
+        private Timer _timer;
+
         public Debug(IEnumerable<IClient> clients)
         {
             _client = clients.FirstOrDefault(x => x is IClientUserStatus) as IClientUserStatus;
-
-            var timer = new Timer((state) =>
+            _timer = new Timer((state) =>
             {
-                _minutesAlive += 1;
                 if (_client != null)
                 {
-                    _client.UserStatus = $"U: {_minutesAlive}m | A: {(GC.GetTotalMemory(false) / 1000.0) / 1024.0:##.##}MB ";
+                    _client.UserStatus = $"GC: {(GC.GetTotalMemory(false) / 1024.0 / 1024.0):##.##}Mb";
                 }
-            }, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
         }
 
+        public void Dispose()
+        {
+            _timer?.Dispose();
+        }
     }
 }
