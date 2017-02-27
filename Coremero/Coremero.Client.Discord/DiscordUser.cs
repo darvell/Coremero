@@ -21,17 +21,18 @@ namespace Coremero.Client.Discord
             _user = user;
         }
 
-        public async Task SendAsync(IMessage message)
+        public async Task<IMessage> SendAsync(IMessage message)
         {
             var dmChannel = await _user.GetDMChannelAsync();
             if (message.Attachments?.Count > 0)
             {
+                DiscordMessage result = null;
                 foreach (IAttachment attachment in message.Attachments)
                 {
                     try
                     {
-                        await dmChannel.SendFileAsync(attachment.Contents, attachment.Name,
-                            message.Attachments?.Count == 1 ? message.Text : null);
+                        result = new DiscordMessage(await dmChannel.SendFileAsync(attachment.Contents, attachment.Name,
+                            message.Attachments?.Count == 1 ? message.Text : null));
                         attachment.Contents?.Dispose();
                     }
                     finally
@@ -39,11 +40,9 @@ namespace Coremero.Client.Discord
                         attachment.Contents?.Dispose();
                     }
                 }
+                return result;
             }
-            else
-            {
-                await dmChannel.SendMessageAsync(message.Text);
-            }
+            return new DiscordMessage(await dmChannel.SendMessageAsync(message.Text));
         }
 
         public void Send(IMessage message)

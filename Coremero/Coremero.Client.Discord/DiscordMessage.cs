@@ -60,16 +60,19 @@ namespace Coremero.Client.Discord
             }
         }
 
-        public async Task<List<string>> GetReactions()
+        public async Task<List<Reaction>> GetReactions()
         {
-            var restMessage = (RestUserMessage) await _message.Channel.GetMessageAsync(_message.Id);
-            List<string> result = new List<string>();
-            foreach (KeyValuePair<Emoji, int> reaction in restMessage.Reactions)
+            IUserMessage message = _message as IUserMessage;
+            if (message == null)
             {
-                for (int i = 0; i < reaction.Value; i++)
-                {
-                    result.Add(reaction.Key.ToString());
-                }
+                return null;
+            }
+
+            List<Reaction> result = new List<Reaction>();
+            foreach (var emoji in message.Reactions)
+            {
+                Reaction reaction = new Reaction(emoji.Key.Name, (await message.GetReactionUsersAsync(emoji.Key.Name)).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
+                result.Add(reaction);
             }
             return result;
         }

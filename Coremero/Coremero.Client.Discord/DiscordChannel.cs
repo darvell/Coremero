@@ -21,22 +21,23 @@ namespace Coremero.Client.Discord
             _channel = channel;
         }
 
-        public async Task SendAsync(IMessage message)
+        public async Task<IMessage> SendAsync(IMessage message)
         {
+            IMessage result = null;
             if (message.Attachments?.Count > 0)
             {
                 foreach (IAttachment attachment in message.Attachments)
                 {
                     try
                     {
-                        await _channel.SendFileAsync(attachment.Contents, attachment.Name,
-                            message.Attachments?.Count == 1 ? message.Text : null);
+                        result = new DiscordMessage(await _channel.SendFileAsync(attachment.Contents, attachment.Name,
+                            message.Attachments?.Count == 1 ? message.Text : null));
                         break;
                     }
                     catch (Exception e)
                     {
                         Log.Exception(e, "Discord file send fail");
-                        return;
+                        return null;
                     }
                 }
                 message.Attachments.ForEach(x => x.Contents?.Dispose());
@@ -44,9 +45,11 @@ namespace Coremero.Client.Discord
             }
             else
             {
-                await _channel.SendMessageAsync(message.Text);
+                result = new DiscordMessage(await _channel.SendMessageAsync(message.Text));
                 IsTyping = false;
             }
+
+            return result;
         }
 
         public void Send(IMessage message)
