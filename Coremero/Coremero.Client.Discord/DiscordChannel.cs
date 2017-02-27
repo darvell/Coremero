@@ -40,14 +40,11 @@ namespace Coremero.Client.Discord
                     }
                 }
                 message.Attachments.ForEach(x => x.Contents?.Dispose());
+                IsTyping = false;
             }
             else
             {
                 await _channel.SendMessageAsync(message.Text);
-            }
-
-            if(IsTyping)
-            {
                 IsTyping = false;
             }
         }
@@ -99,11 +96,7 @@ namespace Coremero.Client.Discord
             }
             else
             {
-                // Force a fake type request in.
-                using (_channel.EnterTypingState())
-                {
-                    IsTyping = false;
-                }
+                IsTyping = false;
             }
         }
 
