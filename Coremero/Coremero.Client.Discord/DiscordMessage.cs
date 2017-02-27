@@ -62,16 +62,16 @@ namespace Coremero.Client.Discord
 
         public async Task<List<Reaction>> GetReactions()
         {
-            IUserMessage message = _message as IUserMessage;
-            if (message == null)
+            var restMessage = (RestUserMessage) await _message.Channel.GetMessageAsync(_message.Id);
+            if (restMessage == null)
             {
                 return null;
             }
 
             List<Reaction> result = new List<Reaction>();
-            foreach (var emoji in message.Reactions)
+            foreach (var emoji in restMessage.Reactions)
             {
-                Reaction reaction = new Reaction(emoji.Key.Name, (await message.GetReactionUsersAsync(emoji.Key.Name)).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
+                Reaction reaction = new Reaction(emoji.Key.Name, (await restMessage.GetReactionUsersAsync(emoji.Key.Name)).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
                 result.Add(reaction);
             }
             return result;
