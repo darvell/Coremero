@@ -45,7 +45,7 @@ namespace Coremero.Plugin.Borat
         [Command("boratreact", HasSideEffects = true)]
         public async Task<string> BoratGame(IInvocationContext context)
         {
-            IReactableMessage message = (IReactableMessage) await context.Channel.SendAsync(Message.Create("hello give me a borat react if you think i'm very nice"));
+            IReactableMessage message = (IReactableMessage) await context.Channel.SendAsync(Message.Create("hello give me a thumbs up if you think i'm very nice"));
 
             if (message == null)
             {
@@ -56,7 +56,7 @@ namespace Coremero.Plugin.Borat
             StringBuilder builder = new StringBuilder();
             foreach (Reaction reaction in await message.GetReactions())
             {
-                if (reaction.Emoji.Contains("borat"))
+                if (reaction.Emoji.Contains("👍"))
                 {
                     foreach (IUser user in reaction.Reactors)
                     {
