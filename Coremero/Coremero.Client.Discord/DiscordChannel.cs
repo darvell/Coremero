@@ -73,10 +73,15 @@ namespace Coremero.Client.Discord
             {
                 List<IUser> result = new List<IUser>();
                 var enumerator = _channel.GetUsersAsync().GetEnumerator();
-                while (enumerator.MoveNext().Result == true)
+                while (enumerator.MoveNext().Result)
                 {
                     foreach (var user in enumerator.Current)
                     {
+                        if (user.IsBot)
+                        {
+                            continue;
+                        }
+
                         result.Add(DiscordFactory.UserFactory.Get(user));
                     }
                 }
