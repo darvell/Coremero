@@ -23,6 +23,8 @@ namespace Coremero.Console
 
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
             var exitEvent = new ManualResetEvent(false);
 
             System.Console.CancelKeyPress += (sender, eventArgs) =>
@@ -33,6 +35,17 @@ namespace Coremero.Console
 
             MainAsync(args).GetAwaiter().GetResult();
             exitEvent.WaitOne();
+            Log.Info("Exit called.");
+        }
+
+        private static void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            Log.Warn($"Unobserved task exception:\n{e.Exception.GetBaseException()}");
+        }
+
+        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Log.Fatal($"Current domain fatal exception:\n{e.ExceptionObject}");
         }
 
         public static async Task MainAsync(string[] args)
