@@ -71,7 +71,7 @@ namespace Coremero.Client.Discord
             }
 
             await _discordClient.LoginAsync(TokenType.Bot, DISCORD_BOT_KEY);
-            await _discordClient.ConnectAsync();
+            await _discordClient.StartAsync();
             IsConnected = true;
 
 #if DEBUG
@@ -135,7 +135,7 @@ namespace Coremero.Client.Discord
         {
             if (IsConnected)
             {
-                await _discordClient.DisconnectAsync();
+                await _discordClient.StopAsync();
                 _discordClient.MessageReceived -= DiscordClientOnMessageReceived;
             }
         }
