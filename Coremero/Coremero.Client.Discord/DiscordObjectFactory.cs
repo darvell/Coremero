@@ -12,6 +12,11 @@ namespace Coremero.Client.Discord
 
         public TTarget Get(TSource source)
         {
+            return (TTarget) Activator.CreateInstance(typeof(TTarget), source);
+
+            /* DISABLED FOR NOW BECAUSE THINGS GO OUT OF SYNC AND THAT MAKES ME SAD */
+
+            /*
             TTarget result;
             _cache.TryGetValue(source.Id, out result);
             if (result == null)
@@ -21,6 +26,7 @@ namespace Coremero.Client.Discord
                 return Get(source);
             }
             return result;
+            */
         }
     }
 
