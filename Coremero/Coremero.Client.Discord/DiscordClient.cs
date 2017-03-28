@@ -75,7 +75,6 @@ namespace Coremero.Client.Discord
             IsConnected = true;
 
 #if DEBUG
-            await _discordClient.WaitForGuildsAsync();
             var cncChannel = _discordClient.GetGuild(DEBUG_GUILD)?.Channels.FirstOrDefault(x => x.Id == DEBUG_CNC_CHANNEL_ID);
             if (cncChannel != null)
             {
