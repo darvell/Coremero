@@ -41,7 +41,7 @@ namespace Coremero
 
         public static void Exception(Exception e, string message = null)
         {
-            Logger.Error(e, message);
+            Logger.Error(message + e.Message + e.StackTrace);
         }
 
         public static void Error(string message)
