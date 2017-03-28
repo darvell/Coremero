@@ -10,7 +10,6 @@
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="NLog" Version="5.0.0-beta06" />
     <PackageReference Include="SimpleInjector" Version="4.0.0-beta1" />
-    <PackageReference Include="System.AppDomain" Version="2.0.11" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
