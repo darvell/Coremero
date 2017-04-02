@@ -40,7 +40,7 @@ namespace Coremero.Services
             }
 
             // Check if command exists.
-            string command = message.Text.Split(' ').First().TrimStart('.');
+            string command = message.Text.Split(' ').First().TrimStart('.','!');
 
             if (!_commandRegistry.Exists(command))
             {
