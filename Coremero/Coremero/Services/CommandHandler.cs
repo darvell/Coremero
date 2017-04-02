@@ -61,13 +61,6 @@ namespace Coremero.Services
             {
                 try
                 {
-                    if (message.Text[0] == '!')
-                    {
-                        if (message is IDeletableMessage)
-                        {
-                            ((IDeletableMessage) message).DeleteAsync();
-                        }
-                    }
                     typingChannel?.SetTyping(true);
                     IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
                     if (result != null)
@@ -75,6 +68,13 @@ namespace Coremero.Services
                         _messageBus.RaiseOutgoing(context.Raiser, result);
                     }
                     typingChannel?.SetTyping(false);
+                    if (message.Text[0] == '!')
+                    {
+                        if (message is IDeletableMessage)
+                        {
+                            await ((IDeletableMessage)message).DeleteAsync();
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
