@@ -123,7 +123,7 @@ namespace Coremero.Utilities
 
         public static bool IsCommand(this string input)
         {
-            if (input?.StartsWith(".") == true && input.Length >= 2)
+            if ((input?.StartsWith(".") == true || input?.StartsWith("!") == true) && input.Length >= 2)
             {
                 return Char.IsLetter(input[1]);
             }

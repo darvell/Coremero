@@ -44,7 +44,7 @@ namespace Coremero.Services
 
             if (!_commandRegistry.Exists(command))
             {
-                if (command[0] != '.')
+                if (command[0] != '.' || command[0] != '!')
                 {
                     if (message is IReactableMessage)
                     {
@@ -61,6 +61,13 @@ namespace Coremero.Services
             {
                 try
                 {
+                    if (message.Text[0] == '!')
+                    {
+                        if (message is IDeletableMessage)
+                        {
+                            ((IDeletableMessage) message).DeleteAsync();
+                        }
+                    }
                     typingChannel?.SetTyping(true);
                     IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
                     if (result != null)
