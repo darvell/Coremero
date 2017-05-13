@@ -9,10 +9,6 @@ namespace Coremero.Client.Discord
     {
         public static string GetApiName(this Emoji emoji)
         {
-            if (emoji.Id.HasValue)
-            {
-                return $"{emoji.Name}:{emoji.Id}";
-            }
             return emoji.Name;
         }
     }

@@ -52,11 +52,11 @@ namespace Coremero.Client.Discord
         {
             if (emoji.StartsWith("<")) // I guess Discord.Net doesn't use the same methods internally?
             {
-                await ((SocketUserMessage) _message).AddReactionAsync(Emoji.Parse(emoji));
+                await ((SocketUserMessage) _message).AddReactionAsync(Emote.Parse(emoji));
             }
             else
             {
-                await ((SocketUserMessage) _message).AddReactionAsync(emoji);
+                await ((SocketUserMessage) _message).AddReactionAsync(new Emoji(emoji));
             }
         }
 
@@ -71,7 +71,7 @@ namespace Coremero.Client.Discord
             List<Reaction> result = new List<Reaction>();
             foreach (var emoji in userMessage.Reactions)
             {
-                Reaction reaction = new Reaction(emoji.Key.Name, (await userMessage.GetReactionUsersAsync(emoji.Key.GetApiName())).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
+                Reaction reaction = new Reaction(emoji.Key.Name, (await userMessage.GetReactionUsersAsync(emoji.Key.Name)).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
                 result.Add(reaction);
             }
             return result;

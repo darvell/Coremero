@@ -7,8 +7,8 @@
     <OutputType>library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ImageSharp" Version="1.0.0-alpha6-00065" />
-    <PackageReference Include="ImageSharp.Drawing" Version="1.0.0-alpha6-00026" />
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha9-00034" />
+    <PackageReference Include="ImageSharp.Drawing" Version="1.0.0-alpha9-00032" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Coremero\Coremero.csproj" />

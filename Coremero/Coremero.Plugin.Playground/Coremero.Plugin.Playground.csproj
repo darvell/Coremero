@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Coremero.Client.Discord\Coremero.Client.Discord.csproj" />
     <ProjectReference Include="..\Coremero\Coremero.csproj" />
     <ProjectReference Include="..\MarkovSharpNetCore\MarkovSharpNetCore.csproj" />
   </ItemGroup>

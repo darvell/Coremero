@@ -16,6 +16,8 @@ namespace Coremero.Client.Discord
     {
         private IMessageChannel _channel;
 
+        public IMessageChannel RootObject => _channel;
+
         public DiscordChannel(IMessageChannel channel)
         {
             _channel = channel;

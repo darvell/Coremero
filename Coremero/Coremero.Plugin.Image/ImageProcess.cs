@@ -29,7 +29,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(Configuration.Default, message.Attachments[0].Contents))
             {
                 image.Contrast(val).Save(ms).Dispose();
             }
@@ -49,7 +49,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Saturation(val).Save(ms).Dispose();
             }
@@ -69,7 +69,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Brightness(val).Save(ms).Dispose();
             }
@@ -89,7 +89,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Pixelate(val).Save(ms).Dispose();
             }
@@ -109,7 +109,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.GaussianSharpen(val).Save(ms).Dispose();
             }
@@ -129,7 +129,7 @@ namespace Coremero.Plugin.Image
 
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Hue(val).Save(ms).Dispose();
             }
@@ -142,7 +142,7 @@ namespace Coremero.Plugin.Image
         {
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.DetectEdges().Save(ms).Dispose();
             }
@@ -155,7 +155,7 @@ namespace Coremero.Plugin.Image
         {
             MemoryStream ms = new MemoryStream();
 
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Invert().Save(ms).Dispose();
             }
@@ -167,7 +167,7 @@ namespace Coremero.Plugin.Image
         public IMessage Glow(IMessage message)
         {
             MemoryStream ms = new MemoryStream();
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Glow().Save(ms).Dispose();
             }
@@ -179,7 +179,7 @@ namespace Coremero.Plugin.Image
         public IMessage EntropyCrop(IMessage message)
         {
             MemoryStream ms = new MemoryStream();
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.EntropyCrop(1.0f).Save(ms).Dispose();
             }
@@ -191,7 +191,7 @@ namespace Coremero.Plugin.Image
         public IMessage Sepia(IMessage message)
         {
             MemoryStream ms = new MemoryStream();
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Sepia().Save(ms).Dispose();
             }
@@ -203,7 +203,7 @@ namespace Coremero.Plugin.Image
         public IMessage Vignette(IMessage message)
         {
             MemoryStream ms = new MemoryStream();
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Vignette().Save(ms).Dispose();
             }
@@ -217,7 +217,7 @@ namespace Coremero.Plugin.Image
         public IMessage OilPainting(IMessage message)
         {
             MemoryStream ms = new MemoryStream();
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.OilPaint().Save(ms).Dispose();
             }
@@ -241,7 +241,7 @@ namespace Coremero.Plugin.Image
                 }
             }
             MemoryStream ms = new MemoryStream();
-            using (ImageSharp.Image image = ImageSharp.Image.Load(message.Attachments[0].Contents))
+            using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
                 image.Skew(x, y, true).Save(ms).Dispose();
             }
@@ -261,7 +261,7 @@ namespace Coremero.Plugin.Image
                 }
                 MemoryStream ms = new MemoryStream();
 
-                using (ImageSharp.Image imageSource = ImageSharp.Image.Load(message.Attachments[0].Contents))
+                using (var imageSource = ImageSharp.Image.Load(message.Attachments[0].Contents))
                 {
                     imageSource.Save(ms);
                     ms.Seek(0, SeekOrigin.Begin);
@@ -269,9 +269,9 @@ namespace Coremero.Plugin.Image
 
                 foreach (IAttachment attachment in message.Attachments.Skip(1))
                 {
-                    using (ImageSharp.Image imageSource = ImageSharp.Image.Load(ms))
+                    using (var imageSource = ImageSharp.Image.Load(ms))
                     {
-                        using (ImageSharp.Image imageTarget = ImageSharp.Image.Load(attachment.Contents))
+                        using (var imageTarget = ImageSharp.Image.Load(attachment.Contents))
                         {
                             using (var resizedImage = imageTarget.Resize(imageSource.Width,
                                     imageSource.Height))
