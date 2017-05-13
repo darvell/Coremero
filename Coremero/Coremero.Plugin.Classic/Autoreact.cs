@@ -36,7 +36,14 @@ namespace Coremero.Plugin.Classic
             {
                 foreach (var reactId in _animeReactionIds)
                 {
-                    await message.React(reactId);
+                    try
+                    {
+                        await message.React(reactId);
+                    }
+                    catch
+                    {
+                        // Whatever
+                    }
                 }
             }
         }
