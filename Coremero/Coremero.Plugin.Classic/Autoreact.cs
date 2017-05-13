@@ -43,6 +43,7 @@ namespace Coremero.Plugin.Classic
                     catch
                     {
                         // Whatever
+                        break;
                     }
                 }
             }
