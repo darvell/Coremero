@@ -11,6 +11,7 @@ using Coremero.Context;
 using Coremero.Messages;
 using Coremero.Utilities;
 using ImageSharp;
+using ImageSharp.PixelFormats;
 
 namespace Coremero.Plugin.Image
 {
@@ -255,9 +256,15 @@ namespace Coremero.Plugin.Image
             if (message.Attachments?.Count >= 2)
             {
                 int blendAmount = 50;
-                if (!string.IsNullOrEmpty(message.Text.TrimCommand()))
+                PixelBlenderMode mode = PixelBlenderMode.Normal;
+                List<string> args = message.Text.GetCommandArguments();
+                if (args.Count > 0)
                 {
-                    int.TryParse(message.Text.TrimCommand(), out blendAmount);
+                    int.TryParse(args[0], out blendAmount);
+                    if (args.Count > 1)
+                    {
+                        PixelBlenderMode.TryParse(args[1], out mode);
+                    }
                 }
                 MemoryStream ms = new MemoryStream();
 
@@ -278,7 +285,7 @@ namespace Coremero.Plugin.Image
                             {
                                 ms.Dispose();
                                 ms = new MemoryStream(); // Reinit the stream. This is also insane.
-                                var blendedImage = imageSource.DrawImage(resizedImage, blendAmount, default(Size), default(Point));
+                                var blendedImage = imageSource.DrawImage(resizedImage, mode, blendAmount / 100.0f, default(Size), default(Point));
                                 blendedImage.Save(ms);
                                 blendedImage.Dispose();
                             }
