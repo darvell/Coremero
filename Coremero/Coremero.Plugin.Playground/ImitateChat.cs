@@ -194,12 +194,12 @@ namespace Coremero.Plugin.Playground
             int counter = 0;
             foreach (var keyValuePair in _models)
             {
-                keyValuePair.Value.Save(Path.Combine(keyValuePair.Key + ".channelmarkov"));
+                keyValuePair.Value.Save(Path.Combine(PathExtensions.ResourceDir, keyValuePair.Key + ".channelmarkov"));
                 counter += 1;
             }
             foreach (var keyValuePair in _userModels)
             {
-                keyValuePair.Value.Save(keyValuePair.Key + ".usermarkov");
+                keyValuePair.Value.Save(Path.Combine(PathExtensions.ResourceDir, keyValuePair.Key + ".usermarkov"));
                 counter += 1;
             }
             return $"Dumped {counter} markovs to disk.";
