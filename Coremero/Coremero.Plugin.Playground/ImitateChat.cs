@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Coremero.Client;
 using Coremero.Commands;
@@ -21,6 +23,26 @@ namespace Coremero.Plugin.Playground
         public ImitateChat(IMessageBus messageBus)
         {
             messageBus.Received += MessageBus_Received;
+            foreach (string path in Directory.GetFiles(PathExtensions.PluginDir, "*.*markov"))
+            {
+                try
+                {
+                    var tempMarkov = new StringMarkov().Load<StringMarkov>(path);
+                    if (Path.GetExtension(path) == "usermarkov")
+                    {
+                        _userModels[ulong.Parse(Path.GetFileNameWithoutExtension(path))] = tempMarkov;
+                    }
+                    else
+                    {
+                        _models[Path.GetFileNameWithoutExtension(path)] = tempMarkov;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Unable to load markov file: {path}");
+                }
+            }
         }
 
         private void MessageBus_Received(object sender, MessageReceivedEventArgs e)
@@ -66,7 +88,7 @@ namespace Coremero.Plugin.Playground
             {
                 if (!_models.ContainsKey(bufferedChannel.Name))
                 {
-                    StringMarkov markov = new StringMarkov() { EnsureUniqueWalk = true };
+                    StringMarkov markov = new StringMarkov(1) { EnsureUniqueWalk = true };
                     DateTimeOffset offset = DateTimeOffset.UtcNow;
                     List<IBufferedMessage> messages = await bufferedChannel.GetMessagesAsync(offset, SearchDirection.Before, 5000);
                     markov.Learn(messages.Where(x => x.User.Name != context.OriginClient.Username && !string.IsNullOrEmpty(x.Text?.Trim()) && !x.Text.IsCommand()).Select(x => x.Text));
@@ -106,7 +128,7 @@ namespace Coremero.Plugin.Playground
                                 {
                                     if (!_userModels.ContainsKey(entity.ID))
                                     {
-                                        _userModels.TryAdd(entity.ID, new StringMarkov() { EnsureUniqueWalk = true });
+                                        _userModels.TryAdd(entity.ID, new StringMarkov(1) { EnsureUniqueWalk = true });
                                     }
                                     StringMarkov markov;
                                     _userModels.TryGetValue(entity.ID, out markov);
@@ -164,6 +186,23 @@ namespace Coremero.Plugin.Playground
                 return _userModels[entity.ID].Walk().First();
             }
             throw new Exception("Not an entity.");
+        }
+
+        [Command("dumpmarkov", MinimumPermissionLevel = UserPermission.BotOwner)]
+        public string DumpMarkovs()
+        {
+            int counter = 0;
+            foreach (var keyValuePair in _models)
+            {
+                keyValuePair.Value.Save(Path.Combine(keyValuePair.Key + ".channelmarkov"));
+                counter += 1;
+            }
+            foreach (var keyValuePair in _userModels)
+            {
+                keyValuePair.Value.Save(keyValuePair.Key + ".usermarkov");
+                counter += 1;
+            }
+            return $"Dumped {counter} markovs to disk.";
         }
     }
 }
