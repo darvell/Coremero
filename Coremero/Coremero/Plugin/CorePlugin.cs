@@ -108,11 +108,9 @@ namespace Coremero
                 sb.AppendLine($"{"." + cmd.Name + " " + args}");
             }
 
-            if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
-            {
-                target.Send(Message.Create($"```css\n{sb.ToString()}\n```"));
-            }
-            target.Send(Message.Create(sb.ToString()));
+            target.Send(context.OriginClient.Features.HasFlag(ClientFeature.Markdown)
+                ? Message.Create($"```css\n{sb.ToString()}\n```")
+                : Message.Create(sb.ToString()));
         }
 
         [Command("help", Arguments = "Command Name", Help = "Get info on a command.")]
