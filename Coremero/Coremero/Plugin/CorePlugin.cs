@@ -87,8 +87,13 @@ namespace Coremero
         }
 
         [Command("list", Help = "List all commands.")]
-        public string CommandList(IInvocationContext context, IMessage message)
+        public void CommandList(IInvocationContext context, IMessage message)
         {
+            ISendable target = context.Raiser;
+            if (context.User.Permissions != UserPermission.BotOwner)
+            {
+                target = context.User;
+            }
             StringBuilder sb = new StringBuilder();
             foreach (
                 var cmd in
@@ -103,11 +108,9 @@ namespace Coremero
                 sb.AppendLine($"{"." + cmd.Name + " " + args}");
             }
 
-            if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
-            {
-                return $"```css\n{sb.ToString()}\n```";
-            }
-            return sb.ToString();
+            target.Send(context.OriginClient.Features.HasFlag(ClientFeature.Markdown)
+                ? Message.Create($"```css\n{sb.ToString()}\n```")
+                : Message.Create(sb.ToString()));
         }
 
         [Command("help", Arguments = "Command Name", Help = "Get info on a command.")]
