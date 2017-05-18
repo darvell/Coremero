@@ -14,4 +14,10 @@
     <ProjectReference Include="..\MarkovSharpNetCore\MarkovSharpNetCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\saxon.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
