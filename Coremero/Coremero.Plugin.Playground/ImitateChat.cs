@@ -23,7 +23,7 @@ namespace Coremero.Plugin.Playground
         public ImitateChat(IMessageBus messageBus)
         {
             messageBus.Received += MessageBus_Received;
-            foreach (string path in Directory.GetFiles(PathExtensions.PluginDir, "*.*markov"))
+            foreach (string path in Directory.GetFiles(PathExtensions.ResourceDir, "*.*markov"))
             {
                 try
                 {
