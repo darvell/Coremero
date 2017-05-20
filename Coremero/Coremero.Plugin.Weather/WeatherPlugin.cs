@@ -23,7 +23,7 @@ namespace Coremero.Plugin.Weather
         {
             Weather weather = new Weather(DARK_SKIES_APIKEY);
             WeatherRendererInfo forecast = await weather.GetForecastAsync(message.TrimCommand());
-            return Message.Create("", new StreamAttachment(weather.RenderWeatherImage(forecast), "weather.png"));
+            return Message.Create("", new StreamAttachment(weather.RenderWeatherImage(forecast), "weather.gif"));
         }
     }
 }
