@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using ImageSharp;
 using ImageSharp.Drawing;
 using DarkSky.Services;
@@ -15,6 +16,7 @@ using System.Linq;
 using Coremero.Utilities;
 using ImageSharp.Drawing.Pens;
 using ImageSharp.Quantizers;
+using NodaTime;
 
 namespace Coremero.Plugin.Weather
 {
@@ -57,7 +59,7 @@ namespace Coremero.Plugin.Weather
 
     public class WeatherRendererDay
     {
-        public DateTime Date { get; set; }
+        public ZonedDateTime Date { get; set; }
         public string Day { get; set; }
         public string Icon { get; set; }
         public string Summary { get; set; }
@@ -69,7 +71,7 @@ namespace Coremero.Plugin.Weather
     {
         public string Address { get; set; }
         public string Unit { get; set; }
-        public DateTime Date { get; set; }
+        public ZonedDateTime Date { get; set; }
         public double? Temperature { get; set; }
         public double? FeelsLike { get; set; }
         public string Alert { get; set; }
@@ -157,39 +159,36 @@ namespace Coremero.Plugin.Weather
                 });
 
             // timezones suck, convert olson to timezoneinfo
-            var mappings = TzdbDateTimeZoneSource.Default.WindowsMapping.MapZones;
-            var map = mappings.FirstOrDefault(x =>
-                x.TzdbIds.Any(z => z.Equals(forecast.Response.Timezone, StringComparison.OrdinalIgnoreCase)));
-            TimeZoneInfo tz = map == null ? null : TimeZoneInfo.FindSystemTimeZoneById(map.WindowsId);
+            var timezone = DateTimeZoneProviders.Tzdb[forecast.Response.Timezone];
 
             // fuckin do it up
             var info = new WeatherRendererInfo()
             {
                 Address = location.FormattedAddress,
                 Unit = forecast.Response.Flags.Units == "us" ? "F" : "C",
-                Date = TimeZoneInfo.ConvertTime(DateTime.UtcNow, tz),
+                Date = timezone.AtStrictly(LocalDateTime.FromDateTime(DateTime.UtcNow)),
                 Temperature = forecast.Response.Currently.Temperature,
                 FeelsLike = forecast.Response.Currently.ApparentTemperature,
                 Alert = forecast.Response.Alerts?[0].Title
             };
 
-            forecast.Response.Daily.Data.GetRange(0, 4)
-                .ForEach(delegate(DataPoint day)
+            int counter = 0;
+            foreach (var day in forecast.Response.Daily.Data.Take(4))
+            {
+                var dayRender = new WeatherRendererDay()
                 {
-                    var dayRender = new WeatherRendererDay()
-                    {
-                        HiTemp = day.TemperatureMax,
-                        LoTemp = day.TemperatureMin,
-                        Summary = weatherDescription.ContainsKey(day.Icon)
-                            ? weatherDescription[day.Icon]
-                            : day.Icon.Replace("-", ""),
-                        Icon = day.Icon,
-                        Date = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(day.Time).ToLocalTime()
-                    };
+                    HiTemp = day.TemperatureMax,
+                    LoTemp = day.TemperatureMin,
+                    Summary = weatherDescription.ContainsKey(day.Icon)
+                        ? weatherDescription[day.Icon]
+                        : day.Icon.Replace("-", ""),
+                    Icon = day.Icon,
+                    Date = info.Date.Plus(Duration.FromDays(counter))
+                };
 
-                    info.Forecast.Add(dayRender);
-                });
-
+                info.Forecast.Add(dayRender);
+                counter++;
+            }
             return info;
         }
 
@@ -201,8 +200,8 @@ namespace Coremero.Plugin.Weather
             {
                 var now = info.Date;
 
-                var topDateLine = now.ToString("h:mm:ss tt").ToUpper();
-                var bottomDateLine = now.ToString("ddd MMM d").ToUpper();
+                var topDateLine = now.ToString("h:mm:ss tt", CultureInfo.CurrentCulture).ToUpper();
+                var bottomDateLine = now.ToString("ddd MMM d", CultureInfo.CurrentCulture).ToUpper();
                 var tickerLine = info.Alert != null ? info.Alert + "\n" : "";
                 tickerLine +=
                     $"Temp: {(int) info.Temperature}°{info.Unit}   Feels Like: {(int) info.FeelsLike}°{info.Unit}";
@@ -255,7 +254,7 @@ namespace Coremero.Plugin.Weather
                         // day of week, icon, summary
                         new DrawCommand()
                         {
-                            Text = day.Date.ToString("ddd").ToUpper(),
+                            Text = day.Date.ToString("ddd", CultureInfo.CurrentCulture).ToUpper(),
                             TextAlign = TextAlignment.Center,
                             IsRelative = true,
                             X = 100,
