@@ -81,7 +81,7 @@ namespace Coremero.Services
                     typingChannel?.SetTyping(false);
                     // Quickly dispose any streams in memory.
                     message.Attachments?.ForEach(x => x.Contents?.Dispose());
-                    Log.Trace($"{command} FAIL: {e}");
+                    Log.Error($"{command} FAIL: {e}");
 
                     if (message is IReactableMessage)
                     {
