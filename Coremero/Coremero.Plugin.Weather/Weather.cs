@@ -166,7 +166,7 @@ namespace Coremero.Plugin.Weather
             {
                 Address = location.FormattedAddress,
                 Unit = forecast.Response.Flags.Units == "us" ? "F" : "C",
-                Date = timezone.AtStrictly(LocalDateTime.FromDateTime(DateTime.UtcNow)),
+                Date = timezone.AtStrictly(LocalDateTime.FromDateTime(DateTime.Now)),
                 Temperature = forecast.Response.Currently.Temperature,
                 FeelsLike = forecast.Response.Currently.ApparentTemperature,
                 Alert = forecast.Response.Alerts?[0].Title
