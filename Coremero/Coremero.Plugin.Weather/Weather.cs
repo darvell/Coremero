@@ -158,15 +158,13 @@ namespace Coremero.Plugin.Weather
                     MeasurementUnits = "auto"
                 });
 
-            // timezones suck, convert olson to timezoneinfo
             var timezone = DateTimeZoneProviders.Tzdb[forecast.Response.Timezone];
-
-            // fuckin do it up
+            var myTime = SystemClock.Instance.GetCurrentInstant();
             var info = new WeatherRendererInfo()
             {
                 Address = location.FormattedAddress,
                 Unit = forecast.Response.Flags.Units == "us" ? "F" : "C",
-                Date = timezone.AtStrictly(LocalDateTime.FromDateTime(DateTime.Now)),
+                Date = myTime.InZone(timezone),
                 Temperature = forecast.Response.Currently.Temperature,
                 FeelsLike = forecast.Response.Currently.ApparentTemperature,
                 Alert = forecast.Response.Alerts?[0].Title
