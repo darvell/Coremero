@@ -7,8 +7,9 @@
   <ItemGroup>
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha9-00054" />
     <PackageReference Include="ImageSharp.Drawing" Version="1.0.0-alpha9-00049" />
-    <PackageReference Include="DarkSkyCore" Version="1.5.0" />
+    <PackageReference Include="DarkSkyCore" Version="1.5.1" />
     <PackageReference Include="GoogleGeoCoderCore" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="1.1.2" />
     <PackageReference Include="NodaTime" Version="2.0.1" />
   </ItemGroup>
 
