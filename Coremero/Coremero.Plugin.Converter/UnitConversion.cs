@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
 using Coremero.Utilities;
+using Newtonsoft.Json;
 
 namespace Coremero.Plugin.Converter
 {
@@ -29,6 +32,21 @@ namespace Coremero.Plugin.Converter
             var f = (temperature * (9.0 / 5.0)) + 32;
 
             return $"{temperature:0.0}F is {c:0.0}C. {temperature:0.0}C is {f:0.0}F";
+        }
+
+        [Command("convert", Help = "Converts [Amount] [Currency From] to [Current To].")]
+        public async Task<string> CurrencyConvert(string message)
+        {
+            double amount = 1.0;
+            var args = message.GetCommandArguments();
+            amount = Convert.ToDouble(args[0]);
+            using (HttpClient client = new HttpClient())
+            {
+                string payload = await client.GetStringAsync($"http://api.fixer.io/latest?base={args[1]}&symbols={args[2]}");
+                var json = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(payload);
+                double converted = amount * Convert.ToDouble(json["rates"][args[2]].ToString());
+                return $"{args[0]} {args[1]} is {converted:#.00##} {args[2]}.";
+            }
         }
     }
 }
