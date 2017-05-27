@@ -47,7 +47,7 @@ namespace Coremero.Plugin.Playground
                 char lowerChar = Char.ToLower(c);
                 if (_charRegionMap.ContainsKey(lowerChar))
                 {
-                    return _charRegionMap[lowerChar];
+                    return _charRegionMap[lowerChar] + " ";
                 }
                 return c.ToString();
             }));
