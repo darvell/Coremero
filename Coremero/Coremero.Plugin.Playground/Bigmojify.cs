@@ -36,7 +36,10 @@ namespace Coremero.Plugin.Playground
             {'w', "🇼"},
             {'x', "🇽"},
             {'y', "🇾"},
-            {'z', "🇿"}
+            {'z', "🇿"},
+            {'.', "🛑" },
+            {'!', "❗" },
+            {'?', "❓" }
         };
 
         [Command("bigmojify")]
