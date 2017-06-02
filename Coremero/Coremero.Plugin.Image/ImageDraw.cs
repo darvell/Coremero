@@ -22,7 +22,7 @@ namespace Coremero.Plugin.Image
         public ImageDraw()
         {
             _fontCollection.Install(Path.Combine(PathExtensions.ResourceDir, "impact.ttf"));
-            _impactOutline = new Font(_fontCollection.Families.First(), 40);
+            _impactOutline = new Font(_fontCollection.Families.First(), 42);
             _impactNormal = new Font(_fontCollection.Families.First(), 36);
         }
 
@@ -33,9 +33,10 @@ namespace Coremero.Plugin.Image
 
             using (var image = ImageSharp.Image.Load(message.Attachments[0].Contents))
             {
-                var bottomVector = new Vector2(image.Width / 2.0f, image.Height);
+                var bottomVector = new Vector2(image.Width / 2.0f, image.Height - 32);
                 image.DrawText(message.Text.TrimCommand(), _impactOutline, Rgba32.Black, bottomVector);
                 image.DrawText(message.Text.TrimCommand(), _impactNormal, Rgba32.White, bottomVector);
+                image.Save(ms);
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
