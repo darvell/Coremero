@@ -12,7 +12,7 @@ namespace Coremero.Plugin.Playground
         private readonly Dictionary<char, string> _charRegionMap = new Dictionary<char, string>()
         {
             {'a', "🇦"},
-            {'b', "🇧"},
+            {'b', "🅱"},
             {'c', "🇨"},
             {'d', "🇩"},
             {'e', "🇪"},
