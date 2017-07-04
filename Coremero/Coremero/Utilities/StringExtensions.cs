@@ -125,7 +125,7 @@ namespace Coremero.Utilities
         {
             if ((input?.StartsWith(".") == true || input?.StartsWith("!") == true) && input.Length >= 2)
             {
-                return Char.IsLetter(input[1]);
+                return Char.IsLetterOrDigit(input[1]);
             }
             return false;
         }
