@@ -23,7 +23,7 @@ namespace Coremero.Client.Discord
 
         public async Task<IMessage> SendAsync(IMessage message)
         {
-            var dmChannel = await _user.GetDMChannelAsync();
+            var dmChannel = await _user.GetOrCreateDMChannelAsync();
             if (message.Attachments?.Count > 0)
             {
                 DiscordMessage result = null;

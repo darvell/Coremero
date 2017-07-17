@@ -17,6 +17,8 @@ using Coremero.Utilities;
 using ImageSharp.Drawing.Pens;
 using ImageSharp.Quantizers;
 using NodaTime;
+using SixLabors.Primitives;
+using SixLabors.Fonts;
 
 namespace Coremero.Plugin.Weather
 {
@@ -45,7 +47,8 @@ namespace Coremero.Plugin.Weather
         public int Y { get; set; }
         public string Text { get; set; }
         public Font Font { get; set; }
-        public TextAlignment TextAlign { get; set; }
+        public HorizontalAlignment HorizontalAlignment { get; set; }
+        public VerticalAlignment VerticalAlignment { get; set; }
         public Rgba32 Color { get; set; }
         public Image<Rgba32> Image { get; set; }
     }
@@ -253,7 +256,8 @@ namespace Coremero.Plugin.Weather
                         new DrawCommand()
                         {
                             Text = day.Date.ToString("ddd", CultureInfo.CurrentCulture).ToUpper(),
-                            TextAlign = TextAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 100,
                             Font = mdFont,
@@ -269,7 +273,8 @@ namespace Coremero.Plugin.Weather
                         new DrawCommand()
                         {
                             Text = day.Summary,
-                            TextAlign = TextAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 90,
                             Y = 125,
@@ -281,7 +286,8 @@ namespace Coremero.Plugin.Weather
                         new DrawCommand()
                         {
                             Text = "Lo",
-                            TextAlign = TextAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = -50,
                             Y = 100,
@@ -291,7 +297,8 @@ namespace Coremero.Plugin.Weather
                         new DrawCommand()
                         {
                             Text = day.LoTemp != null ? Math.Round(day.LoTemp.Value, 0).ToString() : "",
-                            TextAlign = TextAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 0,
                             Y = 45,
@@ -303,7 +310,8 @@ namespace Coremero.Plugin.Weather
                         new DrawCommand()
                         {
                             Text = "Hi",
-                            TextAlign = TextAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 100,
                             Y = -45,
@@ -313,7 +321,8 @@ namespace Coremero.Plugin.Weather
                         new DrawCommand()
                         {
                             Text = day.HiTemp != null ? Math.Round(day.HiTemp.Value, 0).ToString() : "",
-                            TextAlign = TextAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 0,
                             Y = 45,
@@ -343,7 +352,7 @@ namespace Coremero.Plugin.Weather
                     // if we have a text object, use textalignment, color, and text fields
                     if (cmd.Text != null)
                     {
-                        var textOpts = new TextGraphicsOptions(false) {TextAlignment = cmd.TextAlign};
+                        var textOpts = new TextGraphicsOptions(false) {HorizontalAlignment = cmd.HorizontalAlignment, VerticalAlignment = cmd.VerticalAlignment};
                         image.DrawText(cmd.Text, cmd.Font, WeatherColors.Black, new Vector2(x + 2, y + 2), textOpts);
                         image.DrawText(cmd.Text, cmd.Font, cmd.Color, new Vector2(x, y), textOpts);
                     }
@@ -352,7 +361,7 @@ namespace Coremero.Plugin.Weather
                     if (cmd.Image != null)
                     {
                         image.DrawImage(cmd.Image, ImageSharp.PixelFormats.PixelBlenderMode.Normal, 1.0f,
-                            new ImageSharp.Size(cmd.Image.Width, cmd.Image.Height), new Point(x, y));
+                            new Size(cmd.Image.Width, cmd.Image.Height), new Point(x, y));
                     }
                 }
                 image.SaveAsPng(output);

@@ -36,7 +36,7 @@ namespace Coremero.Plugin.Image
                 var bottomVector = new Vector2(image.Width / 2.0f, image.Height - 32);
                 image.DrawText(message.Text.TrimCommand(), _impactOutline, Rgba32.Black, bottomVector);
                 image.DrawText(message.Text.TrimCommand(), _impactNormal, Rgba32.White, bottomVector);
-                image.Save(ms);
+                image.Save(ms, ImageFormats.Jpeg);
             }
             ms.Seek(0, SeekOrigin.Begin);
             return Message.Create(null, new StreamAttachment(ms, message.Attachments[0].Name));
