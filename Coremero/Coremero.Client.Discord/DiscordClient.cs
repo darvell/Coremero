@@ -103,27 +103,6 @@ namespace Coremero.Client.Discord
         {
             return Task.Run(() =>
             {
-#if RELEASE
-                if (_lastIgnoreTime != DateTime.MinValue && (DateTime.Now - _lastIgnoreTime).TotalSeconds < 30)
-                {
-                    return;
-                }
-#endif
-                if (socketMessage.Author.Id == _discordClient.CurrentUser.Id)
-                {
-#if RELEASE
-// TODO: Configurable CNC channel ID.
-                    if (socketMessage.Channel.Id == DEBUG_CNC_CHANNEL_ID)
-                    {
-                        if (socketMessage.Content == DEBUG_IGNORE_PING)
-                        {
-                            _lastIgnoreTime = DateTime.Now;
-                        }
-                    }
-#endif
-                    return;
-                }
-
                 IMessage message = new DiscordMessage(socketMessage);
                 IInvocationContext context = new DiscordInvocationContext(this, socketMessage);
                 _messageBus.RaiseIncoming(context, message);
