@@ -18,7 +18,7 @@ using ImageSharp.Drawing.Pens;
 using ImageSharp.Quantizers;
 using NodaTime;
 using SixLabors.Primitives;
-using SixLabors.Fonts;
+using System.Text.RegularExpressions;
 
 namespace Coremero.Plugin.Weather
 {
@@ -92,16 +92,16 @@ namespace Coremero.Plugin.Weather
 
         private Dictionary<string, string> weatherDescription = new Dictionary<string, string>()
         {
-            ["clear-day"] = "Clear",
-            ["clear-night"] = "Clear",
-            ["cloudy"] = "Cloudy",
-            ["fog"] = "Fog",
-            ["partly-cloudy-day"] = "Partly\nCloudy",
-            ["partly-cloudy-night"] = "Partly\nCloudy",
-            ["rain"] = "Rain",
-            ["sleet"] = "Sleet",
-            ["snow"] = "Snow",
-            ["wind"] = "Wind"
+            ["ClearDay"] = "Clear",
+            ["ClearNight"] = "Clear",
+            ["Cloudy"] = "Cloudy",
+            ["Fog"] = "Fog",
+            ["PartlyCloudyDay"] = "Partly\nCloudy",
+            ["PartlyCloudyNight"] = "Partly\nCloudy",
+            ["Rain"] = "Rain",
+            ["Sleet"] = "Sleet",
+            ["Snow"] = "Snow",
+            ["Wind"] = "Wind"
         };
 
         public Weather(string darkSkyApiKey)
@@ -157,11 +157,11 @@ namespace Coremero.Plugin.Weather
             DarkSkyResponse forecast = await WeatherService.GetForecast(location.Latitude, location.Longitude,
                 new DarkSkyService.OptionalParameters
                 {
-                    DataBlocksToExclude = new List<string> {"minutely", "hourly",},
+                    DataBlocksToExclude = new List<ExclusionBlock> {ExclusionBlock.Minutely, ExclusionBlock.Hourly,},
                     MeasurementUnits = "auto"
                 });
 
-            var timezone = DateTimeZoneProviders.Tzdb[forecast.Response.Timezone];
+            var timezone = DateTimeZoneProviders.Tzdb[forecast.Response.TimeZone];
             var myTime = SystemClock.Instance.GetCurrentInstant();
             var info = new WeatherRendererInfo()
             {
@@ -178,12 +178,12 @@ namespace Coremero.Plugin.Weather
             {
                 var dayRender = new WeatherRendererDay()
                 {
-                    HiTemp = day.TemperatureMax,
-                    LoTemp = day.TemperatureMin,
-                    Summary = weatherDescription.ContainsKey(day.Icon)
-                        ? weatherDescription[day.Icon]
-                        : day.Icon.Replace("-", ""),
-                    Icon = day.Icon,
+                    HiTemp = day.TemperatureHigh,
+                    LoTemp = day.TemperatureLow,
+                    Summary = weatherDescription.ContainsKey(day.Icon.ToString())
+                        ? weatherDescription[day.Icon.ToString()]
+                        : day.Icon.ToString().Replace("-", ""),
+                    Icon = String.Join("-",Regex.Split(day.Icon.ToString(), @"(?<!^)(?=[A-Z])")).ToLower(),
                     Date = info.Date.Plus(Duration.FromDays(counter))
                 };
 

@@ -54,7 +54,7 @@ namespace Coremero.Plugin.Weather
             if(!memoryCache.TryGetValue(location, out forecast))
             {
                 forecast = await weather.GetForecastAsync(location);
-                memoryCache.Set(location, forecast, TimeSpan.FromMinutes(5));
+                memoryCache.Set(location, forecast, TimeSpan.FromMinutes(2));
             }
             return Message.Create("", new StreamAttachment(weather.RenderWeatherImage(forecast), "weather.png"));
         }
