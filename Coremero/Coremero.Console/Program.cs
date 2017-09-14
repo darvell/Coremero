@@ -20,29 +20,9 @@ namespace Coremero.Console
     class Program
     {
         private static Container _container;
+        private static SemaphoreSlim _cancelSemaphore = new SemaphoreSlim(0);
 
-        static void Main(string[] args)
-        {
-            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-            var exitEvent = new ManualResetEvent(false);
-
-            System.Console.CancelKeyPress += (sender, eventArgs) =>
-            {
-                eventArgs.Cancel = true;
-                exitEvent.Set();
-            };
-
-            MainAsync(args).GetAwaiter().GetResult();
-            exitEvent.WaitOne();
-            Log.Info("Exit called.");
-        }
-
-        private static void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-        {
-            Log.Warn($"Unobserved task exception:\n{e.Exception.GetBaseException()}");
-        }
-
-        public static async Task MainAsync(string[] args)
+        public static async Task Main(string[] args)
         {
             // Log init.
             var loggingConfig = new LoggingConfiguration();
@@ -95,14 +75,12 @@ namespace Coremero.Console
             // Register services
             _container.RegisterSingleton<IMessageBus, MessageBus>();
             _container.RegisterSingleton<ICommandHandler, CommandHandler>();
-
-            AssemblyLoader loader = new AssemblyLoader();
-
+            var loader = System.Runtime.Loader.AssemblyLoadContext.Default;
             // Scan for clients
             var clientAssemblies =
                 new DirectoryInfo(PlatformServices.Default.Application.ApplicationBasePath).GetFiles()
                     .Where(file => file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Client."))
-                    .Select(file => loader.LoadFromPath(file.FullName));
+                    .Select(file => loader.LoadFromAssemblyPath(file.FullName));
             _container.RegisterCollection<IClient>(clientAssemblies);
 
             // Scan for plugins
@@ -111,7 +89,7 @@ namespace Coremero.Console
                 var pluginAssemblies =
                     new DirectoryInfo(PathExtensions.PluginDir).GetFiles()
                         .Where(file => file.Extension.ToLower() == ".dll" && file.Name.StartsWith("Coremero.Plugin."))
-                        .Select(file => loader.LoadFromPath(file.FullName));
+                        .Select(file => loader.LoadFromAssemblyPath(file.FullName));
 
                 if (pluginAssemblies?.Any() == true)
                     _container.RegisterCollection<IPlugin>(pluginAssemblies);
@@ -157,6 +135,13 @@ namespace Coremero.Console
             }
 
             cmdRegistry.Register(_container.GetInstance<CorePlugin>());
+            System.Console.CancelKeyPress += Console_CancelKeyPress;
+            await _cancelSemaphore.WaitAsync();
+        }
+
+        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            _cancelSemaphore.Release();
         }
     }
 }
