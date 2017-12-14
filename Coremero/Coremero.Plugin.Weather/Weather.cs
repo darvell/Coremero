@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using ImageSharp;
-using ImageSharp.Drawing;
 using DarkSky.Services;
 using System.IO;
 using DarkSky.Models;
@@ -13,17 +11,16 @@ using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using NodaTime.TimeZones;
 using System.Linq;
-using Coremero.Utilities;
-using ImageSharp.Drawing.Pens;
-using ImageSharp.Quantizers;
 using NodaTime;
 using SixLabors.Primitives;
 using System.Text.RegularExpressions;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing;
 
 namespace Coremero.Plugin.Weather
 {
     // Sponges weather renderer.
-    // Taken from https://github.com/sponge/coreweather 
+    // Taken from https://github.com/sponge/coreweather
 
     // TODO: Go hog wild and clean this up to my standard, whatever that is.
     public static class WeatherColors
@@ -43,6 +40,7 @@ namespace Coremero.Plugin.Weather
     public class DrawCommand
     {
         public bool IsRelative { get; set; }
+        public int ContentWidth { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public string Text { get; set; }
@@ -81,7 +79,7 @@ namespace Coremero.Plugin.Weather
         public List<WeatherRendererDay> Forecast { get; set; } = new List<WeatherRendererDay>();
     }
 
-    class Weather
+    internal class Weather
     {
         private string darkSkyApiKey;
         private FontCollection collection;
@@ -104,17 +102,17 @@ namespace Coremero.Plugin.Weather
             ["Wind"] = "Wind"
         };
 
-        public Weather(string darkSkyApiKey)
+        public Weather(string darkSkyApiKey, string ResourceDir)
         {
             this.darkSkyApiKey = darkSkyApiKey;
 
             collection = new FontCollection();
-            smFont = new Font(collection.Install(Path.Combine(PathExtensions.ResourceDir, "Weather", "Star4000 Small.ttf")), 36);
-            mdFont = new Font(collection.Install(Path.Combine(PathExtensions.ResourceDir, "Weather", "Star4000.ttf")), 36);
-            lgFont = new Font(collection.Install(Path.Combine(PathExtensions.ResourceDir, "Weather", "Star4000 Large.ttf")), 32);
+            smFont = new Font(collection.Install(Path.Combine(ResourceDir, "Weather", "Star4000 Small.ttf")), 36);
+            mdFont = new Font(collection.Install(Path.Combine(ResourceDir, "Weather", "Star4000.ttf")), 36);
+            lgFont = new Font(collection.Install(Path.Combine(ResourceDir, "Weather", "Star4000 Large.ttf")), 32);
 
             images = new Dictionary<string, Image<Rgba32>>();
-            foreach (var image in Directory.GetFiles(Path.Combine(PathExtensions.ResourceDir, "Weather"))
+            foreach (var image in Directory.GetFiles(Path.Combine(ResourceDir, "Weather"))
                 .Where(x => x.Contains(".png") || x.Contains(".gif")))
             {
                 var basename = Path.GetFileNameWithoutExtension(image);
@@ -139,11 +137,16 @@ namespace Coremero.Plugin.Weather
                     var content = await request.Content.ReadAsStringAsync();
                     JObject results = JObject.Parse(content);
 
+                    var address_components = results["results"][0]["address_components"];
+                    var loc = results["results"][0]["geometry"]["location"];
+
+                    var locality = (from a in address_components where a["types"][0].Value<string>() == "locality" select a["short_name"].Value<string>()).FirstOrDefault();
+
                     location = new Location
                     {
-                        Latitude = results["results"][0]["geometry"]["location"]["lat"].Value<double>(),
-                        Longitude = results["results"][0]["geometry"]["location"]["lng"].Value<double>(),
-                        FormattedAddress = results["results"][0]["formatted_address"].Value<string>()
+                        Latitude = loc["lat"].Value<double>(),
+                        Longitude = loc["lng"].Value<double>(),
+                        FormattedAddress = locality
                     };
                 }
             }
@@ -157,7 +160,7 @@ namespace Coremero.Plugin.Weather
             DarkSkyResponse forecast = await WeatherService.GetForecast(location.Latitude, location.Longitude,
                 new DarkSkyService.OptionalParameters
                 {
-                    DataBlocksToExclude = new List<ExclusionBlock> {ExclusionBlock.Minutely, ExclusionBlock.Hourly,},
+                    DataBlocksToExclude = new List<ExclusionBlock> { ExclusionBlock.Minutely, ExclusionBlock.Hourly, },
                     MeasurementUnits = "auto"
                 });
 
@@ -183,7 +186,7 @@ namespace Coremero.Plugin.Weather
                     Summary = weatherDescription.ContainsKey(day.Icon.ToString())
                         ? weatherDescription[day.Icon.ToString()]
                         : day.Icon.ToString().Replace("-", ""),
-                    Icon = String.Join("-",Regex.Split(day.Icon.ToString(), @"(?<!^)(?=[A-Z])")).ToLower(),
+                    Icon = String.Join("-", Regex.Split(day.Icon.ToString(), @"(?<!^)(?=[A-Z])")).ToLower(),
                     Date = info.Date.Plus(Duration.FromDays(counter))
                 };
 
@@ -197,7 +200,7 @@ namespace Coremero.Plugin.Weather
         {
             MemoryStream output = new MemoryStream();
 
-            using (Image<Rgba32> image = new Image<Rgba32>(images["background"]))
+            using (Image<Rgba32> image = images["background"].Clone())
             {
                 var now = info.Date;
 
@@ -205,11 +208,11 @@ namespace Coremero.Plugin.Weather
                 var bottomDateLine = now.ToString("ddd MMM d", CultureInfo.CurrentCulture).ToUpper();
                 var tickerLine = info.Alert != null ? info.Alert + "\n" : "";
                 tickerLine +=
-                    $"Temp: {(int) info.Temperature}°{info.Unit}   Feels Like: {(int) info.FeelsLike}°{info.Unit}";
+                    $"Temp: {(int)info.Temperature}°{info.Unit}   Feels Like: {(int)info.FeelsLike}°{info.Unit}";
 
                 if (info.Alert != null)
                 {
-                    image.Fill<Rgba32>(WeatherColors.Red, new Rectangle(0, 480, image.Width, 96));
+                    image.Mutate(i => i.Fill<Rgba32>(WeatherColors.Red, new Rectangle(0, 480, image.Width, 96)));
                 }
 
                 // everything except the forecast
@@ -260,15 +263,18 @@ namespace Coremero.Plugin.Weather
                             VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 100,
+                            Y = 21,
                             Font = mdFont,
                             Color = WeatherColors.Yellow
                         },
                         new DrawCommand()
                         {
                             Image = images.ContainsKey(day.Icon) ? images[day.Icon] : images["clear-day"],
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            ContentWidth = 190,
                             IsRelative = true,
                             X = -90,
-                            Y = 50
+                            Y = 35
                         },
                         new DrawCommand()
                         {
@@ -277,7 +283,7 @@ namespace Coremero.Plugin.Weather
                             VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 90,
-                            Y = 125,
+                            Y = 145,
                             Font = mdFont,
                             Color = WeatherColors.White
                         },
@@ -290,7 +296,7 @@ namespace Coremero.Plugin.Weather
                             VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = -50,
-                            Y = 100,
+                            Y = 90,
                             Font = mdFont,
                             Color = WeatherColors.TealAlso
                         },
@@ -352,19 +358,25 @@ namespace Coremero.Plugin.Weather
                     // if we have a text object, use textalignment, color, and text fields
                     if (cmd.Text != null)
                     {
-                        var textOpts = new TextGraphicsOptions(false) {HorizontalAlignment = cmd.HorizontalAlignment, VerticalAlignment = cmd.VerticalAlignment};
-                        image.DrawText(cmd.Text, cmd.Font, WeatherColors.Black, new Vector2(x + 2, y + 2), textOpts);
-                        image.DrawText(cmd.Text, cmd.Font, cmd.Color, new Vector2(x, y), textOpts);
+                        var textOpts = new TextGraphicsOptions(false) { HorizontalAlignment = cmd.HorizontalAlignment, VerticalAlignment = cmd.VerticalAlignment };
+                        image.Mutate(i => i.DrawText(cmd.Text, cmd.Font, WeatherColors.Black, new Vector2(x + 2, y + 2), textOpts));
+                        image.Mutate(i => i.DrawText(cmd.Text, cmd.Font, cmd.Color, new Vector2(x, y), textOpts));
                     }
 
                     // if we have an image object, use the image field
                     if (cmd.Image != null)
                     {
-                        image.DrawImage(cmd.Image, ImageSharp.PixelFormats.PixelBlenderMode.Normal, 1.0f,
-                            new Size(cmd.Image.Width, cmd.Image.Height), new Point(x, y));
+                        Point pos = new Point(x, y);
+                        if (cmd.ContentWidth > 0 && cmd.HorizontalAlignment == HorizontalAlignment.Center)
+                        {
+                            pos.X += (cmd.ContentWidth - cmd.Image.Width) / 2;
+                        }
+
+                        image.Mutate(i => i.DrawImage(cmd.Image, SixLabors.ImageSharp.PixelFormats.PixelBlenderMode.Normal, 1.0f,
+                            new Size(cmd.Image.Width, cmd.Image.Height), pos));
                     }
                 }
-                image.SaveAsPng(output);
+                image.SaveAsGif(output);
             }
             output.Seek(0, SeekOrigin.Begin);
             return output;

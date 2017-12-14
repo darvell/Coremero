@@ -36,11 +36,11 @@ namespace Coremero.Plugin.Weather
         [Command("weather")]
         public async Task<IMessage> GetWeather(IInvocationContext context, string message)
         {
-            Weather weather = new Weather(DARK_SKIES_APIKEY);
+            Weather weather = new Weather(DARK_SKIES_APIKEY, PathExtensions.ResourceDir);
             string location = message.TrimCommand();
-            if(location.Length == 0)
+            if (location.Length == 0)
             {
-                if(!_userPostcodes.TryGetValue(context.User.Mention, out location))
+                if (!_userPostcodes.TryGetValue(context.User.Mention, out location))
                 {
                     throw new Exception("No location for user.");
                 }
@@ -51,7 +51,7 @@ namespace Coremero.Plugin.Weather
                 File.WriteAllText(USER_LOCATION_DIR, JsonConvert.SerializeObject(_userPostcodes));
             }
             WeatherRendererInfo forecast;
-            if(!memoryCache.TryGetValue(location, out forecast))
+            if (!memoryCache.TryGetValue(location, out forecast))
             {
                 forecast = await weather.GetForecastAsync(location);
                 memoryCache.Set(location, forecast, TimeSpan.FromMinutes(2));
