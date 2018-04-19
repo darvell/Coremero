@@ -129,12 +129,12 @@ namespace Coremero.Client.Discord
         {
             get
             {
-                return _discordClient.CurrentUser?.Game?.Name;
+                return _discordClient.CurrentUser?.Activity?.Name;
             }
             set
             {
 #pragma warning disable 4014
-                _discordClient?.SetGameAsync(value);
+                _discordClient?.SetGameAsync(value, null, ActivityType.Watching);
 #pragma warning restore 4014
             }
         }
