@@ -15,7 +15,10 @@ using NodaTime;
 using SixLabors.Primitives;
 using System.Text.RegularExpressions;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Drawing;
+using SixLabors.ImageSharp.Processing.Text;
 
 namespace Coremero.Plugin.Weather
 {
@@ -359,8 +362,8 @@ namespace Coremero.Plugin.Weather
                     if (cmd.Text != null)
                     {
                         var textOpts = new TextGraphicsOptions(false) { HorizontalAlignment = cmd.HorizontalAlignment, VerticalAlignment = cmd.VerticalAlignment };
-                        image.Mutate(i => i.DrawText(cmd.Text, cmd.Font, WeatherColors.Black, new Vector2(x + 2, y + 2), textOpts));
-                        image.Mutate(i => i.DrawText(cmd.Text, cmd.Font, cmd.Color, new Vector2(x, y), textOpts));
+                        image.Mutate(i => i.DrawText(textOpts, cmd.Text, cmd.Font, WeatherColors.Black, new Vector2(x + 2, y + 2)));
+                        image.Mutate(i => i.DrawText(textOpts, cmd.Text, cmd.Font, cmd.Color, new Vector2(x, y)));
                     }
 
                     // if we have an image object, use the image field
@@ -372,8 +375,7 @@ namespace Coremero.Plugin.Weather
                             pos.X += (cmd.ContentWidth - cmd.Image.Width) / 2;
                         }
 
-                        image.Mutate(i => i.DrawImage(cmd.Image, SixLabors.ImageSharp.PixelFormats.PixelBlenderMode.Normal, 1.0f,
-                            new Size(cmd.Image.Width, cmd.Image.Height), pos));
+                        image.Mutate(i => i.DrawImage(cmd.Image, PixelBlenderMode.Normal, 1.0f, pos));
                     }
                 }
                 image.SaveAsGif(output);
