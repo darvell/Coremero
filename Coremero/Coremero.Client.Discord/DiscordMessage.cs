@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Coremero.Attachments;
 using Coremero.Messages;
 using Discord;
-using Discord.Rest;
-using Discord.Rpc;
 using Discord.WebSocket;
 using IAttachment = Coremero.Attachments.IAttachment;
 
@@ -47,16 +45,15 @@ namespace Coremero.Client.Discord
             get { return _message.Timestamp.DateTime; }
         }
 
-
         public async Task React(string emoji)
         {
             if (emoji.StartsWith("<")) // I guess Discord.Net doesn't use the same methods internally?
             {
-                await ((SocketUserMessage) _message).AddReactionAsync(Emote.Parse(emoji));
+                await ((SocketUserMessage)_message).AddReactionAsync(Emote.Parse(emoji));
             }
             else
             {
-                await ((SocketUserMessage) _message).AddReactionAsync(new Emoji(emoji));
+                await ((SocketUserMessage)_message).AddReactionAsync(new Emoji(emoji));
             }
         }
 
@@ -71,7 +68,7 @@ namespace Coremero.Client.Discord
             List<Reaction> result = new List<Reaction>();
             foreach (var emoji in userMessage.Reactions)
             {
-                Reaction reaction = new Reaction(emoji.Key.Name, (await userMessage.GetReactionUsersAsync(emoji.Key.Name)).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
+                Reaction reaction = new Reaction(emoji.Key.Name, (await userMessage.GetReactionUsersAsync(emoji.Key)).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
                 result.Add(reaction);
             }
             return result;

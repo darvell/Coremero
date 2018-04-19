@@ -43,7 +43,7 @@ namespace Coremero.Client.Discord
 
         public bool IsConnected { get; private set; }
 
-        #endregion
+        #endregion IClient Properties
 
         private IMessageBus _messageBus;
         private DiscordSocketClient _discordClient;
@@ -59,7 +59,8 @@ namespace Coremero.Client.Discord
             DISCORD_BOT_KEY = credentialStorage.GetKey("discord", null);
             _discordClient = new DiscordSocketClient(new DiscordSocketConfig()
             {
-                MessageCacheSize = 50
+                MessageCacheSize = 150,
+                DefaultRetryMode = RetryMode.AlwaysRetry,
             });
         }
 
@@ -91,7 +92,6 @@ namespace Coremero.Client.Discord
                     }
                 }, token);
 #pragma warning restore 4014
-
             }
 #endif
 

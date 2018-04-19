@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Rpc;
 using IAttachment = Coremero.Attachments.IAttachment;
 using IMessage = Coremero.Messages.IMessage;
 
@@ -57,7 +56,7 @@ namespace Coremero.Client.Discord
             {
                 if (_user is IGuildUser)
                 {
-                    return ((IGuildUser) _user).Nickname ?? _user.Username;
+                    return ((IGuildUser)_user).Nickname ?? _user.Username;
                 }
                 return _user.Username;
             }
@@ -81,7 +80,7 @@ namespace Coremero.Client.Discord
                 {
                     // TODO: Move to configuration
                     // HARDCODE SA-MINECRAFT FOR NOW
-                    var guildUser = (IGuildUser) _user;
+                    var guildUser = (IGuildUser)_user;
 
                     if (guildUser.Guild.Id == 109063664560009216)
                     {
