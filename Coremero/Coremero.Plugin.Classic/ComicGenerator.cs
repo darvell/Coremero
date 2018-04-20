@@ -77,11 +77,10 @@ namespace Coremero.Plugin.Classic
                 using (HttpClient client = new HttpClient())
                 {
                     var content = new StringContent(JsonConvert.SerializeObject(payload, new JsonSerializerSettings() { ContractResolver = new LowercaseContractResolver() }), Encoding.UTF8, "application/json");
-                    var result = await client.PostAsync($"http://localhost:5000/create", content);
+                    var result = await client.PostAsync($"http://localhost:8000/create", content);
                     MemoryStream imageStream = await (await result.Content.ReadAsStreamAsync()).CopyToMemoryStreamAsync();
                     return Message.Create(null, new StreamAttachment(imageStream, $"{DateTime.Now} {context.Channel?.Name} Comic.jpg"));
                 }
-
             }
             throw new Exception("Not a buffered channel.");
         }
