@@ -23,8 +23,28 @@ namespace Coremero.Services
             _messageBus = messageBus;
             _commandRegistry = commandRegistry;
 
-            messageBus.Received += MessageBusOnReceived;
-            messageBus.Sent += MessageBusOnSent;
+            messageBus.Received += (sender, args) =>
+            {
+                try
+                {
+                    MessageBusOnReceived(sender, args);
+                }
+                catch
+                {
+                    // ignore
+                }
+            };
+            messageBus.Sent += (sender, args) =>
+            {
+                try
+                {
+                    MessageBusOnSent(sender, args);
+                }
+                catch
+                {
+                    // ignore
+                }
+            };
         }
 
         private void MessageBusOnReceived(object sender, MessageReceivedEventArgs eventArgs)
@@ -40,7 +60,7 @@ namespace Coremero.Services
             }
 
             // Check if command exists.
-            string command = message.Text.Split(' ').First().TrimStart('.','!');
+            string command = message.Text.Split(' ').First().TrimStart('.', '!');
 
             if (!_commandRegistry.Exists(command))
             {
@@ -48,7 +68,7 @@ namespace Coremero.Services
                 {
                     if (message is IReactableMessage)
                     {
-                        ((IReactableMessage) message).React("🚫").Wait(TimeSpan.FromMilliseconds(250));
+                        ((IReactableMessage)message).React("🚫").Wait(TimeSpan.FromMilliseconds(250));
                     }
                 }
                 return;
@@ -85,7 +105,7 @@ namespace Coremero.Services
 
                     if (message is IReactableMessage)
                     {
-                        await ((IReactableMessage) message).React("💔");
+                        await ((IReactableMessage)message).React("💔");
                     }
                     else
                     {
