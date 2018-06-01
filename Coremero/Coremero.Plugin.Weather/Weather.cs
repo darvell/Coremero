@@ -298,7 +298,7 @@ namespace Coremero.Plugin.Weather
                             HorizontalAlignment = HorizontalAlignment.Center,
                             VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
-                            X = -50,
+                            X = -55,
                             Y = 90,
                             Font = mdFont,
                             Color = WeatherColors.TealAlso
@@ -323,7 +323,7 @@ namespace Coremero.Plugin.Weather
                             VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 100,
-                            Y = -45,
+                            Y = -50,
                             Font = mdFont,
                             Color = WeatherColors.Yellow
                         },
