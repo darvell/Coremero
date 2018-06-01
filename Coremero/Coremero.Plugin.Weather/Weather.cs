@@ -238,14 +238,14 @@ namespace Coremero.Plugin.Weather
                         Y = 36,
                         Color = WeatherColors.Yellow
                     },
-                    new DrawCommand() {Text = topDateLine, Font = smFont, X = 695, Y = 10, Color = WeatherColors.White},
+                    new DrawCommand() {Text = topDateLine, Font = smFont, X = 695, Y = 12, Color = WeatherColors.White},
                     new DrawCommand()
                     {
                         Text = bottomDateLine,
                         Font = smFont,
                         IsRelative = true,
                         X = 0,
-                        Y = 25,
+                        Y = 26,
                         Color = WeatherColors.White
                     },
                     new DrawCommand() {Text = tickerLine, Font = mdFont, X = 5, Y = 485, Color = WeatherColors.White},
