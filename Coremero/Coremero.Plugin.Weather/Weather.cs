@@ -15,6 +15,7 @@ using NodaTime;
 using SixLabors.Primitives;
 using System.Text.RegularExpressions;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Drawing;
@@ -245,7 +246,7 @@ namespace Coremero.Plugin.Weather
                         Font = smFont,
                         IsRelative = true,
                         X = 0,
-                        Y = 26,
+                        Y = 25,
                         Color = WeatherColors.White
                     },
                     new DrawCommand() {Text = tickerLine, Font = mdFont, X = 5, Y = 485, Color = WeatherColors.White},
@@ -299,7 +300,7 @@ namespace Coremero.Plugin.Weather
                             VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = -50,
-                            Y = 85,
+                            Y = 80,
                             Font = mdFont,
                             Color = WeatherColors.TealAlso
                         },
@@ -378,7 +379,7 @@ namespace Coremero.Plugin.Weather
                         image.Mutate(i => i.DrawImage(cmd.Image, PixelBlenderMode.Normal, 1.0f, pos));
                     }
                 }
-                image.SaveAsGif(output);
+                image.SaveAsPng(output);
             }
             output.Seek(0, SeekOrigin.Begin);
             return output;
