@@ -226,7 +226,7 @@ namespace Coremero.Plugin.Weather
                         Text = info.Address,
                         Font = mdFont,
                         X = 150,
-                        Y = 0,
+                        Y = 4,
                         Color = WeatherColors.White
                     },
                     new DrawCommand()
@@ -248,7 +248,7 @@ namespace Coremero.Plugin.Weather
                         Y = 25,
                         Color = WeatherColors.White
                     },
-                    new DrawCommand() {Text = tickerLine, Font = mdFont, X = 5, Y = 480, Color = WeatherColors.White},
+                    new DrawCommand() {Text = tickerLine, Font = mdFont, X = 5, Y = 485, Color = WeatherColors.White},
                 };
 
                 int bx = 15, by = 90;
