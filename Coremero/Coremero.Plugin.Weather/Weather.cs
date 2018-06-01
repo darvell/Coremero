@@ -226,7 +226,7 @@ namespace Coremero.Plugin.Weather
                         Text = info.Address,
                         Font = mdFont,
                         X = 150,
-                        Y = 6,
+                        Y = 8,
                         Color = WeatherColors.White
                     },
                     new DrawCommand()
@@ -238,7 +238,7 @@ namespace Coremero.Plugin.Weather
                         Y = 36,
                         Color = WeatherColors.Yellow
                     },
-                    new DrawCommand() {Text = topDateLine, Font = smFont, X = 695, Y = 1, Color = WeatherColors.White},
+                    new DrawCommand() {Text = topDateLine, Font = smFont, X = 695, Y = 10, Color = WeatherColors.White},
                     new DrawCommand()
                     {
                         Text = bottomDateLine,
@@ -266,7 +266,7 @@ namespace Coremero.Plugin.Weather
                             VerticalAlignment = VerticalAlignment.Center,
                             IsRelative = true,
                             X = 100,
-                            Y = 25,
+                            Y = 30,
                             Font = mdFont,
                             Color = WeatherColors.Yellow
                         },
