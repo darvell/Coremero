@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using DarkSky.Services;
 using System.IO;
-using DarkSky.Models;
-using System.Threading.Tasks;
-using System.Numerics;
-using SixLabors.Fonts;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
-using NodaTime.TimeZones;
 using System.Linq;
-using NodaTime;
-using SixLabors.Primitives;
+using System.Net.Http;
+using System.Numerics;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using DarkSky.Models;
+using DarkSky.Services;
+using Geocoding;
+using Geocoding.Microsoft;
+using Newtonsoft.Json.Linq;
+using NodaTime;
+using NodaTime.TimeZones;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Drawing;
 using SixLabors.ImageSharp.Processing.Text;
+using SixLabors.Primitives;
 
 namespace Coremero.Plugin.Weather
 {
@@ -85,7 +87,8 @@ namespace Coremero.Plugin.Weather
 
     internal class Weather
     {
-        private string darkSkyApiKey;
+        private readonly string darkSkyApiKey;
+        private readonly string bingApiKey;
         private FontCollection collection;
         private Font mdFont;
         private Font lgFont;
@@ -106,7 +109,7 @@ namespace Coremero.Plugin.Weather
             ["Wind"] = "Wind"
         };
 
-        public Weather(string darkSkyApiKey, string ResourceDir)
+        public Weather(string darkSkyApiKey, string bingApiKey, string ResourceDir)
         {
             this.darkSkyApiKey = darkSkyApiKey;
 
@@ -131,27 +134,23 @@ namespace Coremero.Plugin.Weather
             Location location;
             try
             {
-                var requestUri = string.Format(
-                    "http://maps.googleapis.com/maps/api/geocode/json?address={0}&sensor=false",
-                    Uri.EscapeDataString(query));
+                IGeocoder geocoder = new BingMapsGeocoder(bingApiKey);
+                var geoResult = await geocoder.GeocodeAsync(query);
+                dynamic address = geoResult.FirstOrDefault();
 
-                using (var client = new HttpClient())
+                if (address == null)
+                    return null;
+
+                location = new Location
                 {
-                    var request = await client.GetAsync(requestUri);
-                    var content = await request.Content.ReadAsStringAsync();
-                    JObject results = JObject.Parse(content);
+                    Latitude = address.Coordinates.Latitude,
+                    Longitude = address.Coordinates.Longitude,
+                    FormattedAddress = address.FormattedAddress
+                };
 
-                    var address_components = results["results"][0]["address_components"];
-                    var loc = results["results"][0]["geometry"]["location"];
-
-                    var locality = (from a in address_components where a["types"][0].Value<string>() == "locality" select a["short_name"].Value<string>()).FirstOrDefault();
-
-                    location = new Location
-                    {
-                        Latitude = loc["lat"].Value<double>(),
-                        Longitude = loc["lng"].Value<double>(),
-                        FormattedAddress = locality
-                    };
+                if (address.Type.ToString().StartsWith("Postcode"))
+                {
+                    location.FormattedAddress = $"{address.Locality} {address.FormattedAddress}";
                 }
             }
             catch (Exception)
@@ -190,7 +189,7 @@ namespace Coremero.Plugin.Weather
                     Summary = weatherDescription.ContainsKey(day.Icon.ToString())
                         ? weatherDescription[day.Icon.ToString()]
                         : day.Icon.ToString().Replace("-", ""),
-                    Icon = String.Join("-", Regex.Split(day.Icon.ToString(), @"(?<!^)(?=[A-Z])")).ToLower(),
+                    Icon = string.Join("-", Regex.Split(day.Icon.ToString(), @"(?<!^)(?=[A-Z])")).ToLower(),
                     Date = info.Date.Plus(Duration.FromDays(counter))
                 };
 
