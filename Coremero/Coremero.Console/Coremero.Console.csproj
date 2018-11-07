@@ -5,6 +5,7 @@
     <ApplicationIcon />
     <StartupObject>Coremero.Console.Program</StartupObject>
     <LangVersion>Latest</LangVersion>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="**\*.resx" />
