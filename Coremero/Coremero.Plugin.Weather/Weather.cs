@@ -112,6 +112,7 @@ namespace Coremero.Plugin.Weather
         public Weather(string darkSkyApiKey, string bingApiKey, string ResourceDir)
         {
             this.darkSkyApiKey = darkSkyApiKey;
+            this.bingApiKey = bingApiKey;
 
             collection = new FontCollection();
             smFont = new Font(collection.Install(Path.Combine(ResourceDir, "Weather", "Star4000 Small.ttf")), 36);
