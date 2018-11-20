@@ -68,7 +68,7 @@ namespace Coremero.Client.Discord
             List<Reaction> result = new List<Reaction>();
             foreach (var emoji in userMessage.Reactions)
             {
-                Reaction reaction = new Reaction(emoji.Key.Name, (await userMessage.GetReactionUsersAsync(emoji.Key)).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
+                Reaction reaction = new Reaction(emoji.Key.Name, (await userMessage.GetReactionUsersAsync(emoji.Key, 64).FlattenAsync().ConfigureAwait(false)).Select(x => DiscordFactory.UserFactory.Get(x)).Cast<IUser>().ToArray());
                 result.Add(reaction);
             }
             return result;

@@ -11,7 +11,7 @@
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.0.0-beta2-00921" />
+    <PackageReference Include="Discord.Net" Version="2.0.0-beta2-01024" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Coremero\Coremero.csproj" />

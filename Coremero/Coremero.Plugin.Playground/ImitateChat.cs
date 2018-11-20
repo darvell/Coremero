@@ -18,7 +18,7 @@ namespace Coremero.Plugin.Playground
 {
     public class ImitateChat : IPlugin
     {
-        readonly Dictionary<string, StringMarkov> _models = new Dictionary<string, StringMarkov>();
+        private readonly Dictionary<string, StringMarkov> _models = new Dictionary<string, StringMarkov>();
 
         public ImitateChat(IMessageBus messageBus)
         {
@@ -36,7 +36,6 @@ namespace Coremero.Plugin.Playground
                     {
                         _models[Path.GetFileNameWithoutExtension(path)] = tempMarkov;
                     }
-
                 }
                 catch (Exception e)
                 {
@@ -100,7 +99,7 @@ namespace Coremero.Plugin.Playground
             throw new Exception("Not buffered channel.");
         }
 
-        ConcurrentDictionary<ulong, StringMarkov> _userModels = new ConcurrentDictionary<ulong, StringMarkov>();
+        private ConcurrentDictionary<ulong, StringMarkov> _userModels = new ConcurrentDictionary<ulong, StringMarkov>();
 
         [Command("fillusermarkovs", MinimumPermissionLevel = UserPermission.BotOwner)]
         public async Task<string> FillUserMarkovs(IInvocationContext context)
@@ -112,6 +111,7 @@ namespace Coremero.Plugin.Playground
                 Parallel.ForEach(server.Channels, channel =>
                 {
                     IBufferedChannel bufferedChannel = channel as IBufferedChannel;
+
                     if (bufferedChannel != null && !bufferedChannel.Name.Contains("homero-dev"))
                     {
                         try
@@ -130,8 +130,7 @@ namespace Coremero.Plugin.Playground
                                     {
                                         _userModels.TryAdd(entity.ID, new StringMarkov(1) { EnsureUniqueWalk = true });
                                     }
-                                    StringMarkov markov;
-                                    _userModels.TryGetValue(entity.ID, out markov);
+                                    _userModels.TryGetValue(entity.ID, out StringMarkov markov);
                                     markov?.Learn(message.Text);
                                     linesLearned += 1;
                                 }
