@@ -66,9 +66,9 @@ namespace Coremero.Services
             {
                 if (command[0] != '.' || command[0] != '!')
                 {
-                    if (message is IReactableMessage)
+                    if (message is IReactableMessage reactableMessage)
                     {
-                        ((IReactableMessage)message).React("🚫").Wait(TimeSpan.FromMilliseconds(250));
+                        reactableMessage.React("🚫").Forget();
                     }
                 }
                 return;
@@ -85,14 +85,14 @@ namespace Coremero.Services
                     IMessage result = await _commandRegistry.ExecuteCommandAsync(command, context, message);
                     if (result != null)
                     {
-                        _messageBus.RaiseOutgoing(context.Raiser, result);
+                        _messageBus.RaiseOutgoing(context?.Raiser, result);
                     }
                     typingChannel?.SetTyping(false);
                     if (message.Text[0] == '!')
                     {
-                        if (message is IDeletableMessage)
+                        if (message is IDeletableMessage deletableMessage)
                         {
-                            await ((IDeletableMessage)message).DeleteAsync();
+                            deletableMessage.DeleteAsync().Forget();
                         }
                     }
                 }
@@ -103,15 +103,15 @@ namespace Coremero.Services
                     message.Attachments?.ForEach(x => x.Contents?.Dispose());
                     Log.Error($"{command} FAIL: {e}");
 
-                    if (message is IReactableMessage)
+                    if (message is IReactableMessage erroredReactableMessage)
                     {
-                        await ((IReactableMessage)message).React("💔");
+                        erroredReactableMessage.React("💔").Forget();
                     }
                     else
                     {
                         // Check if there is a help function.
                         var help = _commandRegistry.GetHelp(command);
-                        if (!String.IsNullOrEmpty(help))
+                        if (!string.IsNullOrEmpty(help))
                         {
                             _messageBus.RaiseOutgoing(context.Raiser, Message.Create(help));
                         }

@@ -52,7 +52,6 @@ namespace Coremero.Registry
                         }
                     }
 
-
                     // If attribute exists, clear.
                     // TODO: Check if no leaks after due to delegates being delegates.
                     if (_commandMap.ContainsKey(attribute))
@@ -61,7 +60,7 @@ namespace Coremero.Registry
                     }
 
                     // Register command
-                    _commandMap[attribute] = delegate(IInvocationContext context, IMessage message)
+                    _commandMap[attribute] = delegate (IInvocationContext context, IMessage message)
                     {
                         List<object> paramList = new List<object>();
                         foreach (var param in methodInfo.GetParameters())
@@ -86,10 +85,9 @@ namespace Coremero.Registry
                             }
                             else if (param.ParameterType == typeof(int?))
                             {
-                                int value;
-                                if(int.TryParse(message.Text.TrimCommand(), out value))
+                                if (int.TryParse(message.Text.TrimCommand(), out int value))
                                 {
-                                    paramList.Add(value);                                    
+                                    paramList.Add(value);
                                 }
                                 else
                                 {
@@ -152,9 +150,9 @@ namespace Coremero.Registry
                 var result = _commandMap[selectedCommand](context, message);
 
                 // Check if the command is actually a task, if so, start that bad boy up and return result.
-                if (result is Task)
+                if (result is Task task)
                 {
-                    await (Task) result;
+                    await task.ConfigureAwait(false);
                     result = result.GetType().GetRuntimeProperty("Result")?.GetValue(result);
 
                     // The downside of using reflection to get the result is that we have to check this way if it was a void task.
@@ -166,12 +164,12 @@ namespace Coremero.Registry
 
                 if (result == null)
                 {
-                    return Message.Create(String.Empty);
+                    return Message.Create(string.Empty);
                 }
 
-                if (result is IMessage)
+                if (result is IMessage resultMessage)
                 {
-                    return (IMessage) result;
+                    return resultMessage;
                 }
 
                 return Message.Create(result.ToString());

@@ -33,7 +33,6 @@ namespace Coremero
             return message.Text.TrimCommand().ToUpper();
         }
 
-
         [Command("woke", Help = "Return message in uppercase, split by spaces separated by 👏.")]
         public string Woke(IMessage message)
         {
@@ -100,8 +99,8 @@ namespace Coremero
                 _commandRegistry.CommandAttributes.OrderBy(x => x.Name)
                     .Where(x => x.MinimumPermissionLevel <= context.User.Permissions))
             {
-                string args = String.Empty;
-                if (!String.IsNullOrEmpty(cmd.Arguments))
+                string args = string.Empty;
+                if (!string.IsNullOrEmpty(cmd.Arguments))
                 {
                     args = string.Join(" ", cmd.Arguments.Split('|').Select(x => $"[{x.Trim()}]"));
                 }
@@ -134,9 +133,9 @@ namespace Coremero
         [Command("setstatus", Arguments = "Status", MinimumPermissionLevel = UserPermission.BotOwner)]
         public void SetClientStatus(IInvocationContext context, string status)
         {
-            if (context.OriginClient is IClientUserStatus)
+            if (context.OriginClient is IClientUserStatus userStatus)
             {
-                ((IClientUserStatus) context.OriginClient).UserStatus = status;
+                userStatus.UserStatus = status;
             }
         }
 
