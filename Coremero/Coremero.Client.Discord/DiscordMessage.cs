@@ -74,9 +74,9 @@ namespace Coremero.Client.Discord
             return result;
         }
 
-        public async Task DeleteAsync()
+        public Task DeleteAsync()
         {
-            await _message.DeleteAsync();
+            return _message.DeleteAsync();
         }
 
         public IUser User
