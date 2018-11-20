@@ -1,7 +1,7 @@
-﻿using Coremero.Commands;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Utilities;
 using Newtonsoft.Json.Linq;
@@ -13,7 +13,7 @@ namespace Coremero.Plugin.Playground
         [Command("fact")]
         public async Task<string> RandomFact(IInvocationContext context, string target)
         {
-            if (String.IsNullOrEmpty(target))
+            if (string.IsNullOrEmpty(target))
             {
                 target = context.Channel.Users.GetRandom().Name;
             }

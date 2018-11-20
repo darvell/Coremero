@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Coremero.Client;
+﻿using Coremero.Client;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
@@ -37,7 +36,6 @@ namespace Coremero.Plugin.Converter
 
             fancy = $"{spaces}{fancy}{spaces}";
             jab = $"{fancy}\n{jab}\n{fancy}";
-
 
             if (context.OriginClient.Features.HasFlag(ClientFeature.Markdown))
             {

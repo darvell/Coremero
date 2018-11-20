@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Coremero.Plugin.Classic.TumblrJson;
 using Coremero.Utilities;
@@ -13,10 +12,10 @@ namespace Coremero.Plugin.Classic
 {
     public class TumblrImageUrlCache
     {
-        private string _username;
-        private string _apiKey;
+        private readonly string _username;
+        private readonly string _apiKey;
         private DateTime _lastUpdate = DateTime.MinValue;
-        private TimeSpan _cacheInvalidationTime;
+        private readonly TimeSpan _cacheInvalidationTime;
         private List<string> _lastCache = new List<string>();
 
         public TumblrImageUrlCache(string username, string apiKey, TimeSpan cacheInvalidationTime)
@@ -45,7 +44,6 @@ namespace Coremero.Plugin.Classic
             {
                 await FillCache();
             }
-
 
             lock (_lastCache)
             {

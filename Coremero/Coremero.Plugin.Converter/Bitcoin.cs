@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Coremero.Plugin.Converter
+﻿namespace Coremero.Plugin.Converter
 {
     internal class BitcoinPricePoint
     {
@@ -11,7 +7,7 @@ namespace Coremero.Plugin.Converter
         public float High { get; set; }
     }
 
-    class Bitcoin
+    internal class Bitcoin
     {
     }
 }

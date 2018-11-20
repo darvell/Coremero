@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
@@ -45,14 +43,14 @@ namespace Coremero.Plugin.Converter
         [Command("saturn", Help = ".saturn <text> - Cᘎᑎᐯᕮᖇᒮ <ᒮᕮ᙭ᒮ> ᒮᘎ Sᗩᒮᘮᖇᑎᓮᗩᑎ.")]
         public string SaturnConvert(IInvocationContext context, IMessage message)
         {
-            return String.Concat(message.Text?.TrimCommand().Select(x =>
+            return string.Concat(message.Text?.TrimCommand().Select(x =>
             {
                 if (_saturnReplacements.ContainsKey(x))
                 {
                     return _saturnReplacements[x];
                 }
                 return x;
-            }) ?? String.Empty);
+            }) ?? string.Empty);
         }
     }
 }

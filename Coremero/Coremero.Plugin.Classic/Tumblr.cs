@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Coremero.Attachments;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
-using Coremero.Plugin.Classic.TumblrJson;
 using Coremero.Storage;
-using Newtonsoft.Json;
 using Coremero.Utilities;
 
 namespace Coremero.Plugin.Classic
@@ -30,7 +26,7 @@ namespace Coremero.Plugin.Classic
         public Tumblr(ICredentialStorage credentialStorage)
         {
             TUMBLR_API_KEY = credentialStorage.GetKey("tumblr", "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4");
-                // Public testing API key from Tumblr.
+            // Public testing API key from Tumblr.
         }
 
         private async Task<Tuple<Stream, string>> GetRandomTumblrImage(string tumblrUsername)
@@ -67,7 +63,7 @@ namespace Coremero.Plugin.Classic
 
         #region Business Titles
 
-        List<string> _businessTitles = new List<string>()
+        private List<string> _businessTitles = new List<string>()
         {
             "CEO",
             "CFO",
@@ -81,7 +77,7 @@ namespace Coremero.Plugin.Classic
             "Nepotism Hire"
         };
 
-        #endregion
+        #endregion Business Titles
 
         [Command("ceo", Help = "Get a random image of a business man.")]
         public async Task<IMessage> RealBusinessMan(IInvocationContext context, string message)
@@ -126,7 +122,6 @@ namespace Coremero.Plugin.Classic
             return Message.Create(message,
                 new StreamAttachment(image.Item1, $"spongebob.{Path.GetExtension(image.Item2)}"));
         }
-
 
         [Command("tumblrcache", MinimumPermissionLevel = UserPermission.BotOwner)]
         public async Task<string> CacheSize(IInvocationContext context, IMessage message)

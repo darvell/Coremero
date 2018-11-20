@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Coremero.Plugin.Classic.TumblrJson
+﻿namespace Coremero.Plugin.Classic.TumblrJson
 {
     public class Post
     {

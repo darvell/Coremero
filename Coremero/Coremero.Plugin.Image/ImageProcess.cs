@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Coremero.Attachments;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
 using Coremero.Utilities;
 using SixLabors.ImageSharp;
-
-using ImageSharp = SixLabors.ImageSharp;
-
-using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.Primitives;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Convolution;
+using SixLabors.ImageSharp.Processing.Drawing;
 using SixLabors.ImageSharp.Processing.Effects;
 using SixLabors.ImageSharp.Processing.Filters;
 using SixLabors.ImageSharp.Processing.Overlays;
 using SixLabors.ImageSharp.Processing.Transforms;
-using SixLabors.ImageSharp.Processing.Drawing;
+
+using ImageSharp = SixLabors.ImageSharp;
 
 namespace Coremero.Plugin.Image
 {

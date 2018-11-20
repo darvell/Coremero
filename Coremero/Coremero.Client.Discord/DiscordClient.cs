@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Coremero;
 using Coremero.Context;
 using Coremero.Services;
 using Coremero.Storage;
@@ -47,7 +45,7 @@ namespace Coremero.Client.Discord
 
         private IMessageBus _messageBus;
         private DiscordSocketClient _discordClient;
-        private DateTime _lastIgnoreTime = DateTime.MinValue;
+        private readonly DateTime _lastIgnoreTime = DateTime.MinValue;
         private const string DEBUG_IGNORE_PING = "DEBUG_RUNNING_IGNORE";
         private const long DEBUG_CNC_CHANNEL_ID = 336313212280766475;
         private const long DEBUG_GUILD = 336312951743053824;

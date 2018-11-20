@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Coremero.Attachments;
 using Coremero.Commands;
@@ -32,7 +29,7 @@ namespace Coremero.Plugin.Classic
                 {
                     try
                     {
-                        return (long) x["media"][0]["gif"]["size"] < 6000000;
+                        return (long)x["media"][0]["gif"]["size"] < 6000000;
                     }
                     catch
                     {

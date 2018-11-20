@@ -29,21 +29,21 @@ namespace Coremero.Messages
         {
             return Message.Create(text, null);
         }
+
         public static async Task<Message> CreateFromUrlAsync(string url)
         {
-            Message result = new Message() 
+            Message result = new Message()
             {
                 Attachments = new List<IAttachment>()
             };
 
-            using(HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
                 Stream fileStream = await client.GetStreamAndBufferToMemory(url);
-                result.Attachments.Add(new StreamAttachment(fileStream ,Path.GetFileName(url)));
+                result.Attachments.Add(new StreamAttachment(fileStream, Path.GetFileName(url)));
             }
 
             return result;
         }
-
     }
 }

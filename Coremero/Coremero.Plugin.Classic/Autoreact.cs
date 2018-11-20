@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Coremero.Attachments;
-using Coremero.Client.Discord;
 using Coremero.Messages;
 using Coremero.Services;
 
@@ -11,7 +8,7 @@ namespace Coremero.Plugin.Classic
 {
     public class Autoreact : IPlugin
     {
-        private List<string> _animeReactionIds = new List<string>()
+        private readonly List<string> _animeReactionIds = new List<string>()
         {
             "<:_i:275473549286834176>",
             "<:_think:275473560854724608>",

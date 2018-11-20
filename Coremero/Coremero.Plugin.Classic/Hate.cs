@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using Coremero.Utilities;
 using Coremero.Commands;
+using Coremero.Utilities;
 
 namespace Coremero.Plugin.Classic
 {
     public class Hate : IPlugin
     {
         // Get all \n so we can just skip to that directly when reading the file and reduce IO a bit.
-        FileIndex _spongeFileIndex;
-        FileIndex _ppLFileIndex;
+        private FileIndex _spongeFileIndex;
+
+        private FileIndex _ppLFileIndex;
 
         private Random _rnd = new Random();
 
-        private string _spongeFile = Path.Combine(PathExtensions.ResourceDir, "sponge_list.txt");
-        private string _ppFile = Path.Combine(PathExtensions.ResourceDir, "lilpp_list.txt");
-        
+        private readonly string _spongeFile = Path.Combine(PathExtensions.ResourceDir, "sponge_list.txt");
+        private readonly string _ppFile = Path.Combine(PathExtensions.ResourceDir, "lilpp_list.txt");
+
         public Hate()
         {
             _spongeFileIndex = new FileIndex(_spongeFile);
@@ -36,13 +35,11 @@ namespace Coremero.Plugin.Classic
             return $"i hate {_ppLFileIndex.GetRandomLine()}";
         }
 
-
         [Command("love", Help = "Love a random object.")]
         public string PlainLove()
         {
             return $"i love {_ppLFileIndex.GetRandomLine()}";
         }
-
 
         [Command("sponge", Help = "Impersonates sponge.")]
         public string SpongeFeels()

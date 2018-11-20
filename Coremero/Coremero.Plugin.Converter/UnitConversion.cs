@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Context;
@@ -25,7 +24,7 @@ namespace Coremero.Plugin.Converter
         )]
         public string Temperature(IInvocationContext context, IMessage message)
         {
-            List<String> args = message.Text.GetCommandArguments();
+            List<string> args = message.Text.GetCommandArguments();
             double temperature = double.Parse(args[0]);
 
             var c = (temperature - 32) * (5.0 / 9.0);

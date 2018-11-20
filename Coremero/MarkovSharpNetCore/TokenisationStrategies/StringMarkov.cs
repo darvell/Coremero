@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace MarkovSharpNetCore.TokenisationStrategies
 {
@@ -15,7 +13,7 @@ namespace MarkovSharpNetCore.TokenisationStrategies
         {
             if (input == null)
             {
-                return new List<string>() {GetPrepadGram()};
+                return new List<string>() { GetPrepadGram() };
             }
 
             return input?.Split(' ');

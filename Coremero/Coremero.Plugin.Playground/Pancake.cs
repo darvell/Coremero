@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using Coremero.Attachments;
 using Coremero.Client;
@@ -15,6 +14,7 @@ namespace Coremero.Plugin.Playground
     public class Pancake : IPlugin
     {
         private IChannel _catChannel;
+
         public Pancake(IEnumerable<IClient> clients)
         {
             DiscordClient discordClient = clients.FirstOrDefault(x => x.Name.Contains("Discord")) as DiscordClient;

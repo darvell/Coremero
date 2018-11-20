@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Context;
@@ -66,7 +65,7 @@ namespace Coremero.Plugin.Classic
                 {
                     // Quickly dispose what we can.
                     basicMessage.Attachments?.ForEach(x => x.Contents?.Dispose());
-                    throw(e);
+                    throw (e);
                 }
 
                 if (!string.IsNullOrEmpty(result.Text))
@@ -89,7 +88,6 @@ namespace Coremero.Plugin.Classic
                         }
                         basicMessage.Attachments = result.Attachments;
                     }
-
                 }
             }
 

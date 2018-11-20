@@ -21,7 +21,7 @@ namespace Coremero.Registry
 
         public T Get<T>() where T : IClient
         {
-            T result = (T) Clients.FirstOrDefault(x => x is T);
+            T result = (T)Clients.FirstOrDefault(x => x is T);
 
             if (result == null)
             {

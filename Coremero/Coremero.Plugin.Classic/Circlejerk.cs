@@ -6,7 +6,6 @@ using Coremero.Client.Discord;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
-using Coremero.Utilities;
 
 namespace Coremero.Plugin.Classic
 {
@@ -14,7 +13,7 @@ namespace Coremero.Plugin.Classic
     {
         private Random _rnd = new Random();
 
-        private List<string> _tonyOutput = new List<string>
+        private readonly List<string> _tonyOutput = new List<string>
         {
             "Tony is sitting opposite you, examinig each of his fingers in turn.",
             "You wish you could put Tony out of his misery.",
@@ -59,7 +58,7 @@ namespace Coremero.Plugin.Classic
             // Snatch pepitos name if it's in SA-MC.
             if (context.Channel is DiscordChannel)
             {
-                IUser ego = context.Channel.Users.FirstOrDefault(x => ((DiscordUser) x).Username.Contains("ego"));
+                IUser ego = context.Channel.Users.FirstOrDefault(x => ((DiscordUser)x).Username.Contains("ego"));
                 if (ego != null)
                 {
                     egoName = $"{ego.Name}:";

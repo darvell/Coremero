@@ -6,7 +6,7 @@ namespace Coremero.Attachments
     public class UrlAttachment : IAttachment
     {
         private HttpClient _httpClient = new HttpClient();
-        private string _url;
+        private readonly string _url;
 
         public UrlAttachment(string url)
         {

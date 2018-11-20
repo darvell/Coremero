@@ -17,7 +17,7 @@ using SimpleInjector;
 
 namespace Coremero.Console
 {
-    class Program
+    internal class Program
     {
         private static Container _container;
         private static SemaphoreSlim _cancelSemaphore = new SemaphoreSlim(0);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Coremero.Client;
@@ -160,12 +159,12 @@ namespace Coremero.Plugin.Classic
 
         #endregion utility class
 
-        #endregion
+        #endregion Border code from Homeronet
 
         [Command("rip", Arguments = "WHO DIE", Help = "Creates a gravestone for [WHO DIE].")]
         public string RestInPeace(IInvocationContext context, string text)
         {
-            if (String.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text))
             {
                 text = context.Channel?.Users.GetRandom().Name;
             }

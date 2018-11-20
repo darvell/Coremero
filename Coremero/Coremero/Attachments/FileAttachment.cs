@@ -9,7 +9,7 @@ namespace Coremero.Attachments
             _filePath = filePath;
         }
 
-        private string _filePath;
+        private readonly string _filePath;
 
         public string Name
         {

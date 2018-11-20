@@ -46,9 +46,8 @@ namespace Coremero.Plugin.Classic
                 // Force title to null to ensure the payload goes through fine.
                 title = null;
             }
-            if (context.Channel is IBufferedChannel)
+            if (context.Channel is IBufferedChannel bufferedChannel)
             {
-                IBufferedChannel bufferedChannel = context.Channel as IBufferedChannel;
                 List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(30);
                 messages = messages.Where(x => !x.Text.IsCommand() && !string.IsNullOrEmpty(x.Text)).ToList();
 
@@ -79,7 +78,7 @@ namespace Coremero.Plugin.Classic
                     var content = new StringContent(JsonConvert.SerializeObject(payload, new JsonSerializerSettings() { ContractResolver = new LowercaseContractResolver() }), Encoding.UTF8, "application/json");
                     var result = await client.PostAsync($"http://localhost:8000/create", content);
                     MemoryStream imageStream = await (await result.Content.ReadAsStreamAsync()).CopyToMemoryStreamAsync();
-                    return Message.Create(null, new StreamAttachment(imageStream, $"{DateTime.Now} {context.Channel?.Name} Comic.jpg"));
+                    return Message.Create(null, new StreamAttachment(imageStream, $"{DateTime.Now} {bufferedChannel?.Name} Comic.jpg"));
                 }
             }
             throw new Exception("Not a buffered channel.");

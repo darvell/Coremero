@@ -7,7 +7,7 @@ namespace Coremero.Storage
 {
     public class JsonCredentialStorage : ICredentialStorage
     {
-        private string _secretsPath = Path.Combine(PathExtensions.AppDir, "secrets.json");
+        private readonly string _secretsPath = Path.Combine(PathExtensions.AppDir, "secrets.json");
 
         public string GetKey(string keyName, string defaultKey = null)
         {

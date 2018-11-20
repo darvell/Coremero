@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Coremero.Commands;
 using Coremero.Utilities;
-using System.Linq;
 
 namespace Coremero.Plugin.Playground
 {
@@ -47,7 +45,7 @@ namespace Coremero.Plugin.Playground
         {
             return string.Concat(input.TrimCommand().Select(c =>
             {
-                char lowerChar = Char.ToLower(c);
+                char lowerChar = char.ToLower(c);
                 if (_charRegionMap.ContainsKey(lowerChar))
                 {
                     return _charRegionMap[lowerChar] + " ";

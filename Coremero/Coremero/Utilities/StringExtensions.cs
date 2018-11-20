@@ -7,7 +7,7 @@ namespace Coremero.Utilities
 {
     public static class StringExtensions
     {
-        static void Swap<T>(ref T arg1, ref T arg2)
+        private static void Swap<T>(ref T arg1, ref T arg2)
         {
             T temp = arg1;
             arg1 = arg2;
@@ -34,7 +34,7 @@ namespace Coremero.Utilities
                 return int.MaxValue;
             }
 
-            // Ensure arrays [i] / length1 use shorter length 
+            // Ensure arrays [i] / length1 use shorter length
             if (length1 > length2)
             {
                 Swap(ref target, ref source);
@@ -125,7 +125,7 @@ namespace Coremero.Utilities
         {
             if ((input?.StartsWith(".") == true || input?.StartsWith("!") == true) && input.Length >= 2)
             {
-                return Char.IsLetterOrDigit(input[1]);
+                return char.IsLetterOrDigit(input[1]);
             }
             return false;
         }

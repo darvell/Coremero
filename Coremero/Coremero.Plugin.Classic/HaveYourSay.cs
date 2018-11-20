@@ -10,7 +10,7 @@ namespace Coremero.Plugin.Classic
 {
     public class HaveYourSay : IPlugin
     {
-        private Dictionary<string, List<string>> _hysData;
+        private readonly Dictionary<string, List<string>> _hysData;
         private Random _rnd = new Random();
 
         public HaveYourSay()
@@ -46,7 +46,7 @@ namespace Coremero.Plugin.Classic
 
             string opening = _rnd.Next(0, 1) == 1 ? "opening1" : "opening2";
 
-            if (String.IsNullOrEmpty(subject))
+            if (string.IsNullOrEmpty(subject))
             {
                 builder.Append(
                     $"{_hysData[opening].GetRandom()} {_hysData["hated_object"].GetRandom()} {_hysData["terrible_thing"].GetRandom()}");

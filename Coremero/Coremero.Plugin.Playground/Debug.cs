@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using Coremero.Client;
 
@@ -10,7 +9,7 @@ namespace Coremero.Plugin.Playground
     public class Debug : IPlugin, IDisposable
     {
         private readonly IClientUserStatus _client;
-        private Timer _timer;
+        private readonly Timer _timer;
 
         public Debug(IEnumerable<IClient> clients)
         {

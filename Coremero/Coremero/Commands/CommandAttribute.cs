@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace Coremero.Commands
 {
     [AttributeUsage(AttributeTargets.Method)]

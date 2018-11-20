@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Coremero.Messages;
 using Discord;
-using Discord.WebSocket;
 using IAttachment = Coremero.Attachments.IAttachment;
 using IMessage = Coremero.Messages.IMessage;
 
@@ -56,9 +53,9 @@ namespace Coremero.Client.Discord
 
         public void Send(IMessage message)
         {
-            #pragma warning disable 4014
+#pragma warning disable 4014
             SendAsync(message);
-            #pragma warning restore 4014
+#pragma warning restore 4014
         }
 
         public string Name
@@ -68,7 +65,9 @@ namespace Coremero.Client.Discord
 
         public string Topic
         {
-            get { return String.Empty; // Channel interface has no topic? Do we need to cast?
+            get
+            {
+                return string.Empty; // Channel interface has no topic? Do we need to cast?
             }
         }
 
@@ -94,7 +93,7 @@ namespace Coremero.Client.Discord
             }
         }
 
-        private IDisposable _typingState = null;
+        private readonly IDisposable _typingState = null;
         public bool IsTyping { get; private set; }
 
         public async void SetTyping(bool isTyping)
@@ -138,9 +137,11 @@ namespace Coremero.Client.Discord
                 case SearchDirection.Before:
                     discordDirection = Direction.Before;
                     break;
+
                 case SearchDirection.After:
                     discordDirection = Direction.After;
                     break;
+
                 default:
                     discordDirection = Direction.Around;
                     break;

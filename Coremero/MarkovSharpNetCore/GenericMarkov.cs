@@ -12,8 +12,8 @@ namespace MarkovSharpNetCore
 {
     /// <summary>
     /// This class contains core functionality of the generic Markov model.
-    /// Shouldn't be used directly, instead, extend GenericMarkov 
-    /// and implement the IMarkovModel interface - this will allow you to 
+    /// Shouldn't be used directly, instead, extend GenericMarkov
+    /// and implement the IMarkovModel interface - this will allow you to
     /// define overrides for SplitTokens and RebuildPhrase, which is generally
     /// all that should be needed for implementation of a new model type.
     /// </summary>
@@ -69,7 +69,7 @@ namespace MarkovSharpNetCore
         /// </summary>
         public bool EnsureUniqueWalk { get; set; }
 
-        // The number of previous states for the model to to consider when 
+        // The number of previous states for the model to to consider when
         //suggesting the next state
         public int Level { get; private set; }
 
@@ -101,7 +101,7 @@ namespace MarkovSharpNetCore
                 return;
             }
 
-            // Add it to the source lines so we can ignore it 
+            // Add it to the source lines so we can ignore it
             // when learning in future
             if (!SourceLines.Contains(phrase))
             {
@@ -183,7 +183,7 @@ namespace MarkovSharpNetCore
             Learn(SourceLines, false);
         }
 
-        private object lockObj = new object();
+        private readonly object lockObj = new object();
 
         private void AddOrCreate(SourceGrams<TGram> key, TGram value)
         {
@@ -191,7 +191,7 @@ namespace MarkovSharpNetCore
             {
                 if (!Model.ContainsKey(key))
                 {
-                    Model.TryAdd(key, new List<TGram> {value});
+                    Model.TryAdd(key, new List<TGram> { value });
                 }
                 else
                 {
@@ -204,7 +204,7 @@ namespace MarkovSharpNetCore
         {
             if (seed == null)
             {
-                seed = RebuildPhrase(new List<TGram>() {GetPrepadGram()});
+                seed = RebuildPhrase(new List<TGram>() { GetPrepadGram() });
             }
 
             if (lines < 1)
@@ -241,7 +241,7 @@ namespace MarkovSharpNetCore
             var arraySeed = PadArrayLow(SplitTokens(seed)?.ToArray());
             List<TGram> built = new List<TGram>();
 
-            // Allocate a queue to act as the memory, which is n 
+            // Allocate a queue to act as the memory, which is n
             // levels deep of previous words that were used
             var q = new Queue<TGram>(arraySeed);
 

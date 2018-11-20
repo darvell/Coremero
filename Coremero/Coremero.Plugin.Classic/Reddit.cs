@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Coremero.Commands;
 using Coremero.Context;
 using Coremero.Messages;
 using Coremero.Utilities;
-using Newtonsoft.Json.Linq;
 using MarkovSharpNetCore.TokenisationStrategies;
+using Newtonsoft.Json.Linq;
 
 namespace Coremero.Plugin.Classic
 {
@@ -49,7 +46,7 @@ namespace Coremero.Plugin.Classic
             return (format ? "<Hurt>" : "") + await GetRandomTitleFromSubreddit(_hurtSubreddits.GetRandom());
         }
 
-        #endregion
+        #endregion Hurt
 
         #region Hyle
 
@@ -72,7 +69,7 @@ namespace Coremero.Plugin.Classic
             return (format ? "<hyle>" : "") + await GetRandomTitleFromSubreddit(_hyleSubreddits.GetRandom());
         }
 
-        #endregion
+        #endregion Hyle
 
         #region Danl
 
@@ -101,7 +98,7 @@ namespace Coremero.Plugin.Classic
 
         #region Drug
 
-        private List<string> _drugSubreddits = new List<string>()
+        private readonly List<string> _drugSubreddits = new List<string>()
         {
             "drugs",
             "drugscirclejerk",
@@ -130,7 +127,7 @@ namespace Coremero.Plugin.Classic
             return await GetRandomTitleFromSubreddit("benzodiazepines");
         }
 
-        #endregion
+        #endregion Drug
 
         [Command("reddit", Arguments = "Subreddit Name", Help = "Get a random post title from a subreddit.")]
         public async Task<string> RandomReddit(string subreddits)
@@ -162,7 +159,7 @@ namespace Coremero.Plugin.Classic
             {
                 walkSize = 2;
             }
-            var model = new StringMarkov(walkSize) {EnsureUniqueWalk = true};
+            var model = new StringMarkov(walkSize) { EnsureUniqueWalk = true };
             foreach (string sub in subreddit.Split(' '))
             {
                 model.Learn(await GetTitlesFromSubreddit(sub));

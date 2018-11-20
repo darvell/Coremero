@@ -8,7 +8,9 @@ namespace Coremero
     public interface IBufferedChannel : IChannel
     {
         List<IBufferedMessage> GetLatestMessages(int limit = 100);
+
         Task<List<IBufferedMessage>> GetLatestMessagesAsync(int limit = 100);
+
         Task<List<IBufferedMessage>> GetMessagesAsync(DateTimeOffset time, SearchDirection direction, int limit = 100);
     }
 }

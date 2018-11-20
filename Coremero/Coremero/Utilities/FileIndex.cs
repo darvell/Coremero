@@ -8,7 +8,7 @@ namespace Coremero.Utilities
     {
         private List<long> _indexes = new List<long>();
         private Random _rnd = new Random();
-        private string _filePath;
+        private readonly string _filePath;
 
         public FileIndex(string filePath)
         {
@@ -27,7 +27,7 @@ namespace Coremero.Utilities
                 }
             }
         }
-        
+
         private void IndexFile()
         {
             using (FileStream stream = File.OpenRead(_filePath))

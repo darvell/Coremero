@@ -11,7 +11,7 @@ namespace Coremero.Utilities
                 .GetMethod("GetScheduledTasksForDebugger", BindingFlags.NonPublic | BindingFlags.Instance);
             if (mi == null)
                 return null;
-            return (Task[]) mi.Invoke(ts, new object[0]);
+            return (Task[])mi.Invoke(ts, new object[0]);
         }
 
         public static TaskScheduler[] GetTaskSchedulersForDebugger()
@@ -20,7 +20,7 @@ namespace Coremero.Utilities
                 BindingFlags.NonPublic | BindingFlags.Static);
             if (mi == null)
                 return null;
-            return (TaskScheduler[]) mi.Invoke(null, new object[0]);
+            return (TaskScheduler[])mi.Invoke(null, new object[0]);
         }
     }
 }
