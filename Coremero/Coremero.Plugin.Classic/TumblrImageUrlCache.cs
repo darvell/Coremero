@@ -66,7 +66,8 @@ namespace Coremero.Plugin.Classic
                             await httpClient.GetStringAsync(
                                 $"http://api.tumblr.com/v2/blog/{_username}.tumblr.com/posts?api_key={_apiKey}&type=photo&offset={i}");
                         var root = JsonConvert.DeserializeObject<Rootobject>(blogJson);
-                        newUrls.AddRange(root.response.posts.SelectMany(x => x.photos).Select(x => x.original_size.url));
+                        newUrls.AddRange(root.response.posts.Where(x => x?.photos != null).SelectMany(x => x.photos)
+                            .Select(x => x?.original_size?.url).Where(x => !string.IsNullOrEmpty(x)));
                         if (newUrls.Count > 200)
                             break;
                     }
