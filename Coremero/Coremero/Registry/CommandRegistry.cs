@@ -26,77 +26,79 @@ namespace Coremero.Registry
             Type pluginType = plugin.GetType();
             foreach (var methodInfo in pluginType.GetRuntimeMethods())
             {
-                CommandAttribute attribute = methodInfo.GetCustomAttribute<CommandAttribute>();
-                if (attribute != null)
+                foreach (var attribute in methodInfo.GetCustomAttributes<CommandAttribute>())
                 {
-                    // Don't trust the developer to remember to set HasSideEffects. Sorry.
-                    if (methodInfo.ReturnType == typeof(void) || methodInfo.ReturnType == typeof(Task))
+                    if (attribute != null)
                     {
-                        attribute.HasSideEffects = true;
-                    }
-
-                    // Check if the parameters are right.
-                    ParameterInfo[] methodParams = methodInfo.GetParameters();
-                    if (methodParams.Length > 0)
-                    {
-                        if (methodParams.Any(x =>
+                        // Don't trust the developer to remember to set HasSideEffects. Sorry.
+                        if (methodInfo.ReturnType == typeof(void) || methodInfo.ReturnType == typeof(Task))
                         {
-                            Type paramType = x.ParameterType;
-                            return
-                                !(paramType == (typeof(IInvocationContext)) || paramType == typeof(IMessage) ||
-                                  paramType == typeof(string));
-                        }))
-                        {
-                            Debug.Fail("Invalid parameter in command.");
-                            continue;
+                            attribute.HasSideEffects = true;
                         }
-                    }
 
-                    // If attribute exists, clear.
-                    // TODO: Check if no leaks after due to delegates being delegates.
-                    if (_commandMap.ContainsKey(attribute))
-                    {
-                        _commandMap.Remove(attribute);
-                    }
-
-                    // Register command
-                    _commandMap[attribute] = delegate (IInvocationContext context, IMessage message)
-                    {
-                        List<object> paramList = new List<object>();
-                        foreach (var param in methodInfo.GetParameters())
+                        // Check if the parameters are right.
+                        ParameterInfo[] methodParams = methodInfo.GetParameters();
+                        if (methodParams.Length > 0)
                         {
-                            if (param.ParameterType == typeof(IInvocationContext))
+                            if (methodParams.Any(x =>
                             {
-                                paramList.Add(context);
+                                Type paramType = x.ParameterType;
+                                return
+                                    !(paramType == (typeof(IInvocationContext)) || paramType == typeof(IMessage) ||
+                                      paramType == typeof(string));
+                            }))
+                            {
+                                Debug.Fail("Invalid parameter in command.");
+                                continue;
                             }
-                            else if (param.ParameterType == typeof(IMessage))
+                        }
+
+                        // If attribute exists, clear.
+                        // TODO: Check if no leaks after due to delegates being delegates.
+                        if (_commandMap.ContainsKey(attribute))
+                        {
+                            _commandMap.Remove(attribute);
+                        }
+
+                        // Register command
+                        _commandMap[attribute] = delegate (IInvocationContext context, IMessage message)
+                        {
+                            List<object> paramList = new List<object>();
+                            foreach (var param in methodInfo.GetParameters())
                             {
-                                paramList.Add(message);
-                            }
-                            else if (param.ParameterType == typeof(string))
-                            {
-                                paramList.Add(message.Text.TrimCommand());
-                            }
-                            else if (param.ParameterType == typeof(int))
-                            {
-                                int value = int.MinValue;
-                                int.TryParse(message.Text.TrimCommand(), out value);
-                                paramList.Add(value);
-                            }
-                            else if (param.ParameterType == typeof(int?))
-                            {
-                                if (int.TryParse(message.Text.TrimCommand(), out int value))
+                                if (param.ParameterType == typeof(IInvocationContext))
                                 {
+                                    paramList.Add(context);
+                                }
+                                else if (param.ParameterType == typeof(IMessage))
+                                {
+                                    paramList.Add(message);
+                                }
+                                else if (param.ParameterType == typeof(string))
+                                {
+                                    paramList.Add(message.Text.TrimCommand());
+                                }
+                                else if (param.ParameterType == typeof(int))
+                                {
+                                    int value = int.MinValue;
+                                    int.TryParse(message.Text.TrimCommand(), out value);
                                     paramList.Add(value);
                                 }
-                                else
+                                else if (param.ParameterType == typeof(int?))
                                 {
-                                    paramList.Add(null);
+                                    if (int.TryParse(message.Text.TrimCommand(), out int value))
+                                    {
+                                        paramList.Add(value);
+                                    }
+                                    else
+                                    {
+                                        paramList.Add(null);
+                                    }
                                 }
                             }
-                        }
-                        return methodInfo.Invoke(plugin, paramList.Count == 0 ? null : paramList.ToArray());
-                    };
+                            return methodInfo.Invoke(plugin, paramList.Count == 0 ? null : paramList.ToArray());
+                        };
+                    }
                 }
             }
         }

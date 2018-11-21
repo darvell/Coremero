@@ -2,7 +2,7 @@
 
 namespace Coremero.Commands
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class CommandAttribute : Attribute
     {
         /// <summary>
