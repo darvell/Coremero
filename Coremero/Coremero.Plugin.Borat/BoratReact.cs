@@ -19,7 +19,9 @@ namespace Coremero.Plugin.Borat
             "my wife",
             "what type of dog is this",
             "very nice",
-            "great success"
+            "great success",
+            "I can hit a gypsy with a rock from 15 meters away if chained",
+            "Your dog is a loser"
         };
 
         private readonly Random _rnd = new Random();
