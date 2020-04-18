@@ -43,7 +43,7 @@ namespace Coremero.Plugin.Classic
         [Command("comic", Arguments = "Title", Help = "Creates a comic using the last random lines of chat.")]
         public async Task<IMessage> GenerateComic(IInvocationContext context, string title)
         {
-            int panels = _rnd.Next(1, 5);
+            int panels = _rnd.Next(1, 4);
 
             title = title?.Trim() ?? "";
             if(!string.IsNullOrEmpty(title))
@@ -64,12 +64,12 @@ namespace Coremero.Plugin.Classic
             }
             if (context.Channel is IBufferedChannel bufferedChannel)
             {
-                List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(40);
+                List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(50);
                 messages = messages.Where(x => !x.Text.IsCommand() && !string.IsNullOrEmpty(x.Text)).ToList();
 
                 ComicPayload payload = new ComicPayload() { Title = title };
 
-                for (int i = 0; i <= panels; i++)
+                for (int i = 0; i < panels; i++)
                 {
                     if (messages.Count <= i)
                     {
