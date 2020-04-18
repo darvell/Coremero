@@ -38,9 +38,25 @@ namespace Coremero.Plugin.Classic
 
     public class ComicGenerator : IPlugin
     {
+        private Random _rnd = new Random();
+        
         [Command("comic", Arguments = "Title", Help = "Creates a comic using the last random lines of chat.")]
         public async Task<IMessage> GenerateComic(IInvocationContext context, string title)
         {
+            int panels = _rnd.Next(1, 4);
+
+            title = title?.Trim() ?? "";
+            if(!string.IsNullOrEmpty(title))
+            {
+                string panelCount = title.Split().LastOrDefault();
+                if(int.TryParse(panelCount, out panels)) {
+                    title = title.Replace(panelCount, "").Trim();
+                    if(panelCount >= 6) {
+                        panelCount = 6;
+                    }
+                }
+            }
+
             if (string.IsNullOrEmpty(title))
             {
                 // Force title to null to ensure the payload goes through fine.
@@ -51,9 +67,6 @@ namespace Coremero.Plugin.Classic
                 List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(30);
                 messages = messages.Where(x => !x.Text.IsCommand() && !string.IsNullOrEmpty(x.Text)).ToList();
 
-                Random rnd = new Random();
-                int panels = rnd.Next(2, 4);
-
                 ComicPayload payload = new ComicPayload() { Title = title };
 
                 for (int i = 0; i < panels; i++)
@@ -62,10 +75,13 @@ namespace Coremero.Plugin.Classic
                     {
                         break;
                     }
+                    
+                    string curMsg = messages[i].Text;
+                    curMsg = string.Join(" ", curMsg.Split().Where(x => !x.StartsWith("<@") && !x.EndsWith(">"))).Trim();
 
                     payload.Messages.Add(new ComicMessage()
                     {
-                        Message = messages[i].Text,
+                        Message = curMsg,
                         Timestamp = messages[i].Timestamp.Ticks,
                         User = messages[i].User.Name
                     });
