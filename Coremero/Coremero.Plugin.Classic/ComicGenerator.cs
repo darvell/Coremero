@@ -64,12 +64,12 @@ namespace Coremero.Plugin.Classic
             }
             if (context.Channel is IBufferedChannel bufferedChannel)
             {
-                List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(30);
+                List<IBufferedMessage> messages = await bufferedChannel.GetLatestMessagesAsync(40);
                 messages = messages.Where(x => !x.Text.IsCommand() && !string.IsNullOrEmpty(x.Text)).ToList();
 
                 ComicPayload payload = new ComicPayload() { Title = title };
 
-                for (int i = 0; i < panels; i++)
+                for (int i = 0; i <= panels; i++)
                 {
                     if (messages.Count <= i)
                     {
