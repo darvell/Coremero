@@ -43,7 +43,7 @@ namespace Coremero.Plugin.Classic
         [Command("comic", Arguments = "Title", Help = "Creates a comic using the last random lines of chat.")]
         public async Task<IMessage> GenerateComic(IInvocationContext context, string title)
         {
-            int panels = _rnd.Next(1, 4);
+            int panels = _rnd.Next(1, 5);
 
             title = title?.Trim() ?? "";
             if(!string.IsNullOrEmpty(title))
@@ -51,8 +51,8 @@ namespace Coremero.Plugin.Classic
                 string panelCount = title.Split().LastOrDefault();
                 if(int.TryParse(panelCount, out panels)) {
                     title = title.Replace(panelCount, "").Trim();
-                    if(panelCount >= 6) {
-                        panelCount = 6;
+                    if(panels >= 6) {
+                        panels = 6;
                     }
                 }
             }
